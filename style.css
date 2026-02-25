@@ -2582,3 +2582,262 @@ ul {
         min-height: 260px;
     }
 }
+
+/* =============================================
+   EXPERIENCIA PAGE
+   ============================================= */
+
+/* Global Metrics Bar */
+.exp-metrics-bar {
+    background: var(--dark-blue);
+    padding: 28px 20px;
+}
+
+.exp-metrics-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+.exp-metric-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 16px 28px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    min-width: 140px;
+    flex: 1 1 140px;
+    max-width: 180px;
+    text-align: center;
+}
+
+.exp-metric-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 900;
+    color: var(--primary-blue);
+    line-height: 1;
+}
+
+.exp-metric-label {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* Cases Section */
+.exp-cases-section {
+    background: var(--off-white);
+}
+
+.exp-cases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+    margin-top: 50px;
+}
+
+.exp-case-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: clamp(24px, 4vw, 36px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.exp-case-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 120, 212, 0.1);
+}
+
+.exp-case-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.exp-case-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: rgba(0, 120, 212, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.exp-case-icon i {
+    width: 22px;
+    height: 22px;
+    color: var(--primary-blue);
+}
+
+.exp-case-sector {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--primary-blue);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.exp-case-header h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    font-weight: 700;
+    color: var(--dark-blue);
+    line-height: 1.3;
+}
+
+.exp-case-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    flex: 1;
+}
+
+.exp-case-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.exp-case-tags span {
+    padding: 4px 12px;
+    background: rgba(0, 120, 212, 0.07);
+    border: 1px solid rgba(0, 120, 212, 0.15);
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--primary-blue);
+}
+
+.exp-case-results {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.exp-result-item {
+    text-align: center;
+}
+
+.exp-result-item strong {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 900;
+    color: var(--dark-blue);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.exp-result-item p {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+/* Domains Section */
+.exp-domains-section {
+    background: #fff;
+}
+
+.exp-domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 50px;
+}
+
+.exp-domain-card {
+    padding: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    background: #fcfaf7;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.exp-domain-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 120, 212, 0.08);
+}
+
+.exp-domain-card>i {
+    width: 28px;
+    height: 28px;
+    color: var(--primary-blue);
+    margin-bottom: 16px;
+}
+
+.exp-domain-card h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    margin-bottom: 8px;
+}
+
+.exp-domain-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+
+/* Experiencia CTA */
+.exp-cta-section {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Responsive Experiencia */
+@media (max-width: 768px) {
+    .exp-metrics-row {
+        gap: 10px;
+    }
+
+    .exp-metric-pill {
+        min-width: 120px;
+        padding: 12px 16px;
+    }
+
+    .exp-cases-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exp-case-results {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .exp-domains-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .exp-metric-pill {
+        flex: 1 1 calc(50% - 8px);
+        max-width: none;
+    }
+
+    .exp-case-results {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .exp-domains-grid {
+        grid-template-columns: 1fr;
+    }
+}
