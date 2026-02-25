@@ -121,11 +121,8 @@ ul {
     width: 100%;
     height: var(--header-height);
     background: #fcfaf7;
-    /* Warm beige matching the proposal section */
     z-index: 1000;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    /* For background blobs */
 }
 
 .header-bg-elements {
@@ -136,6 +133,8 @@ ul {
     height: 100%;
     pointer-events: none;
     z-index: 0;
+    overflow: hidden;
+    /* Contain blobs without clipping the dropdown */
 }
 
 .header-bg-elements .dot-grid-background {
@@ -160,7 +159,8 @@ ul {
     justify-content: space-between;
     padding: 0 20px;
     position: relative;
-    z-index: 10;
+    z-index: 1100;
+    /* Above header z-index so dropdown overlaps page content */
 }
 
 .logo a.brand-text {
