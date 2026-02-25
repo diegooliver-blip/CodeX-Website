@@ -16,17 +16,17 @@
 
 <body>
     <header id="main-header">
+        <!-- Background Elements from Proposal Section -->
+        <div class="header-bg-elements">
+            <div class="dot-grid-background"></div>
+            <div class="glow-blob blob-1"></div>
+            <div class="background-shape shape-blue"></div>
+        </div>
         <nav class="nav-container">
             <div class="logo">
                 <a href="#" class="brand-text">CODEX AI CONSULTING</a>
             </div>
             <ul class="nav-links">
-                <li class="dropdown">
-                    <a href="#acerca" class="dropbtn">Acerca de <i data-lucide="chevron-down"></i></a>
-                    <div class="dropdown-content">
-                        <a href="#historia">Nuestra Historia</a>
-                    </div>
-                </li>
                 <li class="dropdown">
                     <a href="#servicios" class="dropbtn">Servicios <i data-lucide="chevron-down"></i></a>
                     <div class="dropdown-content">
@@ -38,8 +38,8 @@
                         <a href="#marketing">Marketing Digital</a>
                     </div>
                 </li>
-                <li><a href="#comunidad">Comunidad</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#comunidad">EXPERIENCIA</a></li>
+                <li><a href="#contacto">CONTACTO</a></li>
             </ul>
             <div class="nav-actions">
                 <a href="https://calendly.com/codexai-consulting/30min" target="_blank"
@@ -81,45 +81,73 @@
                     <h2 class="section-title reveal-up">Explora nuestra propuesta</h2>
                     <p class="section-desc">Soluciones integrales que redefinen la eficiencia operativa.</p>
                 </div>
-                <div class="proposal-flow">
-                    <div class="step-card animate-on-scroll reveal-up delay-1">
-                        <div class="step-icon"><i data-lucide="search"></i></div>
-                        <h3>Auditoría de Ineficiencias</h3>
-                        <p>Identificamos fugas operativas que frenan el crecimiento real de tu negocio mediante análisis
-                            profundo.</p>
-                        <div class="step-arrow"><i data-lucide="chevrons-right"></i></div>
-                    </div>
-                    <div class="step-card animate-on-scroll reveal-up delay-2">
-                        <div class="step-icon"><i data-lucide="layout"></i></div>
-                        <h3>Arquitectura de Flujos</h3>
-                        <p>Diseñamos procesos inteligentes totalmente libres de fricción manual y errores humanos.</p>
-                        <div class="step-arrow"><i data-lucide="chevrons-right"></i></div>
-                    </div>
-                    <div class="step-card animate-on-scroll reveal-up delay-3">
-                        <div class="step-icon"><i data-lucide="bot"></i></div>
-                        <h3>Despliegue de IA Agent</h3>
-                        <p>Implementamos agentes autónomos que operan con precisión industrial las 24 horas del día.</p>
-                        <div class="step-arrow"><i data-lucide="chevrons-right"></i></div>
-                    </div>
-                    <div class="step-card animate-on-scroll reveal-up delay-1">
-                        <div class="step-icon"><i data-lucide="trending-up"></i></div>
-                        <h3>Ingeniería de Impacto</h3>
-                        <p>Escalamos tu rentabilidad mediante la integración de datos y una visión estratégica de
-                            vanguardia.</p>
-                        <div class="step-arrow"><i data-lucide="chevrons-right"></i></div>
-                    </div>
-                    <div class="step-card animate-on-scroll reveal-up delay-2">
-                        <div class="step-icon"><i data-lucide="refresh-cw"></i></div>
-                        <h3>Ajuste Dinámico</h3>
-                        <p>Optimizamos cada sistema continuamente para garantizar resultados por encima del promedio del
-                            mercado.</p>
-                        <div class="step-arrow"><i data-lucide="chevrons-right"></i></div>
-                    </div>
-                    <div class="step-card animate-on-scroll reveal-up delay-3">
-                        <div class="step-icon"><i data-lucide="layers"></i></div>
-                        <h3>Escalado de Éxito</h3>
-                        <p>Multiplicamos los resultados del negocio sin incrementar la estructura de costos operativos
-                            complejos.</p>
+                <div class="proposal-list-wrapper">
+                    <div class="proposal-list">
+                        <div class="proposal-item animate-on-scroll reveal-up delay-1" data-id="audit">
+                            <button class="proposal-btn">
+                                <i data-lucide="search"></i>
+                                <span>Auditoría de Ineficiencias</span>
+                            </button>
+                            <div class="proposal-tooltip">
+                                <p>Identificamos fugas operativas que frenan el crecimiento real de tu negocio mediante
+                                    análisis profundo.</p>
+                            </div>
+                        </div>
+
+                        <div class="proposal-item animate-on-scroll reveal-up delay-2" data-id="arch">
+                            <button class="proposal-btn">
+                                <i data-lucide="layout"></i>
+                                <span>Arquitectura de Flujos</span>
+                            </button>
+                            <div class="proposal-tooltip">
+                                <p>Diseñamos procesos inteligentes totalmente libres de fricción manual y errores
+                                    humanos.</p>
+                            </div>
+                        </div>
+
+                        <div class="proposal-item animate-on-scroll reveal-up delay-3" data-id="ai">
+                            <button class="proposal-btn">
+                                <i data-lucide="bot"></i>
+                                <span>Despliegue de IA Agent</span>
+                            </button>
+                            <div class="proposal-tooltip">
+                                <p>Implementamos agentes autónomos que operan con precisión industrial las 24 horas del
+                                    día.</p>
+                            </div>
+                        </div>
+
+                        <div class="proposal-item animate-on-scroll reveal-up delay-1" data-id="eng">
+                            <button class="proposal-btn">
+                                <i data-lucide="trending-up"></i>
+                                <span>Ingeniería de Impacto</span>
+                            </button>
+                            <div class="proposal-tooltip">
+                                <p>Escalamos tu rentabilidad mediante la integración de datos y una visión estratégica
+                                    de vanguardia.</p>
+                            </div>
+                        </div>
+
+                        <div class="proposal-item animate-on-scroll reveal-up delay-2" data-id="adj">
+                            <button class="proposal-btn">
+                                <i data-lucide="refresh-cw"></i>
+                                <span>Ajuste Dinámico</span>
+                            </button>
+                            <div class="proposal-tooltip">
+                                <p>Optimizamos cada sistema continuamente para garantizar resultados por encima del
+                                    promedio del mercado.</p>
+                            </div>
+                        </div>
+
+                        <div class="proposal-item animate-on-scroll reveal-up delay-3" data-id="scale">
+                            <button class="proposal-btn">
+                                <i data-lucide="layers"></i>
+                                <span>Escalado de Éxito</span>
+                            </button>
+                            <div class="proposal-tooltip">
+                                <p>Multiplicamos los resultados del negocio sin incrementar la estructura de costos
+                                    operativos complejos.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -262,150 +290,13 @@
 
                 </div>
 
-                <!-- Distinction Section -->
-                <div class="distinction-section animate-on-scroll">
-                    <div class="distinction-header">
-                        <i data-lucide="brain" size="48" color="#0078D4"></i>
-                        <h3>¿Qué distingue a CODEX?</h3>
-                    </div>
-                    <div class="distinction-grid">
-                        <div class="distinction-item">
-                            <span class="dist-icon">✓</span>
-                            <span>Resultados Medibles</span>
-                        </div>
-                        <div class="distinction-item">
-                            <span class="dist-icon">✓</span>
-                            <span>Eficiencia Operacional</span>
-                        </div>
-                        <div class="distinction-item">
-                            <span class="dist-icon">✓</span>
-                            <span>Automatización Inteligente</span>
-                        </div>
-                        <div class="distinction-item">
-                            <span class="dist-icon">✓</span>
-                            <span>Transformación Sostenible</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <section id="beneficios" class="section-padding bg-light">
-            <div class="container">
-                <div class="section-header text-center reveal-up">
-                    <h2 class="section-title">¿Por qué elegir CODEX?</h2>
-                    <p class="section-desc">Beneficios reales que transforman la rentabilidad de tu negocio.</p>
-                </div>
-                <div class="benefits-grid">
-                    <div class="benefit-card animate-on-scroll reveal-up">
-                        <div class="benefit-graphic">
-                            <div class="chart-bar-container">
-                                <div class="chart-bar" style="height: 40%;"></div>
-                                <div class="chart-bar" style="height: 60%;"></div>
-                                <div class="chart-bar highlight" style="height: 95%;"></div>
-                            </div>
-                        </div>
-                        <div class="big-number">+200%</div>
-                        <h3>Aumento de Ventas</h3>
-                        <p>Nuestros agentes de IA califican y cierran leads mientras duermes, maximizando cada
-                            oportunidad comercial.</p>
-                    </div>
-                    <div class="benefit-card animate-on-scroll">
-                        <div class="benefit-graphic">
-                            <div class="circle-chart">
-                                <svg viewBox="0 0 36 36">
-                                    <path class="circle-bg"
-                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <path class="circle" stroke-dasharray="85, 100"
-                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="big-number">-85%</div>
-                        <h3>Costos Operativos</h3>
-                        <p>Reducimos las tareas manuales en un 85%, permitiendo que tu equipo se enfoque en estrategias
-                            de alto valor.</p>
-                    </div>
-                    <div class="benefit-card animate-on-scroll">
-                        <div class="benefit-graphic">
-                            <div class="rotating-icon-box">
-                                <i data-lucide="refresh-cw" class="rotating-icon"></i>
-                            </div>
-                        </div>
-                        <div class="big-number">24/7</div>
-                        <h3>Optimización Continua</h3>
-                        <p>Sistemas que aprenden y se adaptan a las tendencias del mercado en tiempo real, manteniendo
-                            tu ventaja competitiva.</p>
-                    </div>
-                </div>
             </div>
         </section>
 
 
 
-        <section id="acerca" class="section-padding bg-history-strip">
-            <div id="historia"></div>
-            <div class="container">
-                <div class="section-header text-center reveal-up">
-                    <h2 class="section-title">Nuestra Historia y Visión</h2>
-                    <p class="section-desc">De la ingeniería energética a liderar la revolución tecnológica nacional.
-                    </p>
-                </div>
-                <div class="strategic-timeline animate-on-scroll">
-                    <div class="timeline-line"></div>
 
-                    <div class="milestone past">
-                        <div class="milestone-blob"></div>
-                        <div class="milestone-content">
-                            <span class="milestone-year">2021</span>
-                            <h4>El Origen</h4>
-                            <p>Fundación basada en Ingeniería de Innovación Sustentable. Transición crítica de la
-                                energía a la digitalización.</p>
-                        </div>
-                    </div>
-
-                    <div class="milestone past">
-                        <div class="milestone-blob"></div>
-                        <div class="milestone-content">
-                            <span class="milestone-year">2023</span>
-                            <h4>Consolidación</h4>
-                            <p>Digitalización masiva para aseguradoras nacionales líderes, optimizando procesos de alta
-                                complejidad.</p>
-                        </div>
-                    </div>
-
-                    <div class="milestone current">
-                        <div class="milestone-blob"></div>
-                        <div class="milestone-content">
-                            <span class="milestone-year">2025</span>
-                            <h4>Era de la IA</h4>
-                            <p>Especialización en agentes autónomos y análisis estratégico. CODEX se posiciona como
-                                referente en automatización.</p>
-                        </div>
-                    </div>
-
-                    <div class="milestone future">
-                        <div class="milestone-blob"></div>
-                        <div class="milestone-content">
-                            <span class="milestone-year">2027</span>
-                            <h4>Expansión Soberana</h4>
-                            <p>Integración con el sector público y alianzas estratégicas con la gran industria privada
-                                para modernizar el país.</p>
-                        </div>
-                    </div>
-
-                    <div class="milestone future goal">
-                        <div class="milestone-blob"></div>
-                        <div class="milestone-content">
-                            <span class="milestone-year">2030</span>
-                            <h4>Proveedor #1</h4>
-                            <p>Consolidación como el proveedor de tecnología y IA número uno en el país, impulsando el
-                                crecimiento nacional.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section id="comunidad" class="section-padding bg-cosmic inverted">
             <div id="bi-metrics"></div>
@@ -430,10 +321,10 @@
                             </div>
                         </div>
                         <div class="metric-info">
-                            <h3>Eficiencia Operativa</h3>
-                            <div class="metric-label">Optimización Industrial</div>
-                            <p>Eliminamos tareas repetitivas mediante flujos inteligentes, permitiendo una operatividad
-                                impecable sin errores humanos.</p>
+                            <h3>Eficiencia</h3>
+                            <div class="metric-label">Optimización</div>
+                            <p>Eliminamos tareas repetitivas con flujos inteligentes, garantizando una operatividad sin
+                                errores.</p>
                         </div>
                     </div>
 
@@ -451,10 +342,9 @@
                             </div>
                         </div>
                         <div class="metric-info">
-                            <h3>Atención al Cliente</h3>
-                            <div class="metric-label">Disponibilidad Total</div>
-                            <p>Sistemas conversacionales que responden y califican leads en cualquier momento del día,
-                                todos los días del año.</p>
+                            <h3>Disponibilidad</h3>
+                            <div class="metric-label">Atención 24/7</div>
+                            <p>Sistemas conversacionales que califican leads en tiempo real, todos los días del año.</p>
                         </div>
                     </div>
 
@@ -471,89 +361,107 @@
                             </div>
                         </div>
                         <div class="metric-info">
-                            <h3>Aumento de Ventas</h3>
-                            <div class="metric-label">Crecimiento Mensurable</div>
-                            <p>Incremento directo en la conversión de ventas gracias a la calificación automática y
-                                seguimiento estratégico de IA.</p>
+                            <h3>Crecimiento</h3>
+                            <div class="metric-label">Ventas</div>
+                            <p>Incremento en conversiones gracias a la calificación automática y seguimiento constante
+                                de IA.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <section id="contacto" class="section-padding bg-white cta-split-redesign">
+            <!-- Animated Light Rays Background -->
+            <div class="animated-rays-container">
+                <div class="ray ray-1"></div>
+                <div class="ray ray-2"></div>
+                <div class="ray ray-3"></div>
+            </div>
 
-        <section id="contacto" class="section-padding bg-white">
             <div class="container">
-                <div class="contact-optimized-container">
-                    <div class="contact-info-centered animate-on-scroll">
+                <div class="contact-grid-split">
+                    <!-- Column 1: Branding & Calendly -->
+                    <div class="contact-branding-column animate-on-scroll">
                         <span class="badge">Auditoría Estratégica</span>
                         <h2 class="section-title">Impulsa tu Operación al Futuro</h2>
-                        <p class="section-desc-light-dark">No dejes tu competitividad al azar. Agenda una sesión de 30
+                        <p class="section-desc-left">No dejes tu competitividad al azar. Agenda una sesión de 30
                             minutos y descubre cómo nuestras soluciones de IA pueden escalar tu negocio.</p>
 
-                        <div class="contact-cta-box">
+                        <div class="contact-cta-wrapper">
                             <a href="https://calendly.com/codexai-consulting/30min" target="_blank"
                                 class="btn btn-primary btn-large glow-btn">Agendar Llamada de Estrategia</a>
                             <p class="cta-subtext">Cupos limitados para consultoría gratuita este mes.</p>
                         </div>
 
-                        <div class="or-separator">
+                        <div class="split-separator">
                             <span>O escríbenos directamente</span>
                         </div>
                     </div>
 
-                    <div class="contact-form-wrapper-centered animate-on-scroll">
-                        <form id="contact-form" class="contact-form-innovative">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name">Nombre</label>
-                                    <input type="text" id="name" name="name" required placeholder="Tu nombre">
+                    <!-- Column 2: Glass Contact Form -->
+                    <div class="contact-form-column animate-on-scroll">
+                        <div class="glass-form-card">
+                            <form id="contact-form" class="contact-form-innovative">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="name">Nombre</label>
+                                        <input type="text" id="name" name="name" required placeholder="Tu nombre">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Corporativo</label>
+                                        <input type="email" id="email" name="email" required
+                                            placeholder="tu@empresa.com">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email Corporativo</label>
-                                    <input type="email" id="email" name="email" required placeholder="tu@empresa.com">
+                                    <label>¿Cuál es tu prioridad hoy?</label>
+                                    <div class="casual-options-grid">
+                                        <label class="option-item">
+                                            <input type="radio" name="priority" value="Aumentar Ventas" required>
+                                            <span>Aumentar Ventas</span>
+                                        </label>
+                                        <label class="option-item">
+                                            <input type="radio" name="priority" value="Aprender de IA">
+                                            <span>Aprender de IA</span>
+                                        </label>
+                                        <label class="option-item">
+                                            <input type="radio" name="priority" value="Diseño Web">
+                                            <span>Diseño Web</span>
+                                        </label>
+                                        <label class="option-item">
+                                            <input type="radio" name="priority" value="Automatización">
+                                            <span>Automatización</span>
+                                        </label>
+                                        <label class="option-item">
+                                            <input type="radio" name="priority" value="Consulta General">
+                                            <span>Otras Consultas</span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>¿Cuál es tu prioridad hoy?</label>
-                                <div class="casual-options-grid">
-                                    <label class="option-item">
-                                        <input type="radio" name="priority" value="Aumentar Ventas" required>
-                                        <span>Aumentar Ventas</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="priority" value="Aprender de IA">
-                                        <span>Aprender de IA</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="priority" value="Diseño Web">
-                                        <span>Diseño Web</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="priority" value="Automatización">
-                                        <span>Automatización</span>
-                                    </label>
-                                    <label class="option-item">
-                                        <input type="radio" name="priority" value="Consulta General">
-                                        <span>Otras Consultas</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-large glow-btn w-full">Enviar por
-                                Email</button>
-                        </form>
+                                <button type="submit" class="btn btn-primary btn-large glow-btn w-full">Enviar por
+                                    Email</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+        </section>
     </main>
 
-    <footer class="main-footer">
+    <footer class="main-footer bg-cosmic inverted">
+        <div class="cosmic-background-stars">
+            <div class="stars-layer small"></div>
+            <div class="stars-layer medium"></div>
+            <div class="stars-layer large"></div>
+        </div>
         <div class="container">
             <div class="footer-grid">
                 <!-- COLUMNA 1 — IDENTIDAD CORPORATIVA -->
                 <div class="footer-col branding-col">
                     <div class="footer-logo">CODEX AI CONSULTING</div>
-                    <p class="footer-mission">Líderes en automatización estratégica, inteligencia artificial aplicada e
+                    <p class="footer-mission">Líderes en automatización estratégica, inteligencia artificial
+                        aplicada e
                         ingeniería de datos.</p>
                     <p class="footer-vision">Diseñamos e implementamos sistemas digitales inteligentes que optimizan
                         procesos, aumentan ventas y convierten datos en decisiones estratégicas.</p>
@@ -574,14 +482,17 @@
                     <h4>Políticas y Contacto</h4>
                     <div class="legal-item">
                         <h5>Privacidad de Datos</h5>
-                        <p>En CODEX protegemos la información de nuestros clientes bajo estándares de seguridad digital
-                            y buenas prácticas internacionales. No compartimos ni comercializamos datos con terceros sin
+                        <p>En CODEX protegemos la información de nuestros clientes bajo estándares de seguridad
+                            digital
+                            y buenas prácticas internacionales. No compartimos ni comercializamos datos con terceros
+                            sin
                             consentimiento explícito.</p>
                     </div>
                     <div class="legal-item">
                         <h5>Términos Generales</h5>
                         <p>Todos los servicios ofrecidos están sujetos a contratos personalizados que especifican
-                            alcance, tiempos y responsabilidades. La propiedad intelectual de soluciones desarrolladas
+                            alcance, tiempos y responsabilidades. La propiedad intelectual de soluciones
+                            desarrolladas
                             se define en cada acuerdo.</p>
                     </div>
                     <div class="legal-item">
@@ -616,7 +527,8 @@
                         <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i> LinkedIn</a>
                         <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i> Instagram</a>
                     </div>
-                    <p class="institutional-msg">Conectamos tecnología, datos y estrategia para construir negocios más
+                    <p class="institutional-msg">Conectamos tecnología, datos y estrategia para construir negocios
+                        más
                         eficientes y preparados para el futuro.</p>
                 </div>
             </div>
@@ -625,7 +537,8 @@
                 <div class="footer-bottom-content">
                     <p>© 2025 CODEX AI CONSULTING. Todos los derechos reservados.</p>
                     <p class="trademark">Marca registrada en proceso.</p>
-                    <p class="dev-note">Desarrollado con arquitectura digital optimizada para rendimiento, seguridad y
+                    <p class="dev-note">Desarrollado con arquitectura digital optimizada para rendimiento, seguridad
+                        y
                         escalabilidad.</p>
                 </div>
             </div>
