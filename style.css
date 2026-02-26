@@ -232,24 +232,53 @@ ul {
     color: var(--primary-blue);
 }
 
+.nav-actions-mobile {
+    display: none;
+}
+
 @media (max-width: 992px) {
     .nav-links {
         position: fixed;
-        top: var(--header-height);
-        left: 0;
-        width: 100%;
-        height: calc(100vh - var(--header-height));
-        background: #fcfaf7;
+        top: 0;
+        /* Changed from header-height to 0 for full overlay */
+        right: 0;
+        width: 80%;
+        /* Sidebar style instead of full width */
+        max-width: 320px;
+        height: 100vh;
+        background: #ffffff;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        /* Align left for cleaner list */
         justify-content: flex-start;
-        padding-top: 50px;
+        padding-top: 80px;
         gap: 0;
         transform: translateX(100%);
         transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         display: flex;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+        z-index: 2000;
+        overflow-y: auto;
+    }
+
+    /* Overlay for when menu is open */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+        z-index: 1999;
+    }
+
+    body.menu-open .menu-overlay {
+        opacity: 1;
+        visibility: visible;
     }
 
     .nav-links.active {
@@ -258,15 +287,29 @@ ul {
 
     .nav-links li {
         width: 100%;
-        text-align: center;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.02);
     }
 
     .nav-links li a {
         display: block;
-        padding: 20px;
-        font-size: 1.1rem;
-        letter-spacing: 2px;
+        padding: 18px 25px;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+        color: var(--dark-blue);
+    }
+
+    .nav-actions-mobile {
+        width: 100%;
+        padding: 25px;
+        margin-top: auto;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: block;
+    }
+
+    .nav-actions-mobile .btn {
+        color: var(--white) !important;
+        /* Ensure white text on mobile button */
     }
 
     .nav-actions {
@@ -275,6 +318,46 @@ ul {
 
     .mobile-menu-btn {
         display: flex;
+        position: relative;
+        z-index: 2100;
+    }
+
+    /* Dropdown mobile adaptations - Enhanced */
+    .dropdown-content {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        background: #f8fafd;
+        display: none;
+        width: 100%;
+        padding: 5px 0;
+        border-radius: 0;
+        border-left: 3px solid var(--primary-blue);
+    }
+
+    .dropdown.active-mobile .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-content a {
+        padding: 12px 35px !important;
+        font-size: 0.88rem !important;
+        text-transform: none !important;
+        letter-spacing: 0.5px !important;
+        color: var(--text-muted) !important;
+        border-bottom: none !important;
+    }
+
+    .dropbtn i {
+        transition: transform 0.3s ease;
+        margin-left: auto;
+        /* Push arrow to the right */
+    }
+
+    .dropdown.active-mobile .dropbtn i {
+        transform: rotate(180deg);
     }
 }
 
@@ -1021,24 +1104,61 @@ ul {
 
 @media (max-width: 768px) {
     .proposal-list {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        width: 100%;
     }
 
     .proposal-item {
         width: 100%;
-        max-width: 320px;
+        display: flex;
+        flex-direction: column;
+        background: var(--white);
+        border-radius: 16px;
+        border: 1px solid rgba(0, 38, 77, 0.05);
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
     .proposal-btn {
         width: 100%;
-        justify-content: center;
+        background: transparent;
+        border: none;
+        padding: 18px 20px;
+        border-radius: 0;
+        box-shadow: none;
+        justify-content: flex-start;
+    }
+
+    .proposal-btn:hover {
+        transform: none;
+        box-shadow: none;
     }
 
     .proposal-tooltip {
+        position: static;
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        width: 100%;
+        background: transparent;
+        color: var(--text-muted);
+        padding: 0 20px 18px 44px;
+        /* Align with text after icon */
+        text-align: left;
+        box-shadow: none;
+        pointer-events: auto;
+    }
+
+    .proposal-tooltip::after {
         display: none;
-        /* Tooltips are tricky on mobile, keeping it clean */
+    }
+
+    .proposal-tooltip p {
+        font-size: 0.85rem;
+        line-height: 1.5;
     }
 }
 

@@ -1,43 +1,77 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Header shadow on scroll
     const header = document.getElementById('main-header');
+    // Mobile Menu Toggle
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    const body = document.body;
+
+    // Create overlay if it doesn't exist
+    let overlay = document.querySelector('.menu-overlay');
+    if (!overlay && navLinks) {
+        overlay = document.createElement('div');
+        overlay.className = 'menu-overlay';
+        navLinks.parentNode.insertBefore(overlay, navLinks);
+    }
+
+    const toggleMenu = (forceClose = false) => {
+        if (forceClose || navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            body.classList.remove('menu-open');
+            if (menuBtn) {
+                const icon = menuBtn.querySelector('i');
+                if (icon) {
+                    icon.setAttribute('data-lucide', 'menu');
+                    lucide.createIcons();
+                }
+            }
+        } else {
+            navLinks.classList.add('active');
+            body.classList.add('menu-open');
+            if (menuBtn) {
+                const icon = menuBtn.querySelector('i');
+                if (icon) {
+                    icon.setAttribute('data-lucide', 'x');
+                    lucide.createIcons();
+                }
+            }
+        }
+    };
+
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => toggleMenu());
+        if (overlay) {
+            overlay.addEventListener('click', () => toggleMenu(true));
+        }
+
+        // Close menu on link click (except dropdown buttons)
+        navLinks.querySelectorAll('a:not(.dropbtn)').forEach(link => {
+            link.addEventListener('click', () => toggleMenu(true));
+        });
+    }
+
+    // Dropdown toggle for mobile
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const dropbtn = dropdown.querySelector('.dropbtn');
+        if (dropbtn) {
+            dropbtn.addEventListener('click', (e) => {
+                if (window.innerWidth <= 992) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active-mobile');
+                }
+            });
+        }
+    });
+
+    // Scroll listener for header styles only
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             header.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+            header.style.background = 'rgba(255, 255, 255, 0.98)';
         } else {
             header.style.boxShadow = 'none';
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-        }
-        // Mobile Menu Toggle
-        const menuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-
-        if (menuBtn && navLinks) {
-            menuBtn.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                const icon = menuBtn.querySelector('i');
-                if (icon) {
-                    if (navLinks.classList.contains('active')) {
-                        icon.setAttribute('data-lucide', 'x');
-                    } else {
-                        icon.setAttribute('data-lucide', 'menu');
-                    }
-                    lucide.createIcons();
-                }
-            });
-
-            // Close menu on link click
-            navLinks.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    const icon = menuBtn.querySelector('i');
-                    if (icon) {
-                        icon.setAttribute('data-lucide', 'menu');
-                        lucide.createIcons();
-                    }
-                });
-            });
+            header.style.background = '#fcfaf7';
         }
     });
 
