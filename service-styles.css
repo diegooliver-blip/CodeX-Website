@@ -1964,3 +1964,14 @@ img {
     transform: translateY(0);
 }
 
+/* ============================================
+   MAIN HERO TITLE - Blue Color Override
+   ============================================ */
+#main-hero .hero-title {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #0078D4 !important;
+    background-clip: unset !important;
+    color: #0078D4 !important;
+}
+
