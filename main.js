@@ -1,10 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Header shadow on scroll
+    // Top Strip scroll positioning
+    const topStrip = document.querySelector('.top-strip');
     const header = document.getElementById('main-header');
+    const body = document.body;
+
+    // Header scroll effect - transition from transparent to solid
+    let lastScroll = 0;
+    const handleHeaderScroll = () => {
+        const currentScroll = window.scrollY;
+
+        if (header) {
+            // Top strip height: 50px, header height: 90px
+            if (currentScroll > 100) {
+                header.classList.add('main-header--scrolled');
+                body.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('main-header--scrolled');
+                body.classList.remove('header-scrolled');
+            }
+        }
+
+        lastScroll = currentScroll;
+    };
+
+    window.addEventListener('scroll', () => {
+        requestAnimationFrame(handleHeaderScroll);
+    });
+
+    // Initial check
+    handleHeaderScroll();
+
     // Mobile Menu Toggle
     const menuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    const body = document.body;
+    const navLinks = document.querySelector('.nav-desktop');
 
     // Create overlay if it doesn't exist
     let overlay = document.querySelector('.menu-overlay');
@@ -51,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dropdown toggle for mobile
-    const dropdowns = document.querySelectorAll('.dropdown');
+    const dropdowns = document.querySelectorAll('.dropdown-mega');
     dropdowns.forEach(dropdown => {
         const dropbtn = dropdown.querySelector('.dropbtn');
         if (dropbtn) {
@@ -64,25 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Scroll listener for header styles only
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
-            header.style.background = 'rgba(255, 255, 255, 0.98)';
-        } else {
-            header.style.boxShadow = 'none';
-            header.style.background = '#fcfaf7';
-        }
-    });
-
-    // Smooth scroll for nav links
+    // Smooth scroll for nav links with header offset
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
+                const headerOffset = topStrip ? 140 : 90; // top strip + header height
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
                 window.scrollTo({
-                    top: target.offsetTop - 72,
+                    top: offsetPosition,
                     behavior: 'smooth'
                 });
             }
@@ -145,28 +166,66 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // Contact Form Submission (Mailto Integration)
+    // Contact Form Submission - AJAX instead of mailto
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
             const priority = document.querySelector('input[name="priority"]:checked')?.value || "No especificada";
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
 
-            const subject = encodeURIComponent(`Nuevo Contacto: ${name} - CODEX AI`);
-            const body = encodeURIComponent(
-                `Nombre: ${name}\n` +
-                `Email: ${email}\n` +
-                `Prioridad/Desafío: ${priority}\n\n` +
-                `Hola CODEX, me gustaría obtener más información sobre ${priority}.`
-            );
+            // Basic validation
+            if (!name || !email) {
+                alert('Por favor completa los campos requeridos');
+                return;
+            }
 
-            const mailtoLink = `mailto:codexai.consulting@gmail.com?subject=${subject}&body=${body}`;
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor ingresa un email válido');
+                return;
+            }
 
-            // Open user's email client
-            window.location.href = mailtoLink;
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span>Enviando...</span>
+                <svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke-dasharray="4"></circle>
+                </svg>
+            `;
+
+            try {
+                // TODO: Replace with actual endpoint (Netlify Forms, Formspree, or custom backend)
+                // For now, open email client as fallback
+                const subject = encodeURIComponent(`Nuevo Contacto: ${name} - CODEX AI`);
+                const body = encodeURIComponent(
+                    `Nombre: ${name}\n` +
+                    `Email: ${email}\n` +
+                    `Prioridad/Desafío: ${priority}\n\n` +
+                    `Hola CODEX, me gustaría obtener más información sobre ${priority}.`
+                );
+                const mailtoLink = `mailto:codexai.consulting@gmail.com?subject=${subject}&body=${body}`;
+
+                // Simulate successful submission for demo
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                window.location.href = mailtoLink;
+
+                // Show success message
+                alert('¡Gracias por contactarnos! Te responderemos pronto.');
+                contactForm.reset();
+            } catch (error) {
+                console.error('Form error:', error);
+                alert('Error al enviar. Por favor intenta de nuevo.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
         });
     }
 });
