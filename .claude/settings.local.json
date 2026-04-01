@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -n '2507,4008p' \"c:\\\\Users\\\\doliv\\\\WEBSITE CODEX\\\\style.css\")",
+      "Bash(\"c:\\\\Users\\\\doliv\\\\WEBSITE CODEX\\\\service-styles.css\")",
+      "Bash(\"c:\\\\Users\\\\doliv\\\\WEBSITE CODEX\\\\style.css\")",
+      "Bash(\"c:\\\\Users\\\\doliv\\\\WEBSITE CODEX\\\\service-styles.css\":*)",
+      "Bash(__NEW_LINE_693e5031016dd288__ for:*)",
+      "Bash(do)",
+      "Bash(sed -i 's/class=\"\"main-footer bg-cosmic inverted\"\"/class=\"\"main-footer bg-dark inverted\"\"/g' \"$file\")",
+      "Bash(done)",
+      "Bash(__NEW_LINE_693e5031016dd288__ echo:*)",
+      "Bash(grep -E \"\\\\.\\(html|css|js\\)$\")",
+      "Bash(grep -n \"data-image=\" \"C:\\\\Users\\\\doliv\\\\WEBSITE CODEX\\\\servicios\"*.html)",
+      "Bash(grep \"data-image=\" servicios/*.html)",
+      "Bash(grep -n \"mega-preview-img\" servicios/*.html)",
+      "Bash(npx skills:*)",
+      "Bash(grep -E \"\\\\.\\(png|jpg|jpeg|webp\\)$\")",
+      "Bash(ls \"c:\\\\Users\\\\doliv\\\\WEBSITE CODEX\\\\servicios\"/*.html)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(grep -E \"\\\\.\\(png|jpg|jpeg|gif|svg|webp|ico\\)$\")",
+      "Bash(git commit:*)",
+      "Bash(git clone:*)"
+    ]
+  }
+}

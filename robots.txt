@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://codexai.com/sitemap.xml
+
+# Disallow admin areas (if any)
+Disallow: /admin/
+Disallow: /private/

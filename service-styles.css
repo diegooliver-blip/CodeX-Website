@@ -559,7 +559,7 @@
 /* ─── CUSTOM CURSOR ─────────────────────────────────────────────────────────── */
 @media (hover: hover) and (pointer: fine) {
     *, *::before, *::after {
-        cursor: none !important;
+        /* cursor: none !important; */ /* Deshabilitado para restaurar cursor visible */
     }
 }
 

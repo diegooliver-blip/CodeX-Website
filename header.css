@@ -50,8 +50,8 @@
     font-size: 1.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
-    color: #FFFFFF; /* Color blanco puro para mejor visibilidad */
-    text-shadow: 0 2px 8px rgba(201, 165, 90, 0.3);
+    color: var(--blue-light, #3B82F6); /* Azul claro */
+    text-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .logo-sub {
