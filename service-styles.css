@@ -1664,3 +1664,303 @@ img {
     border: 1px solid rgba(255,255,255,0.08) !important;
 }
 
+/* ============================================
+   RESULTS HIGHLIGHTS - Big Numbers
+   ============================================ */
+.results-highlights {
+    position: relative;
+    overflow: hidden;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    text-align: center;
+}
+
+.result-card {
+    padding: 40px 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    transition: transform 0.4s ease, background 0.4s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255,255,255,0.06);
+}
+
+.result-number {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 12px;
+    line-height: 1;
+}
+
+.result-label {
+    font-family: var(--font-label);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ============================================
+   TESTIMONIALS SECTION
+   ============================================ */
+.testimonials-section {
+    position: relative;
+}
+
+.testimonials-carousel-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.testimonials-carousel {
+    padding: 20px 0;
+}
+
+.testimonial-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    transition: transform 0.4s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.testimonial-rating {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 24px;
+}
+
+.testimonial-rating i {
+    color: var(--gold);
+    width: 20px;
+    height: 20px;
+}
+
+.testimonial-text {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--text-light);
+    margin-bottom: 32px;
+    font-family: var(--font-body);
+    font-weight: 400;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.author-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0A0A0A;
+}
+
+.author-info {
+    text-align: left;
+}
+
+.author-info strong {
+    display: block;
+    font-family: var(--font-label);
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.author-info span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ============================================
+   PROJECTS SECTION
+   ============================================ */
+.projects-section {
+    position: relative;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.project-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.1);
+}
+
+.project-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.2) 50%, transparent 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.project-card:hover .project-overlay {
+    opacity: 1;
+}
+
+.project-info h4 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 4px;
+}
+
+.project-info p {
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ============================================
+   SWIPER CAROUSEL STYLES
+   ============================================ */
+.swiper {
+    width: 100%;
+    padding: 20px 0 60px;
+}
+
+.swiper-wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+.swiper-slide {
+    height: auto;
+}
+
+/* Services Carousel */
+.services-carousel .service-card {
+    height: 100%;
+}
+
+/* Testimonials Carousel */
+.testimonials-carousel .swiper-slide {
+    display: flex;
+    align-items: stretch;
+}
+
+.testimonials-carousel .testimonial-card {
+    margin: 0 auto;
+    max-width: 700px;
+    width: 100%;
+}
+
+/* Navigation buttons */
+.swiper-button-next,
+.swiper-button-prev {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 16px;
+    color: var(--text-light);
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+}
+
+.swiper-button-next:hover:after,
+.swiper-button-prev:hover:after {
+    color: #0A0A0A;
+}
+
+/* Pagination */
+.swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: rgba(255,255,255,0.3);
+    opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--gold);
+}
+
+/* ============================================
+   ANIMATIONS FOR NEW SECTIONS
+   ============================================ */
+.service-card,
+.exp-case-card,
+.exp-domain-card,
+.result-card,
+.project-card,
+.testimonial-card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.service-card.animate-visible,
+.exp-case-card.animate-visible,
+.exp-domain-card.animate-visible,
+.result-card.animate-visible,
+.project-card.animate-visible,
+.testimonial-card.animate-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+

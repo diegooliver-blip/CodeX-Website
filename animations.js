@@ -332,6 +332,127 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
   }
+  // ─── SWIPER CAROUSELS ─────────────────────────────────────────────────────────
+  function initSwiperCarousels() {
+    if (typeof Swiper === 'undefined') return;
+
+    // Services Carousel
+    var servicesCarousel = document.getElementById('servicesCarousel');
+    if (servicesCarousel) {
+      new Swiper(servicesCarousel, {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: servicesCarousel.querySelector('.swiper-pagination'),
+          clickable: true,
+        },
+        navigation: {
+          nextEl: servicesCarousel.querySelector('.swiper-button-next'),
+          prevEl: servicesCarousel.querySelector('.swiper-button-prev'),
+        },
+        breakpoints: {
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+          1280: { slidesPerView: 3 },
+        },
+      });
+    }
+
+    // Testimonials Carousel
+    var testimonialsCarousel = document.getElementById('testimonialsCarousel');
+    if (testimonialsCarousel) {
+      new Swiper(testimonialsCarousel, {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+          delay: 6000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: testimonialsCarousel.querySelector('.swiper-pagination'),
+          clickable: true,
+        },
+        navigation: {
+          nextEl: testimonialsCarousel.querySelector('.swiper-button-next'),
+          prevEl: testimonialsCarousel.querySelector('.swiper-button-prev'),
+        },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+      });
+    }
+  }
+
+  // ─── GENERIC SCROLL ANIMATIONS ───────────────────────────────────────────────
+  function initGenericScrollAnimations() {
+    if (prefersReducedMotion) return;
+
+    // Section titles reveal
+    document.querySelectorAll('.section-title[data-splitting]').forEach(function (title) {
+      if (typeof Splitting !== 'undefined') {
+        Splitting({ target: title, by: 'words' });
+        var words = title.querySelectorAll('.word');
+        gsap.fromTo(words,
+          { yPercent: 110 },
+          { yPercent: 0, duration: 0.8, stagger: 0.06, ease: 'power2.out',
+            scrollTrigger: { trigger: title, start: 'top 85%' }
+          }
+        );
+      }
+    });
+
+    // Generic cards animation (staggered)
+    var cardSelectors = [
+      '.service-card',
+      '.exp-case-card',
+      '.exp-domain-card',
+      '.result-card',
+      '.project-card',
+      '.testimonial-card'
+    ];
+
+    cardSelectors.forEach(function (selector) {
+      document.querySelectorAll(selector).forEach(function (card, i) {
+        gsap.fromTo(card,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.6, delay: i * 0.08, ease: 'power2.out',
+            scrollTrigger: { trigger: card, start: 'top 85%' }
+          }
+        );
+      });
+    });
+
+    // Results numbers counter
+    ScrollTrigger.create({
+      trigger: '.results-highlights',
+      start: 'top 70%',
+      once: true,
+      onEnter: function () {
+        document.querySelectorAll('.result-number[data-target]').forEach(function (el) {
+          var target = parseInt(el.getAttribute('data-target'), 10);
+          var prefix = el.getAttribute('data-prefix') || '';
+          var suffix = el.getAttribute('data-suffix') || '';
+          var obj = { val: 0 };
+
+          gsap.to(obj, {
+            val: target,
+            duration: 2,
+            ease: 'power2.out',
+            onUpdate: function () {
+              el.textContent = prefix + Math.round(obj.val) + suffix;
+            }
+          });
+        });
+      }
+    });
+  }
+
 
   // ─── INIT ─────────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
@@ -343,6 +464,8 @@
     initScrollProgress();
     initMegaMenu();
     initThreeHero();
+    initGenericScrollAnimations();
+    initSwiperCarousels();
 
     if (!document.getElementById('page-loader')) {
       initHeroAnimations();
