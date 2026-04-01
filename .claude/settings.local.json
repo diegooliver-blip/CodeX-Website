@@ -23,7 +23,8 @@
       "Bash(grep -E \"\\\\.\\(png|jpg|jpeg|gif|svg|webp|ico\\)$\")",
       "Bash(git commit:*)",
       "Bash(git clone:*)",
-      "Bash(node -c \"c:/Users/doliv/WEBSITE CODEX/hero-animations.js\")"
+      "Bash(node -c \"c:/Users/doliv/WEBSITE CODEX/hero-animations.js\")",
+      "Bash(node -c \"c:/Users/doliv/WEBSITE CODEX/animations.js\")"
     ]
   }
 }

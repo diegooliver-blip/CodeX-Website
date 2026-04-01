@@ -454,6 +454,7 @@
   }
 
 
+// ─── PARALLAX STARS ─────────────────────────────────────────────────────────  function initParallaxStars() {    if (prefersReducedMotion) return;    const starsContainers = document.querySelectorAll(".cosmic-background-stars");    starsContainers.forEach(container => {      gsap.to(container, {        yPercent: -50,        ease: "none",        scrollTrigger: {          trigger: container.parentElement,          start: "top bottom",          end: "bottom top",          scrub: true        }      });    });  }
   // ─── INIT ─────────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     initLoader();
@@ -464,6 +465,7 @@
     initScrollProgress();
     initMegaMenu();
     initThreeHero();
+    initParallaxStars();
     initGenericScrollAnimations();
     initSwiperCarousels();
 
