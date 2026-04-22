@@ -2579,6 +2579,22 @@ img {
     100% { background-position: 200% 0; }
 }
 
+/* ─── SCROLL TRIGGERED CARD FADE-IN ─────────────────────────────────────────── */
+.fade-in-scroll {
+    animation: fadeInScroll 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes fadeInScroll {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ─── HERO CONTENT MAX WIDTH ────────────────────────────────────────────────── */
 .hero-section.centralized .hero-content {
     max-width: 1100px !important;

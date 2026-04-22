@@ -455,6 +455,35 @@
 
 
 // ─── PARALLAX STARS ─────────────────────────────────────────────────────────  function initParallaxStars() {    if (prefersReducedMotion) return;    const starsContainers = document.querySelectorAll(".cosmic-background-stars");    starsContainers.forEach(container => {      gsap.to(container, {        yPercent: -50,        ease: "none",        scrollTrigger: {          trigger: container.parentElement,          start: "top bottom",          end: "bottom top",          scrub: true        }      });    });  }
+  // ─── CSS-BASED SCROLL ANIMATIONS (Fallback) ──────────────────────────────────
+  function initScrollAnimationsCSS() {
+    if (prefersReducedMotion) return;
+
+    var cardSelectors = [
+      '.service-card',
+      '.exp-case-card',
+      '.exp-domain-card',
+      '.result-card',
+      '.project-card',
+      '.testimonial-card'
+    ];
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in-scroll');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    cardSelectors.forEach(function (selector) {
+      document.querySelectorAll(selector).forEach(function (card) {
+        observer.observe(card);
+      });
+    });
+  }
+
   // ─── INIT ─────────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     initLoader();
@@ -471,6 +500,10 @@
 
     if (!document.getElementById('page-loader')) {
       initHeroAnimations();
+    }
+
+    if (typeof gsap === 'undefined') {
+      initScrollAnimationsCSS();
     }
   });
 
