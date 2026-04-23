@@ -8,10 +8,10 @@
     left: 0;
     right: 0;
     height: 90px;
-    background: rgba(10, 10, 10, 0.85) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(201, 165, 90, 0.15);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     z-index: 999;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
@@ -22,8 +22,8 @@
 #main-header.main-header--scrolled {
     top: 50px;
     height: 70px;
-    background: rgba(10, 10, 10, 0.97) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .main-header__inner {
@@ -46,11 +46,11 @@
 }
 
 .logo-mark {
-    font-family: var(--font-display, 'Cormorant Garamond', serif);
+    font-family: 'Outfit', 'Space Grotesk', var(--font-display, sans-serif);
     font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #ffffff;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #0A1628;
 }
 
 .logo-sub {
@@ -82,7 +82,7 @@
     font-family: var(--font-body, 'DM Sans', sans-serif);
     font-size: 0.9rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.85);
+    color: #0A0A0F;
     text-decoration: none;
     padding: 0.5rem 0;
     position: relative;
@@ -93,7 +93,7 @@
 }
 
 .nav-link:hover {
-    color: var(--color-gold, #C9A55A);
+    color: #2563EB;
 }
 
 .nav-chevron {
@@ -112,9 +112,10 @@
     height: 80px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid rgba(201, 165, 90, 0.3);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     flex-shrink: 0;
+    background: linear-gradient(135deg, #0D1E35, #1a3558);
 }
 
 /* Contacto header (opcional) */
@@ -135,7 +136,7 @@
 }
 
 .contact-link:hover {
-    color: var(--color-gold, #C9A55A);
+    color: #60A5FA;
 }
 
 .contact-link svg {
@@ -196,6 +197,12 @@
         width: 100px;
         height: 65px;
     }
+
+    .btn-ingresar {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -235,4 +242,33 @@
     .has-top-strip {
         padding-top: 60px;
     }
+}
+
+/* ─── BOTÓN INGRESAR ─────────────────────────────────────────────────────── */
+.btn-ingresar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border: 2px solid #0F2D5A;
+    border-radius: 4px;
+    color: #0A1628;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-ingresar:hover {
+    background: #0F2D5A;
+    color: #fff;
+    border-color: #0F2D5A;
+}
+
+.btn-ingresar svg {
+    flex-shrink: 0;
 }

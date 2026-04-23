@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CODEX | Sistemas Digitales Inteligentes y Automatización Estratégica</title>
-    <meta name="description"
+    <meta name="descripti1on"
         content="CODEX: Potenciamos negocios con sistemas digitales inteligentes y automatización estratégica.">
 
     <!-- SEO Meta Tags -->
@@ -40,7 +40,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&family=Outfit:wght@300;400;700;900&family=Space+Grotesk:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&family=Outfit:wght@300;400;700;900&family=Space+Grotesk:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -138,7 +138,8 @@
                                 </a>
                             </div>
                             <div class="mega-preview">
-                                <img class="mega-preview-img" src="AUTOMATIZA.png" alt="Vista previa servicio" />
+                                <img class="mega-preview-img" src="AUTOMATIZA.png" alt="Vista previa servicio"
+                                    onerror="this.style.display='none'" />
                             </div>
                         </div>
                     </li>
@@ -146,8 +147,14 @@
                     <li><a href="#contacto" class="nav-link">Contacto</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <a href="https://calendly.com/codexai-consulting/30min" target="_blank"
-                        class="btn btn-primary magnetic-btn">Consultoría Gratis</a>
+                    <a href="/portal/login.html" class="btn-ingresar">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Ingresar
+                    </a>
                 </div>
             </nav>
             <button class="mobile-menu-btn" aria-label="Menú">
@@ -160,10 +167,11 @@
         <!-- ============================================
              HERO SECTION - Premium Style (como experiencia.html)
              ============================================ -->
-        <section id="main-hero" class="service-hero" style="background: var(--bg-cream);">
+        <section id="main-hero" class="service-hero">
             <div class="service-hero-content container">
                 <span class="service-badge"><i data-lucide="award"></i> Alto Rendimiento en IA</span>
-                <h1 class="hero-title" data-splitting>Potenciamos Negocios con Sistemas<br>Digitales Inteligentes</h1>
+                <h1 class="hero-title" data-splitting><span class="hero-accent">Potenciamos</span> Negocios con
+                    Sistemas<br>Digitales Inteligentes</h1>
                 <p>Transformamos la complejidad operativa en crecimiento escalable mediante soluciones de IA y
                     automatización que generan resultados excepcionales.</p>
                 <div class="hero-cta-group">
@@ -178,8 +186,8 @@
              GLOBAL METRICS BAR
              ============================================ -->
         <section class="exp-metrics-bar">
-            <div class="container">
-                <div class="exp-metrics-row">
+            <div class="metrics-track-wrapper">
+                <div class="metrics-track">
                     <div class="exp-metric-pill">
                         <span class="exp-metric-num">+340%</span>
                         <span class="exp-metric-label">Eficiencia Operativa</span>
@@ -205,128 +213,58 @@
         </section>
 
         <!-- ============================================
-             SERVICIOS DESTACADOS - CAROUSEL
+             SERVICIOS — GRID 3×2
              ============================================ -->
-        <section id="servicios" class="section-padding bg-white">
-            <div class="container">
+        <section id="servicios" class="section-padding" style="background:#0d1b2a;position:relative;">
+            <div class="container" style="position:relative;z-index:1;">
                 <div class="section-header text-center">
                     <span class="badge">Nuestros Servicios</span>
-                    <h2 class="section-title" data-splitting>Soluciones de Alto Impacto</h2>
-                    <p class="section-desc">Diseñamos e implementamos sistemas de IA que generan resultados medibles y
-                        sostenibles.</p>
+                    <h2 class="section-title" style="color:#FFFFFF;">Soluciones que <span
+                            style="color:#00d4ff">transforman</span> tu operación</h2>
+                    <p class="section-desc" style="color:rgba(255,255,255,0.7);">Tecnología de punta aplicada a los
+                        desafíos reales de tu empresa. <a href="servicios/automatizacion.html" class="service-link"
+                            style="display:inline;font-size:inherit;color:#00d4ff;">Explora todos los servicios →</a>
+                    </p>
                 </div>
-
-                <!-- Carrusel de Servicios -->
-                <div class="services-carousel-wrapper">
-                    <div class="services-carousel" id="servicesCarousel">
-                        <div class="swiper-wrapper">
-                            <!-- Servicio 1 -->
-                            <div class="swiper-slide">
-                                <div class="service-card">
-                                    <div class="service-image">
-                                        <img src="AUTOMATIZACION DE PROCESOS.jpg" alt="Automatización" loading="lazy">
-                                    </div>
-                                    <div class="service-content">
-                                        <span class="service-tag">Automatización</span>
-                                        <h3>Flujos Autónomos</h3>
-                                        <p>Integración nativa con n8n, Zapier y agents. Elimina tareas repetitivas y
-                                            reduce errores humanos.</p>
-                                        <a href="servicios/automatizacion.html" class="service-link">
-                                            Ver detalles <i data-lucide="arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Servicio 2 -->
-                            <div class="swiper-slide">
-                                <div class="service-card">
-                                    <div class="service-image">
-                                        <img src="TECLADO AI.png" alt="Ventas con IA" loading="lazy">
-                                    </div>
-                                    <div class="service-content">
-                                        <span class="service-tag">Ventas</span>
-                                        <h3>IA Comercial</h3>
-                                        <p>Chatbots inteligentes, WhatsApp Business API y nurturing automático. Aumenta
-                                            conversiones hasta +71%.</p>
-                                        <a href="servicios/ventas-ia.html" class="service-link">
-                                            Ver detalles <i data-lucide="arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Servicio 3 -->
-                            <div class="swiper-slide">
-                                <div class="service-card">
-                                    <div class="service-image">
-                                        <img src="IMAGEN CONTENIDO ORGANICO.png" alt="Contenido IA" loading="lazy">
-                                    </div>
-                                    <div class="service-content">
-                                        <span class="service-tag">Contenido</span>
-                                        <h3>Generación Inteligente</h3>
-                                        <p>Producción automatizada de contenido personalizado para email, social y web.
-                                            Calidad premium.</p>
-                                        <a href="servicios/contenido-ia.html" class="service-link">
-                                            Ver detalles <i data-lucide="arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Servicio 4 -->
-                            <div class="swiper-slide">
-                                <div class="service-card">
-                                    <div class="service-image">
-                                        <img src="DATA AI.png" alt="Big Data & BI" loading="lazy">
-                                    </div>
-                                    <div class="service-content">
-                                        <span class="service-tag">Datos</span>
-                                        <h3>Business Intelligence</h3>
-                                        <p>Dashboards ejecutivos, pipelines en tiempo real y analítica predictiva. Toma
-                                            decisiones basadas en datos.</p>
-                                        <a href="servicios/datos-bi.html" class="service-link">
-                                            Ver detalles <i data-lucide="arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Servicio 5 -->
-                            <div class="swiper-slide">
-                                <div class="service-card">
-                                    <div class="service-image">
-                                        <img src="DISEÑO UXUI.png" alt="UX/UI Design" loading="lazy">
-                                    </div>
-                                    <div class="service-content">
-                                        <span class="service-tag">Diseño</span>
-                                        <h3>Experiencia de Usuario</h3>
-                                        <p>Interfaces que convierten, sistemas de diseño completos y optimización de
-                                            journeys.</p>
-                                        <a href="servicios/ux-ui.html" class="service-link">
-                                            Ver detalles <i data-lucide="arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Servicio 6 -->
-                            <div class="swiper-slide">
-                                <div class="service-card">
-                                    <div class="service-image">
-                                        <img src="MARKETING.jpg" alt="Marketing Digital" loading="lazy">
-                                    </div>
-                                    <div class="service-content">
-                                        <span class="service-tag">Marketing</span>
-                                        <h3>Estrategia Digital</h3>
-                                        <p>Optimización de campañas, SEO avanzado y estrategias de crecimiento orgánico.
-                                        </p>
-                                        <a href="servicios/marketing.html" class="service-link">
-                                            Ver detalles <i data-lucide="arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Navegación del carrusel -->
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-pagination"></div>
+                <div class="services-grid-3x2">
+                    <div class="svc-card animate-on-scroll">
+                        <div class="svc-icon"><i data-lucide="zap"></i></div>
+                        <h3>Automatización de Procesos</h3>
+                        <p>RPA, flujos inteligentes y n8n para eliminar tareas manuales y escalar operaciones sin
+                            errores.</p>
+                        <a href="servicios/automatizacion.html" class="svc-cta">Saber más →</a>
+                    </div>
+                    <div class="svc-card animate-on-scroll">
+                        <div class="svc-icon"><i data-lucide="message-circle"></i></div>
+                        <h3>Chatbots IA Conversacional</h3>
+                        <p>Asistentes GPT con soporte 24/7 que convierten consultas en ventas y retienen clientes.</p>
+                        <a href="servicios/ventas-ia.html" class="svc-cta">Saber más →</a>
+                    </div>
+                    <div class="svc-card animate-on-scroll">
+                        <div class="svc-icon"><i data-lucide="bar-chart-2"></i></div>
+                        <h3>Dashboards y Análisis BI</h3>
+                        <p>Business Intelligence en tiempo real para decisiones ejecutivas basadas en datos concretos.
+                        </p>
+                        <a href="servicios/datos-bi.html" class="svc-cta">Saber más →</a>
+                    </div>
+                    <div class="svc-card animate-on-scroll">
+                        <div class="svc-icon"><i data-lucide="code-2"></i></div>
+                        <h3>Desarrollo Web y Apps</h3>
+                        <p>Portales B2B, aplicaciones a medida e integraciones API para modernizar tu empresa.</p>
+                        <a href="servicios/ux-ui.html" class="svc-cta">Saber más →</a>
+                    </div>
+                    <div class="svc-card animate-on-scroll">
+                        <div class="svc-icon"><i data-lucide="lightbulb"></i></div>
+                        <h3>Consultoría Tecnológica</h3>
+                        <p>Estrategia de IA aplicada a tu modelo de negocio con hoja de ruta clara y resultados
+                            medibles.</p>
+                        <a href="servicios/marketing.html" class="svc-cta">Saber más →</a>
+                    </div>
+                    <div class="svc-card animate-on-scroll">
+                        <div class="svc-icon"><i data-lucide="shopping-cart"></i></div>
+                        <h3>E-commerce e Integración</h3>
+                        <p>Tiendas digitales con IA integradas a tu ERP, CRM y canales de venta omnicanal.</p>
+                        <a href="servicios/contenido-ia.html" class="svc-cta">Saber más →</a>
                     </div>
                 </div>
             </div>
@@ -344,8 +282,15 @@
                 <div class="section-header text-center">
                     <span class="badge">Casos de Éxito</span>
                     <h2 class="section-title" data-splitting>Transformaciones Documentadas</h2>
-                    <p class="section-desc">Cada caso representa un ecosistema completo de soluciones integradas, sin
-                        revelar datos identificadores de clientes.</p>
+                    <p class="section-desc">Estos no son proyectos piloto ni demos: son implementaciones en producción
+                        que siguen operando hoy. Presentados de forma anónima para proteger la información de nuestros
+                        clientes, cada caso refleja un ecosistema completo de soluciones integradas — automatización,
+                        datos, IA comercial y más.</p>
+                    <p class="section-desc" style="margin-top:0.75rem;">¿Identificas una situación similar a la tuya?
+                        Cada tecnología usada tiene una página de servicio completa. <a
+                            href="servicios/automatizacion.html" class="service-link"
+                            style="display:inline;font-size:inherit;">Revisa nuestros servicios para entender cómo lo
+                            hacemos →</a></p>
                 </div>
 
                 <div class="exp-cases-grid">
@@ -450,53 +395,41 @@
         </section>
 
         <!-- ============================================
-             SECTORES INDUSTRIALES
+             EQUIPO PREVIEW
              ============================================ -->
-        <section class="section-padding exp-domains-section bg-white">
+        <section class="section-padding equipo-preview bg-white">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="badge">Ámbitos de Experiencia</span>
-                    <h2 class="section-title" data-splitting>Dominio Técnico y Regulatorio</h2>
-                    <p class="section-desc">Cubrimos el espectro completo: desde la tecnología hasta el cumplimiento
-                        normativo y la dirección estratégica.</p>
+                    <span class="badge">Nuestro Equipo</span>
+                    <h2 class="section-title" data-splitting>Las personas detrás de los resultados</h2>
+                    <p class="section-desc">Especialistas en IA, automatización y estrategia digital con experiencia
+                        comprobada en entornos B2B de alta exigencia.</p>
                 </div>
-                <div class="exp-domains-grid">
-                    <div class="exp-domain-card animate-on-scroll">
-                        <i data-lucide="cpu"></i>
-                        <h4>Automatización Industrial</h4>
-                        <p>Integración de flujos productivos con tecnología n8n, Zapier y agentes IA en entornos de
-                            manufactura y logística.</p>
+                <div class="equipo-grid">
+                    <div class="equipo-card animate-on-scroll">
+                        <div class="equipo-avatar">DM</div>
+                        <h3>Diego Martínez</h3>
+                        <span class="equipo-rol">CEO &amp; Arquitecto de Soluciones IA</span>
+                        <p>Especialista en automatización empresarial y estrategia digital para mercados B2B con más de
+                            8 años de experiencia en manufactura y servicios.</p>
                     </div>
-                    <div class="exp-domain-card animate-on-scroll">
-                        <i data-lucide="leaf"></i>
-                        <h4>Gestión Ambiental</h4>
-                        <p>Sistemas de reporte y trazabilidad de indicadores ambientales alineados a ISO 14001 y
-                            regulaciones sectoriales.</p>
+                    <div class="equipo-card animate-on-scroll">
+                        <div class="equipo-avatar">AS</div>
+                        <h3>Ana Sánchez</h3>
+                        <span class="equipo-rol">Lead Developer &amp; Integraciones</span>
+                        <p>Experta en n8n, APIs y desarrollo de portales de alto rendimiento para empresas industriales
+                            y de servicios a escala.</p>
                     </div>
-                    <div class="exp-domain-card animate-on-scroll">
-                        <i data-lucide="shield-check"></i>
-                        <h4>Normatividad ISO</h4>
-                        <p>Experiencia en diseño e implementación de SGC bajo ISO 9001, ISO 45001 e ISO 14001, con
-                            integración digital completa.</p>
+                    <div class="equipo-card animate-on-scroll">
+                        <div class="equipo-avatar">CR</div>
+                        <h3>Carlos Reyes</h3>
+                        <span class="equipo-rol">Especialista en IA &amp; Datos</span>
+                        <p>Diseño de modelos LLM, dashboards BI y sistemas de análisis en tiempo real orientados a
+                            dirección ejecutiva.</p>
                     </div>
-                    <div class="exp-domain-card animate-on-scroll">
-                        <i data-lucide="globe"></i>
-                        <h4>Regulaciones Internacionales</h4>
-                        <p>Adecuación de sistemas y procesos a marcos regulatorios internacionales en sectores
-                            industriales, financieros y de servicios.</p>
-                    </div>
-                    <div class="exp-domain-card animate-on-scroll">
-                        <i data-lucide="briefcase"></i>
-                        <h4>Dirección Corporativa</h4>
-                        <p>Implementación de centros de inteligencia corporativa y sistemas de decisión ejecutiva
-                            basados en datos en tiempo real.</p>
-                    </div>
-                    <div class="exp-domain-card animate-on-scroll">
-                        <i data-lucide="git-branch"></i>
-                        <h4>Gestión de Proyectos</h4>
-                        <p>Metodología PMI/PMBOK y marcos ágiles aplicados a proyectos de transformación digital de
-                            mediana y gran escala.</p>
-                    </div>
+                </div>
+                <div class="text-center" style="margin-top:40px;">
+                    <a href="#equipo" class="btn btn-secondary">Conoce al equipo completo →</a>
                 </div>
             </div>
         </section>
@@ -504,33 +437,122 @@
         <!-- ============================================
              RESULTADOS GLOBALES (Big Numbers)
              ============================================ -->
-        <section class="section-padding results-highlights bg-cosmic">
-            <div class="cosmic-background-stars">
-                <div class="stars-layer small"></div>
-                <div class="stars-layer medium"></div>
-            </div>
+        <section class="section-padding results-highlights" style="background:#f4f7fb;">
             <div class="container" style="position:relative;z-index:10;">
-                <div class="section-header text-center" style="margin-bottom: 60px;">
+                <div class="section-header text-center" style="margin-bottom:60px;">
                     <span class="badge">Impacto Medible</span>
                     <h2 class="section-title" data-splitting>Resultados que Hablan por Sí Solos</h2>
+                    <p class="section-desc" style="color:#5B7499;max-width:680px;margin:0 auto;">Estas métricas no son
+                        proyecciones ni estimaciones — son cifras reales medidas antes y después en implementaciones
+                        activas de clientes CODEX. Cada punto porcentual se traduce en rentabilidad tangible.</p>
                 </div>
+
                 <div class="results-grid">
+                    <!-- Card 1 -->
                     <div class="result-card animate-on-scroll">
+                        <div class="result-icon-wrap"><i data-lucide="zap"></i></div>
                         <div class="result-number" data-target="340" data-suffix="%">0</div>
-                        <div class="result-label">Eficiencia Operativa Promedio</div>
+                        <div class="result-label">Eficiencia Operativa</div>
+                        <div class="result-bars">
+                            <div class="rbar-row">
+                                <span class="rbar-label">Antes</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-before" style="width:22%"></div>
+                                </div>
+                            </div>
+                            <div class="rbar-row">
+                                <span class="rbar-label rbar-label-after">Después</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-after" style="width:90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-context"><i data-lucide="factory"></i> Manufactura &amp; Logística ·
+                            2022–2025</div>
                     </div>
+                    <!-- Card 2 -->
                     <div class="result-card animate-on-scroll">
+                        <div class="result-icon-wrap"><i data-lucide="trending-up"></i></div>
                         <div class="result-number" data-target="71" data-suffix="%">0</div>
                         <div class="result-label">Incremento en Conversiones</div>
+                        <div class="result-bars">
+                            <div class="rbar-row">
+                                <span class="rbar-label">Antes</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-before" style="width:35%"></div>
+                                </div>
+                            </div>
+                            <div class="rbar-row">
+                                <span class="rbar-label rbar-label-after">Después</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-after" style="width:82%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-context"><i data-lucide="users"></i> B2B Ventas &amp; Marketing · 2023–2025
+                        </div>
                     </div>
+                    <!-- Card 3 -->
                     <div class="result-card animate-on-scroll">
+                        <div class="result-icon-wrap"><i data-lucide="clock"></i></div>
                         <div class="result-number" data-target="89" data-prefix="-" data-suffix="%">0</div>
-                        <div class="result-label">Reducción de Tiempo Manual</div>
+                        <div class="result-label">Reducción Tiempo Manual</div>
+                        <div class="result-bars">
+                            <div class="rbar-row">
+                                <span class="rbar-label">Antes</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-before" style="width:90%"></div>
+                                </div>
+                            </div>
+                            <div class="rbar-row">
+                                <span class="rbar-label rbar-label-after">Después</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-after" style="width:11%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-context"><i data-lucide="cpu"></i> Automatización RPA · múltiples sectores
+                        </div>
                     </div>
+                    <!-- Card 4 -->
                     <div class="result-card animate-on-scroll">
+                        <div class="result-icon-wrap"><i data-lucide="shield-check"></i></div>
                         <div class="result-number" data-target="24" data-suffix="/7">0</div>
                         <div class="result-label">Disponibilidad de Sistemas</div>
+                        <div class="result-bars">
+                            <div class="rbar-row">
+                                <span class="rbar-label">Antes</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-before" style="width:45%"></div>
+                                </div>
+                            </div>
+                            <div class="rbar-row">
+                                <span class="rbar-label rbar-label-after">Después</span>
+                                <div class="rbar-track">
+                                    <div class="rbar-fill rbar-after" style="width:99%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-context"><i data-lucide="server"></i> Sistemas críticos · 99.9% uptime</div>
                     </div>
+                </div>
+
+                <!-- Sectores cubiertos -->
+                <div class="results-sectors">
+                    <span class="sector-pill"><i data-lucide="factory"></i> Manufactura</span>
+                    <span class="sector-pill"><i data-lucide="briefcase"></i> Corporativo B2B</span>
+                    <span class="sector-pill"><i data-lucide="shopping-bag"></i> Retail &amp; E-commerce</span>
+                    <span class="sector-pill"><i data-lucide="building-2"></i> Servicios</span>
+                    <span class="sector-pill"><i data-lucide="heart-pulse"></i> Salud</span>
+                </div>
+
+                <!-- Nota metodológica -->
+                <div class="results-methodology">
+                    <i data-lucide="info"></i>
+                    <p><strong>Metodología:</strong> Cifras obtenidas mediante medición antes/después en
+                        implementaciones activas. Período de referencia: 2022–2025. Sectores: manufactura, B2B,
+                        servicios corporativos. Los resultados individuales pueden variar según el tamaño, industria y
+                        complejidad del proyecto.</p>
                 </div>
             </div>
         </section>
@@ -538,11 +560,15 @@
         <!-- ============================================
              TESTIMONIOS
              ============================================ -->
-        <section class="section-padding testimonials-section bg-white">
-            <div class="container">
+        <section class="section-padding testimonials-section bg-white" style="position:relative;">
+            <div class="container" style="position:relative;z-index:1;">
                 <div class="section-header text-center">
                     <span class="badge">Testimonios</span>
                     <h2 class="section-title" data-splitting>Lo que Dicen Nuestros Clientes</h2>
+                    <p class="section-desc">Directores de operaciones, CEOs y CFOs que apostaron por la transformación
+                        digital con CODEX. Sus palabras reflejan algo que los números por sí solos no siempre capturan:
+                        la diferencia que hace trabajar con un equipo que entiende tanto la tecnología como el negocio.
+                    </p>
                 </div>
 
                 <div class="testimonials-carousel-wrapper">
@@ -624,88 +650,47 @@
         </section>
 
         <!-- ============================================
-             PROYECTOS RECIENTES
+             BLOG / RECURSOS
              ============================================ -->
-        <section class="section-padding projects-section bg-cosmic inverted">
-            <div class="cosmic-background-stars">
-                <div class="stars-layer small"></div>
-            </div>
-            <div class="container" style="position:relative;z-index:10;">
+        <section class="section-padding blog-preview" style="background:#f0f4fa;">
+            <div class="container">
                 <div class="section-header text-center">
-                    <span class="badge">Portfolio</span>
-                    <h2 class="section-title" data-splitting>Proyectos Recientes</h2>
-                    <p class="section-desc">Una selección de implementaciones que demuestran nuestra capacidad técnica y
-                        visión estratégica.</p>
+                    <span class="badge">Blog &amp; Recursos</span>
+                    <h2 class="section-title" data-splitting>Conocimiento que genera valor</h2>
+                    <p class="section-desc">Artículos, guías y casos reales sobre IA aplicada y automatización
+                        empresarial para decisores B2B.</p>
                 </div>
-
-                <div class="projects-grid">
-                    <div class="project-card animate-on-scroll">
-                        <div class="project-image">
-                            <img src="AUTOMATIZACION DE PROCESOS.jpg" alt="Proyecto Automatización Industrial"
-                                loading="lazy">
+                <div class="blog-grid">
+                    <article class="blog-card animate-on-scroll">
+                        <div class="blog-card-img blog-img-1">
+                            <span class="blog-category">IA Empresarial</span>
                         </div>
-                        <div class="project-overlay">
-                            <div class="project-info">
-                                <h4>Planta Automatizada</h4>
-                                <p>IoT + BI + n8n</p>
-                            </div>
+                        <div class="blog-card-body">
+                            <h3>Cómo reducir costos operativos un 40% con automatización RPA</h3>
+                            <time datetime="2025-04-15">15 Abr 2025</time>
+                            <a href="#" class="blog-read-more">Leer más →</a>
                         </div>
-                    </div>
-                    <div class="project-card animate-on-scroll">
-                        <div class="project-image">
-                            <img src="TECLADO AI.png" alt="Proyecto Ventas con IA" loading="lazy">
+                    </article>
+                    <article class="blog-card animate-on-scroll">
+                        <div class="blog-card-img blog-img-2">
+                            <span class="blog-category">Automatización</span>
                         </div>
-                        <div class="project-overlay">
-                            <div class="project-info">
-                                <h4>Chatbot Empresarial</h4>
-                                <p>WhatsApp API + IA</p>
-                            </div>
+                        <div class="blog-card-body">
+                            <h3>n8n vs Zapier: cuál elegir para flujos empresariales en 2025</h3>
+                            <time datetime="2025-04-08">8 Abr 2025</time>
+                            <a href="#" class="blog-read-more">Leer más →</a>
                         </div>
-                    </div>
-                    <div class="project-card animate-on-scroll">
-                        <div class="project-image">
-                            <img src="DATA AI.png" alt="Proyecto BI Corporativo" loading="lazy">
+                    </article>
+                    <article class="blog-card animate-on-scroll">
+                        <div class="blog-card-img blog-img-3">
+                            <span class="blog-category">Casos de Éxito</span>
                         </div>
-                        <div class="project-overlay">
-                            <div class="project-info">
-                                <h4>Dashboard Ejecutivo</h4>
-                                <p>Big Data + Real-time</p>
-                            </div>
+                        <div class="blog-card-body">
+                            <h3>Chatbot IA que aumentó conversiones en ventas B2B un 71%</h3>
+                            <time datetime="2025-04-01">1 Abr 2025</time>
+                            <a href="#" class="blog-read-more">Leer más →</a>
                         </div>
-                    </div>
-                    <div class="project-card animate-on-scroll">
-                        <div class="project-image">
-                            <img src="DISEÑO UXUI.png" alt="Proyecto UX/UI" loading="lazy">
-                        </div>
-                        <div class="project-overlay">
-                            <div class="project-info">
-                                <h4>Portal Operativo</h4>
-                                <p>UX/UI + APIs</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-card animate-on-scroll">
-                        <div class="project-image">
-                            <img src="MARKETING.jpg" alt="Proyecto Marketing" loading="lazy">
-                        </div>
-                        <div class="project-overlay">
-                            <div class="project-info">
-                                <h4>Campaña Automatizada</h4>
-                                <p>Contenido IA + SEO</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-card animate-on-scroll">
-                        <div class="project-image">
-                            <img src="IMAGEN CONTENIDO ORGANICO.png" alt="Proyecto Contenido" loading="lazy">
-                        </div>
-                        <div class="project-overlay">
-                            <div class="project-info">
-                                <h4>Generador de Contenido</h4>
-                                <p>LLM + Personalización</p>
-                            </div>
-                        </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -720,9 +705,10 @@
                 <div class="stars-layer large"></div>
             </div>
             <div class="container" style="position:relative;z-index:10;text-align:center;">
-                <h2 class="section-title" style="color:#fff;" data-splitting>¿Listo para ser el próximo caso de éxito?
+                <h2 class="section-title" style="color:#0F2D5A;" data-splitting>¿Listo para ser el próximo caso de
+                    éxito?
                 </h2>
-                <p style="color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 40px;font-size:1.1rem;">Hablemos de
+                <p style="color:#2D3E55;max-width:600px;margin:0 auto 40px;font-size:1.1rem;">Hablemos de
                     tu operación. Una consultoría gratuita de 30 minutos puede ser el primer paso hacia la
                     transformación que tus sistemas necesitan.</p>
                 <a href="https://calendly.com/codexai-consulting/30min" target="_blank"

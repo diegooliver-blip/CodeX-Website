@@ -18,9 +18,9 @@ class HeroParticles {
         this.isRunning = true;
 
         this.colors = {
-            gold: new THREE.Color(0xC9A55A),
-            blue: new THREE.Color(0x1D4ED8),
-            white: new THREE.Color(0xFFFFFF)
+            gold: new THREE.Color(0x2563EB),
+            blue: new THREE.Color(0x60A5FA),
+            white: new THREE.Color(0xEEF2F7)
         };
 
         this.init();

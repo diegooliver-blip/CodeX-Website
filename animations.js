@@ -109,6 +109,13 @@
     if (heroStats) {
       gsap.fromTo(heroStats, { opacity: 0 }, { opacity: 1, duration: 0.6, delay: 1.4, ease: 'power2.out' });
     }
+
+    // Parallax scroll on hero title
+    if (document.querySelector('.hero-title') && document.querySelector('.hero-section')) {
+      gsap.to('.hero-title', { yPercent: -20, ease: 'none',
+        scrollTrigger: { trigger: '.hero-section', start: 'top top', end: 'bottom top', scrub: true }
+      });
+    }
   }
 
   // ─── SCROLL ANIMATIONS ───────────────────────────────────────────────────────
@@ -173,8 +180,8 @@
     // Service cards reveal
     document.querySelectorAll('.service-card').forEach(function (card, i) {
       gsap.fromTo(card,
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.6, delay: i * 0.1, ease: 'power2.out',
+        { opacity: 0, y: 40, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, delay: i * 0.1, ease: 'power2.out',
           scrollTrigger: { trigger: card, start: 'top 85%' }
         }
       );
@@ -410,11 +417,9 @@
     // Generic cards animation (staggered)
     var cardSelectors = [
       '.service-card',
-      '.exp-case-card',
       '.exp-domain-card',
       '.result-card',
-      '.project-card',
-      '.testimonial-card'
+      '.project-card'
     ];
 
     cardSelectors.forEach(function (selector) {
@@ -426,6 +431,26 @@
           }
         );
       });
+    });
+
+    // exp-case-card: entry from left
+    document.querySelectorAll('.exp-case-card').forEach(function (card, i) {
+      gsap.fromTo(card,
+        { opacity: 0, x: -60 },
+        { opacity: 1, x: 0, duration: 0.7, delay: i * 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' }
+        }
+      );
+    });
+
+    // testimonial-card: subtle rotation entry
+    document.querySelectorAll('.testimonial-card').forEach(function (card, i) {
+      gsap.fromTo(card,
+        { opacity: 0, y: 30, rotation: 2 },
+        { opacity: 1, y: 0, rotation: 0, duration: 0.6, delay: i * 0.08, ease: 'power2.out',
+          scrollTrigger: { trigger: card, start: 'top 85%' }
+        }
+      );
     });
 
     // Results numbers counter

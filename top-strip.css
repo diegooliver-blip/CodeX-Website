@@ -8,8 +8,8 @@
     left: 0;
     right: 0;
     height: 50px;
-    background: #0A0A0A;
-    border-bottom: 1px solid rgba(201, 165, 90, 0.3);
+    background: #0A1628;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.25);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -17,7 +17,7 @@
     padding: 0 2rem;
     font-family: var(--font-label, 'Inter', sans-serif);
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .top-strip__contact {
@@ -34,7 +34,7 @@
 }
 
 .top-strip__item:hover {
-    color: var(--color-gold, #C9A55A);
+    color: #60A5FA;
 }
 
 .top-strip__icon {
@@ -64,7 +64,7 @@
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--color-gold, #C9A55A);
+    background: #60A5FA;
     transition: width 0.3s ease;
 }
 
@@ -74,7 +74,7 @@
 }
 
 .top-strip__tab.active {
-    color: var(--color-gold, #C9A55A);
+    color: #60A5FA;
 }
 
 .top-strip__lang {
@@ -86,8 +86,8 @@
 }
 
 .top-strip__lang:hover {
-    border-color: var(--color-gold, #C9A55A);
-    color: var(--color-gold, #C9A55A);
+    border-color: #60A5FA;
+    color: #60A5FA;
 }
 
 /* Mobile responsive */
@@ -130,7 +130,7 @@
     position: absolute;
     top: -40px;
     left: 0;
-    background: var(--color-gold, #C9A55A);
+    background: #60A5FA;
     color: #0A0A0A;
     padding: 8px 16px;
     z-index: 10000;

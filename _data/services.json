@@ -1,0 +1,82 @@
+{
+  "services": [
+    {
+      "id": "ventas-ia",
+      "title": "Ventas con IA",
+      "slug": "ventas-ia",
+      "url": "servicios/ventas-ia.html",
+      "image": "img_ventas-ia.png",
+      "icon": "zap",
+      "color": "#FF6B6B",
+      "tagline": "Chatbots avanzados que capturan, califican y convierten leads sin intervención humana directa",
+      "metric": "+71%",
+      "metricLabel": "Conversión"
+    },
+    {
+      "id": "ux-ui",
+      "title": "UX/UI Design",
+      "slug": "ux-ui",
+      "url": "servicios/ux-ui.html",
+      "image": "img_ux-ui.png",
+      "icon": "palette",
+      "color": "#4F46E5",
+      "tagline": "Interfaces premium que aumentan engagement y convierten visitantes en clientes",
+      "metric": "+48%",
+      "metricLabel": "Engagement"
+    },
+    {
+      "id": "marketing",
+      "title": "Marketing Digital",
+      "slug": "marketing",
+      "url": "servicios/marketing.html",
+      "image": "img_marketing-dig.png",
+      "icon": "trending-up",
+      "color": "#DB2777",
+      "tagline": "Campañas inteligentes que llegan al público correcto con el mensaje correcto",
+      "metric": "+340%",
+      "metricLabel": "ROI"
+    },
+    {
+      "id": "automatizacion",
+      "title": "Automatización de Procesos",
+      "slug": "automatizacion",
+      "url": "servicios/automatizacion.html",
+      "image": "img_automatizacion-inteligente.png",
+      "icon": "cog",
+      "color": "#0891B2",
+      "tagline": "Flujos autónomos con n8n, Zapier y agentes que eliminan trabajo manual",
+      "metric": "-89%",
+      "metricLabel": "Costos"
+    },
+    {
+      "id": "datos-bi",
+      "title": "Análisis de Datos & BI",
+      "slug": "datos-bi",
+      "url": "servicios/datos-bi.html",
+      "image": "img_analisis-datos.png",
+      "icon": "bar-chart-3",
+      "color": "#EA580C",
+      "tagline": "Dashboards inteligentes que revelan oportunidades ocultas en tus datos",
+      "metric": "+156%",
+      "metricLabel": "Insights"
+    },
+    {
+      "id": "contenido-ia",
+      "title": "Contenido Orgánico con IA",
+      "slug": "contenido-ia",
+      "url": "servicios/contenido-ia.html",
+      "image": "img_contenido-organico.png",
+      "icon": "pen-tool",
+      "color": "#059669",
+      "tagline": "Contenido estratégico generado por IA que posiciona tu marca como experta",
+      "metric": "24/7",
+      "metricLabel": "Disponible"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2026-04-23",
+    "totalServices": 6,
+    "category": "AI & Digital Services"
+  }
+}
