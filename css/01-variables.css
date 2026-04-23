@@ -1,0 +1,76 @@
+/* ===========================================
+   CODEX AI CONSULTING — DESIGN TOKENS
+   Source of truth for all CSS variables.
+   =========================================== */
+
+:root {
+  /* ── COLORS ─────────────────────────────── */
+  --bg:              #FFFFFF;
+  --bg-cream:        #EEF2F7;
+  --bg-dark:         #0A1628;
+  --bg-dark-2:       #0D1E35;
+
+  --blue:            #0F2D5A;
+  --blue-light:      #2563EB;
+  --blue-bright:     #60A5FA;
+  --navy-gradient:   linear-gradient(135deg, #0A1628, #0D1E35);
+
+  --gold:            #C9A55A;
+  --accent-primary:  #2563EB;
+  --accent-secondary:#C9A55A;
+
+  /* ── STATUS ─────────────────────────────── */
+  --status-success:  #10B981;
+  --status-warning:  #F59E0B;
+  --status-error:    #EF4444;
+
+  /* ── TEXT ───────────────────────────────── */
+  --text-main:   #0A1628;
+  --text-muted:  #5B7499;
+  --text-light:  #EEF2F7;
+
+  /* ── BORDERS ────────────────────────────── */
+  --border:        rgba(0, 0, 0, 0.06);
+  --border-strong: rgba(10, 22, 40, 0.15);
+
+  /* ── TYPOGRAPHY ─────────────────────────── */
+  --font-display: 'Outfit', 'Space Grotesk', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-label:   'Inter', sans-serif;
+
+  /* ── SPACING & LAYOUT ───────────────────── */
+  --header-height:   clamp(64px, 8vh, 80px);
+  --container-max:   1280px;
+  --section-padding: clamp(60px, 10vh, 120px) 24px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+
+  /* ── SHADOWS ────────────────────────────── */
+  --shadow-soft:   0 2px 12px rgba(10, 22, 40, 0.06);
+  --shadow-medium: 0 8px 24px rgba(10, 22, 40, 0.12);
+  --shadow-strong: 0 16px 48px rgba(10, 22, 40, 0.16);
+  --shadow-glow:   0 0 20px rgba(37, 99, 235, 0.15);
+
+  /* ── TRANSITIONS ────────────────────────── */
+  --transition-smooth:  0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bouncy:  0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-expo:      cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-back:      cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Z-INDEX SYSTEM ─────────────────────── */
+  --z-dropdown:     100;
+  --z-sticky:       200;
+  --z-fixed:        300;
+  --z-modal:        1000;
+  --z-tooltip:      1100;
+  --z-notification: 1200;
+
+  /* ── BREAKPOINTS (for JS reference) ─────── */
+  --bp-mobile:  320px;
+  --bp-tablet:  641px;
+  --bp-desktop: 1025px;
+  --bp-large:   1440px;
+}

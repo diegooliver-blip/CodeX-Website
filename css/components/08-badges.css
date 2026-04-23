@@ -1,0 +1,94 @@
+/* ===========================================
+   CODEX — BADGES COMPONENT
+   =========================================== */
+
+/* ── BASE ──────────────────────────────────── */
+.badge,
+.service-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+/* ── COLOR VARIANTS ─────────────────────────── */
+.badge--primary {
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  color: var(--blue-light);
+}
+
+.badge--dark {
+  background: rgba(0, 120, 212, 0.15);
+  border: 1px solid rgba(0, 120, 212, 0.3);
+  color: #FFFFFF;
+}
+
+.badge--success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--status-success);
+}
+
+.badge--warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--status-warning);
+}
+
+.badge--error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--status-error);
+}
+
+.badge--outline {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+}
+
+/* ── SERVICE BADGE (dark hero) ──────────────── */
+.service-badge {
+  background: rgba(0, 120, 212, 0.15);
+  border: 1px solid rgba(0, 120, 212, 0.3);
+  color: #FFFFFF;
+  margin-bottom: 20px;
+}
+
+.service-badge i {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── SECTOR PILLS (results section) ─────────── */
+.sector-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #FFFFFF;
+  border: 1px solid #D6E2F0;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #3D5A80;
+  transition: border-color var(--transition-smooth), background var(--transition-smooth);
+}
+
+.sector-pill:hover {
+  border-color: var(--blue-light);
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.sector-pill i {
+  width: 12px;
+  height: 12px;
+}

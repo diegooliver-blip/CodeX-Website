@@ -1,0 +1,127 @@
+/* ===========================================
+   CODEX — FORMS COMPONENT
+   =========================================== */
+
+/* ── CONTACT FORM ───────────────────────────── */
+.contact-form,
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group,
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label,
+.form__label {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-main);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select,
+.form__input {
+  padding: 14px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  background: #fff;
+  color: var(--text-main);
+  transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  width: 100%;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.form__input:focus {
+  outline: none;
+  border-color: var(--blue-light);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-group input::placeholder,
+.form__input::placeholder {
+  color: #9CA3AF;
+}
+
+textarea.form__input,
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ── OPTIONS GRID (radio chips) ─────────────── */
+.options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option-chip {
+  cursor: pointer;
+  position: relative;
+}
+
+.option-chip input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.option-chip span {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.option-chip input:checked + span {
+  background: var(--blue-light);
+  border-color: var(--blue-light);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.option-chip:hover span {
+  border-color: var(--blue-light);
+  color: var(--blue-light);
+}
+
+/* ── GLASS CARD (wraps forms) ───────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-medium);
+}
+
+/* ── RESPONSIVE ─────────────────────────────── */
+@media (max-width: 640px) {
+  .form-row { grid-template-columns: 1fr; }
+  .glass-card { padding: 24px; }
+}

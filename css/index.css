@@ -1,0 +1,54 @@
+/* ===========================================
+   CODEX AI CONSULTING
+   CSS Architecture v2.0 — Modular & Scalable
+
+   Load order matters — do not reorder.
+   =========================================== */
+
+/* 01. Design Tokens */
+@import url('./01-variables.css');
+
+/* 02. Reset & Normalize */
+@import url('./02-reset-and-base.css');
+
+/* 03. Typography */
+@import url('./03-typography.css');
+
+/* 04. Layout & Utilities */
+@import url('./04-layout.css');
+
+/* 05. Buttons */
+@import url('./components/05-buttons.css');
+
+/* 06. Cards */
+@import url('./components/06-cards.css');
+
+/* 07. Forms */
+@import url('./components/07-forms.css');
+
+/* 08. Badges */
+@import url('./components/08-badges.css');
+
+/* 09. Navigation (header, top-strip, mega-menu) */
+@import url('./components/09-navigation.css');
+
+/* 10. Hero Section */
+@import url('./sections/10-hero.css');
+
+/* 11. Services Section */
+@import url('./sections/11-services.css');
+
+/* 12. Results Section */
+@import url('./sections/12-results.css');
+
+/* 13. CTA + Contact */
+@import url('./sections/13-cta-and-contact.css');
+
+/* 14. Footer */
+@import url('./sections/14-footer.css');
+
+/* 17. Keyframe Animations */
+@import url('./animations/17-keyframes.css');
+
+/* 18. Animation Utilities */
+@import url('./animations/18-animation-utilities.css');
