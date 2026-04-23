@@ -200,7 +200,8 @@
   padding: 32px;
 }
 
-.dropdown-mega:hover .dropdown-mega-panel {
+.dropdown-mega:hover .dropdown-mega-panel,
+.dropdown-mega.mega-pinned .dropdown-mega-panel {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);

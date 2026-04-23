@@ -240,13 +240,16 @@
     });
   }
 
-  // ─── MEGA MENU IMAGE SWITCH ───────────────────────────────────────────────────
+  // ─── MEGA MENU IMAGE SWITCH + CLICK-TO-PIN ───────────────────────────────────
   function initMegaMenu() {
     if (!isDesktop) return;
 
     var megaItems = document.querySelectorAll('.mega-item');
     var previewImg = document.querySelector('.mega-preview-img');
+    var trigger = document.querySelector('[data-mega-trigger]');
+    var megaDropdown = trigger ? trigger.closest('.dropdown-mega') : null;
 
+    // Image swap on hover
     if (megaItems.length && previewImg) {
       megaItems.forEach(function (item) {
         item.addEventListener('mouseenter', function () {
@@ -264,6 +267,28 @@
             });
           }
         });
+      });
+    }
+
+    // Click-to-pin: clicking "Servicios" locks the panel open
+    if (trigger && megaDropdown) {
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        megaDropdown.classList.toggle('mega-pinned');
+      });
+
+      // Close when clicking outside the mega-menu
+      document.addEventListener('click', function (e) {
+        if (!megaDropdown.contains(e.target)) {
+          megaDropdown.classList.remove('mega-pinned');
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          megaDropdown.classList.remove('mega-pinned');
+        }
       });
     }
   }
