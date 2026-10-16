@@ -1,0 +1,116 @@
+import uuid
+from datetime import datetime
+
+from pgvector.sqlalchemy import Vector
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, func
+from sqlalchemy.dialects.postgresql import TSVECTOR, UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.schema import Computed
+
+from app.config import get_settings
+from app.db import Base
+
+
+def _id() -> Mapped[uuid.UUID]:
+    return mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+
+def _created() -> Mapped[datetime]:
+    return mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[uuid.UUID] = _id()
+    email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(200), default="")
+    password_hash: Mapped[str] = mapped_column(String(200))
+    role: Mapped[str] = mapped_column(String(20), default="editor")  # admin | editor
+    created_at: Mapped[datetime] = _created()
+
+
+class Course(Base):
+    __tablename__ = "courses"
+    id: Mapped[uuid.UUID] = _id()
+    slug: Mapped[str] = mapped_column(String(160), unique=True, index=True)
+    title: Mapped[str] = mapped_column(String(200))
+    subtitle: Mapped[str] = mapped_column(String(300), default="")
+    description: Mapped[str] = mapped_column(Text, default="")
+    category: Mapped[str] = mapped_column(String(80), default="IA aplicada")
+    level: Mapped[str] = mapped_column(String(40), default="Intermedio")
+    cover_key: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    price_mxn: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    status: Mapped[str] = mapped_column(String(20), default="draft")  # draft | published
+    created_at: Mapped[datetime] = _created()
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    modules: Mapped[list["Module"]] = relationship(
+        back_populates="course", cascade="all, delete-orphan", order_by="Module.position"
+    )
+
+
+class Module(Base):
+    __tablename__ = "modules"
+    id: Mapped[uuid.UUID] = _id()
+    course_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("courses.id", ondelete="CASCADE"), index=True)
+    title: Mapped[str] = mapped_column(String(200))
+    position: Mapped[int] = mapped_column(Integer, default=0)
+    course: Mapped[Course] = relationship(back_populates="modules")
+    lessons: Mapped[list["Lesson"]] = relationship(
+        back_populates="module", cascade="all, delete-orphan", order_by="Lesson.position"
+    )
+
+
+class Lesson(Base):
+    __tablename__ = "lessons"
+    id: Mapped[uuid.UUID] = _id()
+    module_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("modules.id", ondelete="CASCADE"), index=True)
+    slug: Mapped[str] = mapped_column(String(160))
+    title: Mapped[str] = mapped_column(String(200))
+    kind: Mapped[str] = mapped_column(String(20), default="video")  # video | pdf | text
+    body: Mapped[str] = mapped_column(Text, default="")
+    asset_key: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    duration_min: Mapped[int] = mapped_column(Integer, default=0)
+    is_free: Mapped[bool] = mapped_column(Boolean, default=False)
+    position: Mapped[int] = mapped_column(Integer, default=0)
+    module: Mapped[Module] = relationship(back_populates="lessons")
+
+
+class Lead(Base):
+    __tablename__ = "leads"
+    id: Mapped[uuid.UUID] = _id()
+    name: Mapped[str] = mapped_column(String(200))
+    email: Mapped[str] = mapped_column(String(320), index=True)
+    company: Mapped[str] = mapped_column(String(200), default="")
+    phone: Mapped[str] = mapped_column(String(40), default="")
+    service: Mapped[str] = mapped_column(String(80), default="")
+    message: Mapped[str] = mapped_column(Text, default="")
+    source: Mapped[str] = mapped_column(String(40), default="contacto")  # contacto | academia | chat
+    course_slug: Mapped[str] = mapped_column(String(160), default="")
+    created_at: Mapped[datetime] = _created()
+
+
+class Document(Base):
+    __tablename__ = "documents"
+    id: Mapped[uuid.UUID] = _id()
+    source: Mapped[str] = mapped_column(String(20))  # content | course | upload
+    ref: Mapped[str] = mapped_column(String(300), index=True)
+    title: Mapped[str] = mapped_column(String(300))
+    url: Mapped[str] = mapped_column(String(500), default="")
+    checksum: Mapped[str] = mapped_column(String(64), default="")
+    created_at: Mapped[datetime] = _created()
+    chunks: Mapped[list["Chunk"]] = relationship(back_populates="document", cascade="all, delete-orphan")
+
+
+class Chunk(Base):
+    __tablename__ = "chunks"
+    id: Mapped[uuid.UUID] = _id()
+    document_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("documents.id", ondelete="CASCADE"), index=True)
+    position: Mapped[int] = mapped_column(Integer, default=0)
+    content: Mapped[str] = mapped_column(Text)
+    embedding: Mapped[list[float]] = mapped_column(Vector(get_settings().embedding_dim))
+    tsv: Mapped[str] = mapped_column(
+        TSVECTOR, Computed("to_tsvector('spanish', content)", persisted=True)
+    )
+    document: Mapped[Document] = relationship(back_populates="chunks")

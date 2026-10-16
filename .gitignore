@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+graphify-out/
+apps/api/.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/next-env.d.ts

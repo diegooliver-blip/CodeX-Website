@@ -1,0 +1,17 @@
+fastapi==0.143.3
+uvicorn[standard]>=0.32
+sqlalchemy[asyncio]>=2.0.36
+asyncpg>=0.30
+alembic>=1.14
+pgvector>=0.3.6
+pydantic-settings>=2.6
+email-validator>=2.2
+pyjwt>=2.10
+bcrypt>=4.2
+boto3>=1.35
+httpx>=0.28
+anthropic==1.15.0
+fastembed==0.9.0
+pypdf>=5.1
+slowapi>=0.1.9
+python-multipart>=0.0.18

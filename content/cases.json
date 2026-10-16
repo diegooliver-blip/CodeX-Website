@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "planta-manufactura",
+    "sector": "Sector industrial",
+    "title": "Automatización de planta de manufactura",
+    "text": "Empresa manufacturera con operaciones en múltiples plantas que requería visibilidad en tiempo real sobre producción, consumo de materias primas y eficiencia energética. Se integraron sensores con pipelines de datos en tiempo real y tableros conectados al ERP corporativo.",
+    "tags": ["Automatización", "Big Data & BI", "ISO 9001", "Trazabilidad"]
+  },
+  {
+    "slug": "gestion-ambiental",
+    "sector": "Procesos ambientales",
+    "title": "Sistema de gestión ambiental con IA",
+    "text": "Organización con obligaciones de reporte ambiental ante autoridades que necesitaba automatizar la captura de datos de emisiones, consumos y residuos para cumplir regulaciones nacionales e internacionales sin carga administrativa extra.",
+    "tags": ["ISO 14001", "Automatización", "Normatividad", "Reportería"]
+  },
+  {
+    "slug": "inteligencia-corporativa",
+    "sector": "Corporativo",
+    "title": "Centro de inteligencia corporativa",
+    "text": "Grupo con varias unidades de negocio que requería una visión unificada del desempeño financiero, operativo y comercial. Se creó un centro de datos centralizado con agentes de IA que generan reportes ejecutivos y alertan sobre desviaciones.",
+    "tags": ["PMI / PMBOK", "BI ejecutivo", "Agentes de IA"]
+  },
+  {
+    "slug": "embudo-b2b",
+    "sector": "Ventas y marketing",
+    "title": "Ecosistema de captación y conversión automatizada",
+    "text": "Empresa de servicios B2B que reestructuró su embudo completo: atracción con contenido, calificación de leads por chatbot, agendado automático de citas y seguimiento post-venta con secuencias de correo personalizadas.",
+    "tags": ["Ventas con IA", "WhatsApp API", "Email"]
+  },
+  {
+    "slug": "digitalizacion-iso",
+    "sector": "Calidad y normatividad",
+    "title": "Digitalización de sistema de gestión ISO",
+    "text": "Organización industrial certificada en ISO 9001 e ISO 45001 que buscaba eliminar el papel de sus procesos de calidad y seguridad. Se implementaron flujos digitales auditables con alertas y tableros de indicadores de cumplimiento.",
+    "tags": ["ISO 9001", "ISO 45001", "UX/UI", "Automatización"]
+  },
+  {
+    "slug": "portal-logistica",
+    "sector": "Transformación digital",
+    "title": "Portal operativo para empresa de logística",
+    "text": "Empresa logística con operación en varios países que necesitaba una plataforma unificada para órdenes, rutas y clientes desde cualquier dispositivo. Se diseñó un portal con integraciones a sistemas existentes y tableros operativos en tiempo real.",
+    "tags": ["UX/UI", "BI", "Multi-país"]
+  }
+]

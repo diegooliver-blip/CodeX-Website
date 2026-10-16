@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "agentes-whatsapp",
+    "title": "Agentes de IA para WhatsApp",
+    "short": "Atención, ventas y seguimiento 24/7 con agentes que entienden texto, audio e imágenes.",
+    "icon": "message-circle",
+    "group": "Agentes de IA",
+    "description": "Diseñamos agentes conversacionales sobre WhatsApp que atienden, califican, cotizan y dan seguimiento como lo haría tu mejor ejecutivo — sin horario. Leen imágenes, transcriben audios, consultan tu inventario o CRM y escalan a una persona cuando hace falta.",
+    "capabilities": [
+      "Multinúmero: un solo cerebro atendiendo varias líneas",
+      "Comprensión multimodal: texto, audio, imágenes y documentos",
+      "Calificación de leads y agendado automático",
+      "Vigilancia de tiempos de respuesta del equipo humano",
+      "Panel que explica por qué el agente respondió o no",
+      "Interruptor maestro y reglas de escalamiento"
+    ],
+    "deliverables": ["Agente en producción", "Dashboard de conversaciones", "Integración con CRM o base de datos", "Manual de operación"],
+    "stack": ["Claude", "WhatsApp Cloud API", "Evolution API", "Redis", "PostgreSQL", "Next.js"]
+  },
+  {
+    "slug": "websites-ia",
+    "title": "Websites y plataformas con IA",
+    "short": "Sitios de alto nivel que venden, cargan rápido y tienen inteligencia integrada.",
+    "icon": "monitor",
+    "group": "Producto digital",
+    "description": "Construimos sitios corporativos, landing pages y plataformas web con diseño editorial, animación cuidada y rendimiento de primer nivel. Integramos agentes, buscadores inteligentes, reservas y automatizaciones para que tu sitio trabaje, no solo exista.",
+    "capabilities": [
+      "Diseño premium a la medida, sin plantillas",
+      "Core Web Vitals en verde y SEO técnico",
+      "Agentes de IA y búsqueda semántica integrados",
+      "Reservas, pagos y correos transaccionales",
+      "Contenido tipado: el sitio crece sin rehacerse",
+      "Accesibilidad y animación que respeta al usuario"
+    ],
+    "deliverables": ["Sitio en producción", "Panel de contenido", "SEO técnico", "Analítica configurada"],
+    "stack": ["Next.js", "React", "TypeScript", "Tailwind", "GSAP", "Vercel"]
+  },
+  {
+    "slug": "ecommerce",
+    "title": "Tiendas en línea inteligentes",
+    "short": "E-commerce con pagos, inventario real, subastas, preventas y agentes que venden.",
+    "icon": "shopping-bag",
+    "group": "Producto digital",
+    "description": "Tiendas en línea construidas para vender más y operar menos: checkout confiable, inventario sincronizado con almacén, preventas, subastas en vivo y asistentes de IA que ayudan al cliente y al administrador.",
+    "capabilities": [
+      "Checkout que registra la orden antes de cobrar",
+      "Mercado Pago, Stripe y webhooks verificados",
+      "Subastas en vivo con protección anti-sniping",
+      "Preventas con cuenta regresiva y stock real",
+      "Asistente de IA para precios e inventario con permisos",
+      "Recibos y notificaciones automáticas por correo"
+    ],
+    "deliverables": ["Tienda en producción", "Panel administrativo", "Integración de pagos", "Pruebas automatizadas"],
+    "stack": ["Next.js", "PostgreSQL", "Drizzle", "Mercado Pago", "Stripe", "Resend"]
+  },
+  {
+    "slug": "apps-moviles",
+    "title": "Apps para iOS y Android",
+    "short": "Aplicaciones móviles nativas en experiencia, con un solo código y IA integrada.",
+    "icon": "smartphone",
+    "group": "Producto digital",
+    "description": "Desarrollamos aplicaciones móviles para iOS y Android con React Native y Expo: una base de código, experiencia fluida, notificaciones, pagos y funciones de IA en el dispositivo o en la nube. Conectadas al mismo backend que tu web y tus agentes.",
+    "capabilities": [
+      "iOS y Android desde una sola base de código",
+      "Notificaciones push y modo sin conexión",
+      "Pagos dentro de la app",
+      "Asistentes de IA y reconocimiento de imágenes",
+      "Backend compartido con tu web y dashboards",
+      "Publicación en App Store y Google Play"
+    ],
+    "deliverables": ["App publicada en tiendas", "Backend y API", "Panel administrativo", "Analítica de uso"],
+    "stack": ["React Native", "Expo", "TypeScript", "FastAPI", "PostgreSQL"]
+  },
+  {
+    "slug": "campanas-meta",
+    "title": "Campañas Meta y Google con IA",
+    "short": "Publicidad que se mide de anuncio a venta, con agentes que analizan y proponen.",
+    "icon": "trending-up",
+    "group": "Crecimiento",
+    "description": "Planeamos, lanzamos y optimizamos campañas en Meta y Google para aumentar ventas de negocios concretos. Conectamos el anuncio con la conversación y con la venta, y usamos agentes de IA que revisan el rendimiento diario y proponen ajustes antes de que el presupuesto se pierda.",
+    "capabilities": [
+      "Estrategia y estructura de campañas por objetivo",
+      "Rastreo anuncio → conversación → venta",
+      "Reportes diarios automáticos por WhatsApp",
+      "Detección temprana de anuncios que pierden dinero",
+      "Calendario de contenido orgánico con IA",
+      "Análisis de margen por producto y paquete"
+    ],
+    "deliverables": ["Campañas activas", "Tablero de rendimiento", "Reportes automáticos", "Plan de contenido"],
+    "stack": ["Meta Ads API", "Google Ads", "Claude", "WhatsApp Cloud API", "PostgreSQL"]
+  },
+  {
+    "slug": "automatizacion",
+    "title": "Automatización de procesos",
+    "short": "Flujos que eliminan trabajo manual, conectan sistemas y se reparan solos.",
+    "icon": "workflow",
+    "group": "Operación",
+    "description": "Automatizamos procesos digitales de punta a punta con n8n, APIs y agentes de IA: captura de datos, conciliaciones, reportes, aprobaciones, catalogación masiva de archivos y mucho más. Incluso construimos operadores de IA que diagnostican y reparan los propios flujos.",
+    "capabilities": [
+      "Integración entre ERP, CRM, correo, hojas y bases de datos",
+      "Operadores de IA que construyen y reparan workflows",
+      "Procesamiento masivo de archivos y catálogos",
+      "Roles y aprobaciones: quien propone no aprueba",
+      "Bitácora técnica y exportación a CSV/PDF",
+      "Rutinas programadas que corren solas"
+    ],
+    "deliverables": ["Flujos en producción", "Panel de control", "Bitácora y alertas", "Documentación"],
+    "stack": ["n8n", "Claude", "Node.js", "TypeScript", "PostgreSQL", "Docker"]
+  },
+  {
+    "slug": "email-automation",
+    "title": "Automatización de correos",
+    "short": "Correos transaccionales y secuencias que llegan, se leen y convierten.",
+    "icon": "mail",
+    "group": "Crecimiento",
+    "description": "Diseñamos el sistema de correo completo: confirmaciones, recibos, recordatorios y secuencias de nutrición personalizadas con IA. También asistentes que resumen tu bandeja, redactan respuestas y convierten correos en tareas — siempre con tu aprobación antes de enviar.",
+    "capabilities": [
+      "Correos transaccionales: reservas, compras, accesos",
+      "Secuencias de bienvenida y nutrición de leads",
+      "Resúmenes de bandeja y borradores con IA",
+      "Correos convertidos en tareas y citas",
+      "Entregabilidad: dominios, SPF, DKIM y DMARC",
+      "Plantillas con tu identidad de marca"
+    ],
+    "deliverables": ["Sistema de correo configurado", "Plantillas", "Secuencias activas", "Métricas de apertura y clic"],
+    "stack": ["Loops", "Resend", "Gmail API", "Claude", "Next.js"]
+  },
+  {
+    "slug": "dashboards",
+    "title": "Dashboards y plataformas de control",
+    "short": "Toda tu operación en una sola consola, en tiempo real y con alertas inteligentes.",
+    "icon": "layout-dashboard",
+    "group": "Operación",
+    "description": "Construimos plataformas de control tipo dashboard: ventas, operación, sucursales, producción, proyectos de software o agentes de IA. Datos unificados, indicadores claros y alertas que te avisan antes de que el problema llegue a tu escritorio.",
+    "capabilities": [
+      "Integración de múltiples fuentes de datos",
+      "Indicadores en tiempo real por rol",
+      "Alertas y resúmenes ejecutivos automáticos",
+      "Puntajes de salud con la razón explicada",
+      "Seguridad por filas y permisos granulares",
+      "Exportación de reportes y auditoría"
+    ],
+    "deliverables": ["Plataforma en producción", "Modelo de datos", "Alertas configuradas", "Capacitación"],
+    "stack": ["Next.js", "PostgreSQL", "Supabase", "Python", "Claude"]
+  },
+  {
+    "slug": "simulacion-energetica",
+    "title": "Simulación energética y gemelos digitales",
+    "short": "Modelos eléctricos y térmicos de edificios y plantas para decidir con física, no con intuición.",
+    "icon": "zap",
+    "group": "Ingeniería",
+    "description": "Desarrollamos herramientas de simulación energética para edificios industriales y comerciales: gemelos digitales en 3D del consumo, modelo eléctrico detallado, tarifas CFE con demanda y horario, y verificación normativa. Configurables con un catálogo y una conversación, no con archivos de entrada interminables.",
+    "capabilities": [
+      "Gemelo digital 3D del consumo en tiempo real",
+      "Transformadores, tableros, alimentadores, factor de potencia y armónicos",
+      "Modelo térmico con clima real y tarifas CFE",
+      "Cumplimiento: NOM-001-SEDE, NOM-ENER, Código de Red, IEEE 519, ASHRAE 90.1",
+      "Calibración contra mediciones (ASHRAE Guideline 14)",
+      "Escenarios de ahorro y retorno de inversión"
+    ],
+    "deliverables": ["Modelo calibrado", "Gemelo digital", "Reporte de escenarios", "Plataforma de consulta"],
+    "stack": ["Python", "FastAPI", "TimescaleDB", "React", "Three.js"]
+  },
+  {
+    "slug": "sistemas-multiagente",
+    "title": "Sistemas multiagente",
+    "short": "Equipos completos de agentes de IA que trabajan como un departamento.",
+    "icon": "network",
+    "group": "Agentes de IA",
+    "description": "Orquestamos decenas de agentes especializados que reciben solicitudes, se reparten el trabajo, entregan resultados y reportan. Con topes de gasto, rutinas programadas, aprobación humana y una visualización en vivo de lo que cada agente está haciendo.",
+    "capabilities": [
+      "Flujo recepción → líder → especialistas en paralelo → síntesis",
+      "Departamentos de marketing, operación y análisis",
+      "Tope diario de gasto y control de costos",
+      "Rutinas autónomas programadas",
+      "Oficina virtual visual en tiempo real",
+      "Plantilla reutilizable para nuevas empresas"
+    ],
+    "deliverables": ["Sistema multiagente", "Oficina virtual", "Procedimientos documentados", "Panel de costos"],
+    "stack": ["Claude", "Next.js", "PostgreSQL", "Phaser", "Drizzle"]
+  },
+  {
+    "slug": "e-learning",
+    "title": "Plataformas de e-learning con IA",
+    "short": "Academias, tutores inteligentes y cursos que se adaptan a cada alumno.",
+    "icon": "graduation-cap",
+    "group": "Producto digital",
+    "description": "Creamos plataformas educativas con tutores de IA que leen tus materiales, academias gamificadas donde cada ejercicio se verifica de verdad y portales de cursos con video, módulos y seguimiento de progreso.",
+    "capabilities": [
+      "Tutores de IA sobre PDF, Word, PowerPoint y código",
+      "Ejercicios ejecutables en el navegador (Python, SQL)",
+      "Gamificación: niveles, rachas y repetición espaciada",
+      "Gestión de cursos, módulos y lecciones",
+      "Integración con Microsoft 365 y herramientas académicas",
+      "Analítica de avance por alumno"
+    ],
+    "deliverables": ["Plataforma en producción", "Panel de cursos", "Tutor de IA", "Reportes de progreso"],
+    "stack": ["Next.js", "Claude", "Pyodide", "PostgreSQL", "Supabase"]
+  },
+  {
+    "slug": "consultoria-ia",
+    "title": "Consultoría y estrategia de IA",
+    "short": "Hoja de ruta clara para adoptar IA donde genera retorno, con gobierno y normatividad.",
+    "icon": "compass",
+    "group": "Estrategia",
+    "description": "Acompañamos a la dirección para decidir dónde aplicar IA, en qué orden y con qué controles. Experiencia en sistemas de gestión ISO 9001, 14001 y 45001, dirección de proyectos PMI/PMBOK y transformación digital en industria, corporativos y servicios.",
+    "capabilities": [
+      "Diagnóstico de procesos y oportunidades de IA",
+      "Hoja de ruta priorizada por retorno",
+      "Gobierno de IA, permisos y aprobación humana",
+      "Integración con sistemas de gestión ISO",
+      "Dirección de proyectos PMI/PMBOK y ágil",
+      "Capacitación de equipos"
+    ],
+    "deliverables": ["Diagnóstico", "Hoja de ruta", "Casos de negocio", "Plan de capacitación"],
+    "stack": ["Claude", "n8n", "Python", "Power BI", "PostgreSQL"]
+  }
+]

@@ -1,0 +1,31 @@
+from fastapi import APIRouter, HTTPException, Request, status
+from sqlalchemy import select
+
+from app.limiter import limiter
+from app.models import User
+from app.schemas import LoginIn, RefreshIn, TokenPair, UserOut
+from app.security import DB, CurrentUser, decode, issue_tokens, verify_password
+
+router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.post("/login", response_model=TokenPair)
+@limiter.limit("10/minute")
+async def login(request: Request, body: LoginIn, session: DB) -> dict:
+    user = await session.scalar(select(User).where(User.email == body.email.lower()))
+    if user is None or not verify_password(body.password, user.password_hash):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Correo o contraseña incorrectos")
+    return issue_tokens(user.id)
+
+
+@router.post("/refresh", response_model=TokenPair)
+async def refresh(body: RefreshIn, session: DB) -> dict:
+    user = await session.get(User, decode(body.refresh_token, "refresh"))
+    if user is None:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Usuario no encontrado")
+    return issue_tokens(user.id)
+
+
+@router.get("/me", response_model=UserOut)
+async def me(user: CurrentUser) -> User:
+    return user

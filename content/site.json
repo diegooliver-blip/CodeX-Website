@@ -1,0 +1,37 @@
+{
+  "name": "CODEX AI Consulting",
+  "shortName": "CODEX",
+  "domain": "https://codexai.com",
+  "tagline": "Ingeniería de inteligencia artificial para empresas que no esperan.",
+  "description": "Agencia de inteligencia artificial en México. Diseñamos y construimos agentes de IA, plataformas web, tiendas en línea, apps, automatizaciones, dashboards y simulación energética — en producción, no en presentaciones.",
+  "location": "México · Operación remota en todo el país",
+  "contact": {
+    "phone": "+52 833 137 5723",
+    "phoneHref": "tel:+528331375723",
+    "email": "codexai.consulting@gmail.com",
+    "whatsapp": "https://wa.me/528331375723",
+    "calendly": "https://calendly.com/codexai-consulting/30min"
+  },
+  "proof": [
+    { "value": "17+", "label": "Plataformas construidas en producción y prototipo" },
+    { "value": "2M+", "label": "Registros reales procesados en un solo proyecto" },
+    { "value": "80+", "label": "Agentes de IA diseñados y orquestados" },
+    { "value": "24/7", "label": "Sistemas que operan sin pausa" }
+  ],
+  "method": [
+    { "step": "01", "title": "Diagnóstico", "text": "Entendemos la operación real: procesos, datos, cuellos de botella y dónde la IA genera retorno medible." },
+    { "step": "02", "title": "Diseño", "text": "Arquitectura técnica, experiencia de usuario y un plan con alcance, tiempos y criterios de éxito claros." },
+    { "step": "03", "title": "Desarrollo", "text": "Construimos en ciclos cortos con entregas funcionales que puedes probar desde la primera semana." },
+    { "step": "04", "title": "Pruebas", "text": "Pruebas automatizadas, simulaciones de carga y revisión con tu equipo antes de tocar producción." },
+    { "step": "05", "title": "Entrega", "text": "Despliegue, monitoreo, documentación y acompañamiento. El sistema queda operando, no en una carpeta." }
+  ],
+  "stack": [
+    "Claude", "Next.js", "React", "TypeScript", "Python", "FastAPI", "PostgreSQL", "pgvector", "Supabase",
+    "n8n", "WhatsApp Cloud API", "Meta Ads API", "Mercado Pago", "Stripe", "Three.js", "Docker", "Vercel", "Redis"
+  ],
+  "principles": [
+    { "title": "Producción, no demos", "text": "Cada sistema que mostramos corre con datos reales o está listo para hacerlo." },
+    { "title": "El humano aprueba", "text": "Nuestros agentes proponen; las acciones sensibles pasan por una persona. IA con control." },
+    { "title": "Confidencialidad total", "text": "Nunca exponemos nombres, marcas ni datos de nuestros clientes. Tampoco aquí." }
+  ]
+}

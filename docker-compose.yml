@@ -1,0 +1,60 @@
+# CODEX Platform — local stack.  `docker compose up --build`
+#   web  http://localhost:3000   api  http://localhost:8000/docs   storage console http://localhost:9001
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: codex
+      POSTGRES_PASSWORD: codex
+      POSTGRES_DB: codex
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U codex"]
+      interval: 3s
+      retries: 20
+
+  storage:  # S3-compatible object storage (RustFS; MinIO no longer ships public images)
+    image: rustfs/rustfs:1.0.2
+    environment:
+      RUSTFS_ACCESS_KEY: codex
+      RUSTFS_SECRET_KEY: codex-secret
+      RUSTFS_CORS_ALLOWED_ORIGINS: http://localhost:3000
+    ports: ["9000:9000", "9001:9001"]
+    volumes: [objectdata:/data]
+
+  api:
+    build: ./apps/api
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+asyncpg://codex:codex@db:5432/codex
+      S3_ENDPOINT: http://storage:9000
+      S3_PUBLIC_ENDPOINT: http://localhost:9000
+      WEB_ORIGIN: http://localhost:3000
+      CONTENT_DIR: /content
+    volumes:
+      - ./content:/content:ro
+      - fastembed:/root/.cache
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+      storage: { condition: service_started }
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      API_URL: http://api:8000
+    ports: ["3000:3000"]
+    depends_on: [api]
+
+volumes:
+  pgdata:
+  objectdata:
+  fastembed:
