@@ -2,6 +2,7 @@
   {
     "slug": "agentes-whatsapp",
     "title": "Agentes de IA para WhatsApp",
+    "label": "Agentes de WhatsApp",
     "short": "Atención, ventas y seguimiento 24/7 con agentes que entienden texto, audio e imágenes.",
     "icon": "message-circle",
     "group": "Agentes de IA",
@@ -14,12 +15,25 @@
       "Panel que explica por qué el agente respondió o no",
       "Interruptor maestro y reglas de escalamiento"
     ],
-    "deliverables": ["Agente en producción", "Dashboard de conversaciones", "Integración con CRM o base de datos", "Manual de operación"],
-    "stack": ["Claude", "WhatsApp Cloud API", "Evolution API", "Redis", "PostgreSQL", "Next.js"]
+    "deliverables": [
+      "Agente en producción",
+      "Dashboard de conversaciones",
+      "Integración con CRM o base de datos",
+      "Manual de operación"
+    ],
+    "stack": [
+      "Claude",
+      "WhatsApp Cloud API",
+      "Evolution API",
+      "Redis",
+      "PostgreSQL",
+      "Next.js"
+    ]
   },
   {
     "slug": "websites-ia",
     "title": "Websites y plataformas con IA",
+    "label": "Websites con IA",
     "short": "Sitios de alto nivel que venden, cargan rápido y tienen inteligencia integrada.",
     "icon": "monitor",
     "group": "Producto digital",
@@ -32,12 +46,25 @@
       "Contenido tipado: el sitio crece sin rehacerse",
       "Accesibilidad y animación que respeta al usuario"
     ],
-    "deliverables": ["Sitio en producción", "Panel de contenido", "SEO técnico", "Analítica configurada"],
-    "stack": ["Next.js", "React", "TypeScript", "Tailwind", "GSAP", "Vercel"]
+    "deliverables": [
+      "Sitio en producción",
+      "Panel de contenido",
+      "SEO técnico",
+      "Analítica configurada"
+    ],
+    "stack": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind",
+      "GSAP",
+      "Vercel"
+    ]
   },
   {
     "slug": "ecommerce",
     "title": "Tiendas en línea inteligentes",
+    "label": "Tiendas en línea",
     "short": "E-commerce con pagos, inventario real, subastas, preventas y agentes que venden.",
     "icon": "shopping-bag",
     "group": "Producto digital",
@@ -50,12 +77,25 @@
       "Asistente de IA para precios e inventario con permisos",
       "Recibos y notificaciones automáticas por correo"
     ],
-    "deliverables": ["Tienda en producción", "Panel administrativo", "Integración de pagos", "Pruebas automatizadas"],
-    "stack": ["Next.js", "PostgreSQL", "Drizzle", "Mercado Pago", "Stripe", "Resend"]
+    "deliverables": [
+      "Tienda en producción",
+      "Panel administrativo",
+      "Integración de pagos",
+      "Pruebas automatizadas"
+    ],
+    "stack": [
+      "Next.js",
+      "PostgreSQL",
+      "Drizzle",
+      "Mercado Pago",
+      "Stripe",
+      "Resend"
+    ]
   },
   {
     "slug": "apps-moviles",
     "title": "Apps para iOS y Android",
+    "label": "Apps iOS y Android",
     "short": "Aplicaciones móviles nativas en experiencia, con un solo código y IA integrada.",
     "icon": "smartphone",
     "group": "Producto digital",
@@ -68,12 +108,24 @@
       "Backend compartido con tu web y dashboards",
       "Publicación en App Store y Google Play"
     ],
-    "deliverables": ["App publicada en tiendas", "Backend y API", "Panel administrativo", "Analítica de uso"],
-    "stack": ["React Native", "Expo", "TypeScript", "FastAPI", "PostgreSQL"]
+    "deliverables": [
+      "App publicada en tiendas",
+      "Backend y API",
+      "Panel administrativo",
+      "Analítica de uso"
+    ],
+    "stack": [
+      "React Native",
+      "Expo",
+      "TypeScript",
+      "FastAPI",
+      "PostgreSQL"
+    ]
   },
   {
     "slug": "campanas-meta",
     "title": "Campañas Meta y Google con IA",
+    "label": "Campañas Meta y Google",
     "short": "Publicidad que se mide de anuncio a venta, con agentes que analizan y proponen.",
     "icon": "trending-up",
     "group": "Crecimiento",
@@ -86,12 +138,24 @@
       "Calendario de contenido orgánico con IA",
       "Análisis de margen por producto y paquete"
     ],
-    "deliverables": ["Campañas activas", "Tablero de rendimiento", "Reportes automáticos", "Plan de contenido"],
-    "stack": ["Meta Ads API", "Google Ads", "Claude", "WhatsApp Cloud API", "PostgreSQL"]
+    "deliverables": [
+      "Campañas activas",
+      "Tablero de rendimiento",
+      "Reportes automáticos",
+      "Plan de contenido"
+    ],
+    "stack": [
+      "Meta Ads API",
+      "Google Ads",
+      "Claude",
+      "WhatsApp Cloud API",
+      "PostgreSQL"
+    ]
   },
   {
     "slug": "automatizacion",
     "title": "Automatización de procesos",
+    "label": "Automatización",
     "short": "Flujos que eliminan trabajo manual, conectan sistemas y se reparan solos.",
     "icon": "workflow",
     "group": "Operación",
@@ -104,12 +168,25 @@
       "Bitácora técnica y exportación a CSV/PDF",
       "Rutinas programadas que corren solas"
     ],
-    "deliverables": ["Flujos en producción", "Panel de control", "Bitácora y alertas", "Documentación"],
-    "stack": ["n8n", "Claude", "Node.js", "TypeScript", "PostgreSQL", "Docker"]
+    "deliverables": [
+      "Flujos en producción",
+      "Panel de control",
+      "Bitácora y alertas",
+      "Documentación"
+    ],
+    "stack": [
+      "n8n",
+      "Claude",
+      "Node.js",
+      "TypeScript",
+      "PostgreSQL",
+      "Docker"
+    ]
   },
   {
     "slug": "email-automation",
     "title": "Automatización de correos",
+    "label": "Correos automáticos",
     "short": "Correos transaccionales y secuencias que llegan, se leen y convierten.",
     "icon": "mail",
     "group": "Crecimiento",
@@ -122,12 +199,24 @@
       "Entregabilidad: dominios, SPF, DKIM y DMARC",
       "Plantillas con tu identidad de marca"
     ],
-    "deliverables": ["Sistema de correo configurado", "Plantillas", "Secuencias activas", "Métricas de apertura y clic"],
-    "stack": ["Loops", "Resend", "Gmail API", "Claude", "Next.js"]
+    "deliverables": [
+      "Sistema de correo configurado",
+      "Plantillas",
+      "Secuencias activas",
+      "Métricas de apertura y clic"
+    ],
+    "stack": [
+      "Loops",
+      "Resend",
+      "Gmail API",
+      "Claude",
+      "Next.js"
+    ]
   },
   {
     "slug": "dashboards",
     "title": "Dashboards y plataformas de control",
+    "label": "Dashboards",
     "short": "Toda tu operación en una sola consola, en tiempo real y con alertas inteligentes.",
     "icon": "layout-dashboard",
     "group": "Operación",
@@ -140,12 +229,24 @@
       "Seguridad por filas y permisos granulares",
       "Exportación de reportes y auditoría"
     ],
-    "deliverables": ["Plataforma en producción", "Modelo de datos", "Alertas configuradas", "Capacitación"],
-    "stack": ["Next.js", "PostgreSQL", "Supabase", "Python", "Claude"]
+    "deliverables": [
+      "Plataforma en producción",
+      "Modelo de datos",
+      "Alertas configuradas",
+      "Capacitación"
+    ],
+    "stack": [
+      "Next.js",
+      "PostgreSQL",
+      "Supabase",
+      "Python",
+      "Claude"
+    ]
   },
   {
     "slug": "simulacion-energetica",
     "title": "Simulación energética y gemelos digitales",
+    "label": "Simulación energética",
     "short": "Modelos eléctricos y térmicos de edificios y plantas para decidir con física, no con intuición.",
     "icon": "zap",
     "group": "Ingeniería",
@@ -158,12 +259,24 @@
       "Calibración contra mediciones (ASHRAE Guideline 14)",
       "Escenarios de ahorro y retorno de inversión"
     ],
-    "deliverables": ["Modelo calibrado", "Gemelo digital", "Reporte de escenarios", "Plataforma de consulta"],
-    "stack": ["Python", "FastAPI", "TimescaleDB", "React", "Three.js"]
+    "deliverables": [
+      "Modelo calibrado",
+      "Gemelo digital",
+      "Reporte de escenarios",
+      "Plataforma de consulta"
+    ],
+    "stack": [
+      "Python",
+      "FastAPI",
+      "TimescaleDB",
+      "React",
+      "Three.js"
+    ]
   },
   {
     "slug": "sistemas-multiagente",
     "title": "Sistemas multiagente",
+    "label": "Sistemas multiagente",
     "short": "Equipos completos de agentes de IA que trabajan como un departamento.",
     "icon": "network",
     "group": "Agentes de IA",
@@ -176,12 +289,24 @@
       "Oficina virtual visual en tiempo real",
       "Plantilla reutilizable para nuevas empresas"
     ],
-    "deliverables": ["Sistema multiagente", "Oficina virtual", "Procedimientos documentados", "Panel de costos"],
-    "stack": ["Claude", "Next.js", "PostgreSQL", "Phaser", "Drizzle"]
+    "deliverables": [
+      "Sistema multiagente",
+      "Oficina virtual",
+      "Procedimientos documentados",
+      "Panel de costos"
+    ],
+    "stack": [
+      "Claude",
+      "Next.js",
+      "PostgreSQL",
+      "Phaser",
+      "Drizzle"
+    ]
   },
   {
     "slug": "e-learning",
     "title": "Plataformas de e-learning con IA",
+    "label": "E-learning con IA",
     "short": "Academias, tutores inteligentes y cursos que se adaptan a cada alumno.",
     "icon": "graduation-cap",
     "group": "Producto digital",
@@ -194,12 +319,24 @@
       "Integración con Microsoft 365 y herramientas académicas",
       "Analítica de avance por alumno"
     ],
-    "deliverables": ["Plataforma en producción", "Panel de cursos", "Tutor de IA", "Reportes de progreso"],
-    "stack": ["Next.js", "Claude", "Pyodide", "PostgreSQL", "Supabase"]
+    "deliverables": [
+      "Plataforma en producción",
+      "Panel de cursos",
+      "Tutor de IA",
+      "Reportes de progreso"
+    ],
+    "stack": [
+      "Next.js",
+      "Claude",
+      "Pyodide",
+      "PostgreSQL",
+      "Supabase"
+    ]
   },
   {
     "slug": "consultoria-ia",
     "title": "Consultoría y estrategia de IA",
+    "label": "Consultoría de IA",
     "short": "Hoja de ruta clara para adoptar IA donde genera retorno, con gobierno y normatividad.",
     "icon": "compass",
     "group": "Estrategia",
@@ -212,7 +349,18 @@
       "Dirección de proyectos PMI/PMBOK y ágil",
       "Capacitación de equipos"
     ],
-    "deliverables": ["Diagnóstico", "Hoja de ruta", "Casos de negocio", "Plan de capacitación"],
-    "stack": ["Claude", "n8n", "Python", "Power BI", "PostgreSQL"]
+    "deliverables": [
+      "Diagnóstico",
+      "Hoja de ruta",
+      "Casos de negocio",
+      "Plan de capacitación"
+    ],
+    "stack": [
+      "Claude",
+      "n8n",
+      "Python",
+      "Power BI",
+      "PostgreSQL"
+    ]
   }
 ]

@@ -59,7 +59,7 @@ def presign_put(key: str, content_type: str, expires: int = 3600) -> str:
     )
 
 
-def presign_get(key: str, expires: int = 3600) -> str:
+def presign_get(key: str, expires: int = 6 * 3600) -> str:  # outlives the web cache window
     return public().generate_presigned_url(
         "get_object", Params={"Bucket": get_settings().s3_bucket, "Key": key}, ExpiresIn=expires
     )
