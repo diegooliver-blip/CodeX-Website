@@ -1,29 +1,30 @@
 # CODEX AI Consulting — Directrices de Trabajo
 
-## 📋 SKILLS ACTIVOS
+## 📋 STACK ACTUAL (Plataforma v3)
 
-### 🎨 Frontend Design
-- **Framework**: GSAP + ScrollTrigger para animaciones scroll-triggered
-- **CSS**: Custom properties (variables), Tailwind patterns, BEM naming
-- **Animaciones**: IntersectionObserver fade+slide para secciones, stagger para grids
-- **Paleta Actual**: 
-  - Background: #0A0A0A (dark)
-  - Accent: #C9A55A (gold)
-  - Text: #FFFFFF (light)
-- **Motion Design**: 
-  - Scroll reveals: `opacity 0→1, translateY 40px→0`
-  - Easing: `cubic-bezier(0.34, 1.56, 0.64, 1)`
-  - Duraciones: 0.6s cards, 0.8s sections, 1.2s hero
+### 🎨 Frontend — `apps/web` (Next.js 16)
+- **App Router + Cache Components** (`cacheComponents`, `partialPrefetching`): leer `apps/web/AGENTS.md` y `node_modules/next/dist/docs/` antes de usar APIs de Next — la versión cambia rápido.
+  - Datos de la API: funciones con `'use cache'` + `cacheLife` + `cacheTag` (`src/lib/api.ts`); `cookies()`/`params` sin `generateStaticParams` van dentro de `<Suspense>`.
+  - Middleware se llama `proxy.ts` (sesión del portal + 404 reales para slugs desconocidos).
+- **CSS**: Tailwind v4 con tokens en `src/app/globals.css` (`@theme`).
+- **Paleta**:
+  - Obsidiana `#0A0A0A` (fondo), grafito `#16140F` (superficies)
+  - Oro `#C9A55A` (señal/acento), champaña `#E6D3A3` (texto dorado pequeño, AA)
+  - Marfil `#EEE9DF` (texto), ceniza `#8E887C` (secundario)
+- **Tipografía**: Bodoni Moda (titulares, clase `.display`) + Hanken Grotesk (texto/UI).
+- **Motion**: una sola secuencia orquestada (hero + constelación). Reveals discretos (`<Reveal>`), Lenis solo en puntero fino. Easing `cubic-bezier(0.34, 1.56, 0.64, 1)`; duraciones 0.6s / 0.8s / 1.2s. Siempre respetar `prefers-reduced-motion`.
+- **Reglas de estilo**: sin etiquetas en MAYÚSCULAS, sin "·" como separador, sin "→" en botones, numeración solo para secuencias reales (método).
 
-### 🔐 Auth Portal (En Desarrollo)
-- JWT con localStorage
-- Refresh tokens de 24h
-- Rutas protegidas bajo `/portal/*`
-- Sessions encriptadas
+### ⚙️ Backend — `apps/api` (FastAPI)
+- Postgres 16 + pgvector, migraciones Alembic (`alembic upgrade head`).
+- Auth JWT: access 15 min + refresh 24 h; cookies httpOnly gestionadas por el BFF de Next (`/api/auth/*`, `/api/portal/*`).
+- Almacenamiento S3 (RustFS local / S3 o R2 en producción) con URLs prefirmadas.
+- RAG: fastembed local (`paraphrase-multilingual-MiniLM-L12-v2`, 384 dims) + FTS español, fusión RRF; Claude `claude-opus-5` en streaming SSE.
+- Loops.so: eventos `lead_created` y `course_interest`.
+- CLI: `python -m app.cli create-admin <email> <nombre>` y `python -m app.cli reindex`.
 
-### 📊 Project Tracker (Pendiente)
-- Estados: Planificación → Diseño → Desarrollo → Pruebas → Entrega
-- Milestones vinculados a fases del roadmap
+### 📚 Contenido — `content/*.json`
+Fuente única para páginas y RAG. **Nunca** nombres ni marcas de clientes. Proyectos del mismo cliente: registrar en `sameClient` (`apps/web/src/lib/content.ts`) y no enlazarlos entre sí; redondear cifras que identifiquen.
 
 ---
 
@@ -31,13 +32,14 @@
 
 ### Acceso a Archivos
 - **Nunca** leer archivos completos si solo necesitas una función/sección específica
-- Usar `offset` + `limit` para archivos grandes (style.css, index.html)
+- Usar `offset` + `limit` para archivos grandes
 - Usar `Grep` para búsquedas de código, no Read
 - Prefiere `Glob` para encontrar patrones de archivos
+- Si existe `graphify-out/graph.json`, consultar el grafo primero para preguntas de arquitectura
 
 ### Cambios de Código
 - **Confirmar plan** antes de escribir código (usar EnterPlanMode para cambios > 2 archivos)
-- **Máximo 3 archivos** por sesión de cambios
+- **Máximo 3 archivos** por sesión de cambios, salvo que el usuario pida explícitamente una reestructuración
 - **Minimal edits**: No refactorizar, no agregar features no solicitadas
 - **Testing**: Si hay dev server, probar en browser antes de considerar "done"
 
@@ -50,50 +52,54 @@
 ### Performance
 - Core Web Vitals objetivo: LCP < 2.5s, FID < 100ms, CLS < 0.1
 - GPU acceleration: usar `transform` y `opacity`, no posición/tamaño
-- Lazy loading: `loading="lazy"` en imágenes, preload críticas
-- Minificar assets antes de producción
+- Imágenes con `next/image`; fuentes con `next/font`
 
 ---
 
-## 🚀 WORKFLOW ROADMAP
+## 🚀 ROADMAP
 
-### Fase 1: Micro-Interacciones (↔ actual)
-✅ Scroll-Triggered Card Fade-In
-⏳ Button Glow + Hover Effects
-⏳ Hero Title Text Reveal
-⏳ Metrics Counter Animation
-⏳ Mega Menu Visual Hierarchy
+### Hecho (v3)
+✅ Monorepo Next.js + FastAPI + pgvector en Docker
+✅ Sitio negro/dorado: 12 servicios, 17 proyectos anonimizados, experiencia, contacto
+✅ Academia pública + portal de cursos (video/PDF/texto, subida prefirmada)
+✅ Asistente RAG con Claude y fuentes
+✅ Leads + Loops.so, SEO (metadata, sitemap, JSON-LD, OG)
+✅ Pruebas: pytest (API) + Playwright e2e
 
-### Fase 2-8: Ver REDESIGN_ROADMAP.md
+### Siguiente
+⏳ Pagos de cursos (Stripe / Mercado Pago) y acceso de alumnos
+⏳ Métricas reales de clientes y testimonios verificados
+⏳ Caso de app móvil (iOS/Android) cuando exista
+⏳ Despliegue: Vercel (web) + VPS con `infra/docker-compose.prod.yml`
 
 ---
 
 ## 📂 ESTRUCTURA CRÍTICA
 
 ```
-/WEBSITE CODEX
-├── index.html (842 líneas, español)
-├── animations.js (GSAP + ScrollTrigger)
-├── style.css (CSS variables, @keyframes)
-├── header.css (Fixed header + mega-menu)
-├── main.js (Interacciones globales)
-├── REDESIGN_ROADMAP.md (9 fases estratégicas)
-└── CLAUDE.md (este archivo)
+/CODEX OFICIAL WEBSITE
+├── apps/web/            Next.js (src/app/(site), src/app/portal, src/components, src/lib)
+├── apps/api/            FastAPI (app/routers, app/services, alembic, tests)
+├── content/             site.json, services.json, projects.json, cases.json
+├── infra/               docker-compose.prod.yml, Caddyfile, .env.prod.example
+├── docker-compose.yml   stack local (db, storage, api :8010, web :3000)
+├── legacy/              sitio estático v2 (solo referencia, no editar)
+└── docs/legacy/         planeación anterior (REDESIGN_ROADMAP, auditorías)
 ```
 
 **Archivos NO tocar sin supervisión:**
-- `index.html` excepto secciones marcadas (no HTML refactoring)
-- Configuración de carrusel Swiper (ya está optimizado)
+- `legacy/` (referencia histórica)
+- Migraciones Alembic ya aplicadas (crear una nueva en vez de editar)
 
 ---
 
 ## ✅ CHECKLIST ANTES DE COMPLETAR TAREA
 
 - [ ] Código escrito sigue patrones existentes (naming, estructura)
-- [ ] Probado en browser (si hay cambios visuales/interacción)
+- [ ] `npm run typecheck`, `npm run lint` y `pytest` en verde
+- [ ] Probado en browser (si hay cambios visuales/interacción) y `npm run test:e2e`
 - [ ] No hay console errors ni warnings
 - [ ] Respeta `prefers-reduced-motion` (accesibilidad)
-- [ ] Performance: no más de 2 ScriptTriggers nuevos
 - [ ] Commit creado con mensaje descriptivo
 
 ---
@@ -101,21 +107,15 @@
 ## 🔧 HERRAMIENTAS HABITUALES
 
 ```bash
-# Verificar cambios
-git status
-
-# Crear commit
-git commit -m "Task: Descripción clara"
-
-# Dev server (si aplica)
-npm run dev / python -m http.server
-
-# Testing accesibilidad
-axe DevTools, WAVE
+docker compose up -d --build                    # stack completo
+docker compose exec api python -m app.cli reindex
+npm run dev                                     # web en :3000 (API en :8010)
+cd apps/api && .venv/Scripts/python -m pytest
+cd apps/web && npm run test:e2e
 ```
 
 ---
 
-**Última actualización**: 2026-04-21  
-**Versión**: 1.0  
+**Última actualización**: 2026-10-16
+**Versión**: 3.0
 **Owner**: Diego Oliver Martínez

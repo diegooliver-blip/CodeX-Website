@@ -63,6 +63,8 @@ async def test_lead_is_stored(client, admin_headers):
     assert res.status_code == 201
     leads = (await client.get("/admin/leads", headers=admin_headers)).json()
     assert leads[0]["email"] == "ana@example.com"
+    assert (await client.delete(f"/admin/leads/{leads[0]['id']}", headers=admin_headers)).status_code == 204
+    assert all(lead["email"] != "ana@example.com" for lead in (await client.get("/admin/leads", headers=admin_headers)).json())
 
 
 async def test_presign_validates_type(client, admin_headers):

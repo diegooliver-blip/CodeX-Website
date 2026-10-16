@@ -64,6 +64,14 @@ async def list_leads(session: DB, _: CurrentUser) -> list[Lead]:
     return list(await session.scalars(select(Lead).order_by(Lead.created_at.desc()).limit(500)))
 
 
+@router.delete("/admin/leads/{lead_id}", status_code=204, tags=["admin"])
+async def delete_lead(lead_id: uuid.UUID, session: DB, _: AdminUser) -> None:
+    lead = await session.get(Lead, lead_id)
+    if lead:
+        await session.delete(lead)
+        await session.commit()
+
+
 # ---------- chat ----------
 @router.post("/chat", tags=["chat"])
 @limiter.limit("20/minute")

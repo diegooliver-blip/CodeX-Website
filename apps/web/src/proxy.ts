@@ -1,6 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ACCESS_COOKIE, REFRESH_COOKIE, setSession, type TokenPair } from "@/lib/session";
 import { API_URL, apiHeaders } from "@/lib/api-base";
+import projects from "@content/projects.json";
+import services from "@content/services.json";
+
+const known: Record<string, Set<string>> = {
+  proyectos: new Set(projects.map((p) => p.slug)),
+  servicios: new Set(services.map((s) => s.slug)),
+};
 
 /**
  * Optimistic guard for /portal: only checks cookies. When the 15-minute access
@@ -9,6 +16,17 @@ import { API_URL, apiHeaders } from "@/lib/api-base";
  */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Content slugs are known up front: answer unknown ones with a real 404 instead of
+  // streaming the app shell first (which would send 200 and read as a soft 404).
+  const [, section, slug, extra] = pathname.split("/");
+  if (known[section]) {
+    if (extra !== undefined || !known[section].has(slug)) {
+      return NextResponse.rewrite(new URL("/no-encontrado", request.url), { status: 404 });
+    }
+    return NextResponse.next();
+  }
+
   if (pathname === "/portal/login") return NextResponse.next();
 
   const access = request.cookies.get(ACCESS_COOKIE)?.value;
@@ -42,5 +60,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/portal/:path*", "/api/portal/:path*"],
+  matcher: ["/portal/:path*", "/api/portal/:path*", "/proyectos/:path+", "/servicios/:path+"],
 };

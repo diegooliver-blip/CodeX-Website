@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
 import { portal, type Lead } from "@/lib/portal-client";
 
 const fmt = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" });
@@ -46,6 +47,7 @@ export function LeadsAdmin() {
                 <th className="px-4 py-3 font-normal">Contacto</th>
                 <th className="px-4 py-3 font-normal">Interés</th>
                 <th className="px-4 py-3 font-normal">Mensaje</th>
+                <th className="px-4 py-3"><span className="sr-only">Acciones</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
@@ -60,6 +62,24 @@ export function LeadsAdmin() {
                   </td>
                   <td className="px-4 py-3 text-ash">{l.source}{l.service && <span className="block">{l.service}</span>}{l.course_slug && <span className="block">{l.course_slug}</span>}</td>
                   <td className="max-w-md px-4 py-3 text-ash">{l.message}</td>
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      aria-label={`Eliminar lead de ${l.name}`}
+                      className="grid size-8 place-items-center rounded-md text-ash hover:bg-graphite hover:text-ivory"
+                      onClick={async () => {
+                        if (!window.confirm(`¿Eliminar el lead de ${l.name}? No se puede deshacer.`)) return;
+                        try {
+                          await portal(`leads/${l.id}`, { method: "DELETE" });
+                          setLeads((all) => all?.filter((x) => x.id !== l.id) ?? null);
+                        } catch (e) {
+                          setError((e as Error).message);
+                        }
+                      }}
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

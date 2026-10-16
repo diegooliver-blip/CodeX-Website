@@ -191,8 +191,10 @@ body {
   }
 }
 .hero-line {
-  display: block;
   animation: rise 1.2s var(--ease-out-soft) both;
+}
+span.hero-line {
+  display: block;
 }
 
 @keyframes pulse-dot {

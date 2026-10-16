@@ -4,6 +4,12 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+def _default_content_dir() -> Path:
+    """Repo checkout: <root>/content. Container: mounted at /content."""
+    here = Path(__file__).resolve()
+    return here.parents[3] / "content" if len(here.parents) > 3 else Path("/content")
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(".env", "../../.env"), extra="ignore")
 
@@ -30,7 +36,7 @@ class Settings(BaseSettings):
 
     loops_api_key: str = ""
 
-    content_dir: Path = Path(__file__).resolve().parents[3] / "content"
+    content_dir: Path = _default_content_dir()
 
 
 @lru_cache

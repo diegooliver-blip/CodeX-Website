@@ -1,5 +1,5 @@
 # CODEX Platform — local stack.  `docker compose up --build`
-#   web  http://localhost:3000   api  http://localhost:8000/docs   storage console http://localhost:9001
+#   web  http://localhost:3000   api  http://localhost:8010/docs   storage console http://localhost:9001
 services:
   db:
     image: pgvector/pgvector:pg16
@@ -37,7 +37,7 @@ services:
     volumes:
       - ./content:/content:ro
       - fastembed:/root/.cache
-    ports: ["8000:8000"]
+    ports: ["8010:8000"]  # host 8000 is often reserved on Windows (Hyper-V)
     depends_on:
       db: { condition: service_healthy }
       storage: { condition: service_started }

@@ -1,0 +1,15 @@
+{$API_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy api:8000 {
+		# SSE: stream the assistant's tokens as they arrive
+		flush_interval -1
+	}
+}
+
+{$MEDIA_DOMAIN} {
+	# Presigned S3 URLs are signed for this host; Caddy keeps the Host header intact.
+	request_body {
+		max_size 4GB
+	}
+	reverse_proxy storage:9000
+}
