@@ -1,0 +1,8 @@
+legacy/
+docs/legacy/
+apps/web/e2e/fixtures/
+apps/api/.venv/
+node_modules/
+.next/
+apps/web/public/images/
+package-lock.json
