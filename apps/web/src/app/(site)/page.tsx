@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ChatConsole } from "@/components/ChatConsole";
@@ -175,10 +176,15 @@ export default function HomePage() {
       </section>
 
       {/* ---------- closing ---------- */}
-      <section className="relative overflow-hidden border-t border-line">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-25 mix-blend-luminosity"
+      <section className="relative isolate overflow-hidden border-t border-line">
+        <Image
+          src="/images/hero-bg.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          quality={70}
+          loading="lazy"
+          className="-z-10 object-cover opacity-25 mix-blend-luminosity"
         />
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-obsidian via-obsidian/80 to-obsidian" />
         <div className="mx-auto max-w-[1440px] px-5 py-32 md:px-10 md:py-44">

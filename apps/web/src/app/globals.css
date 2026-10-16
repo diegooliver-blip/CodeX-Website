@@ -180,10 +180,12 @@ body {
   transform: none;
 }
 
+/* Starts partly visible on purpose: a fully transparent headline can't count as the
+   LCP element, which would push LCP to the end of the animation. */
 @keyframes rise {
   from {
-    opacity: 0;
-    transform: translateY(0.6em);
+    opacity: 0.25;
+    transform: translateY(0.45em);
   }
   to {
     opacity: 1;

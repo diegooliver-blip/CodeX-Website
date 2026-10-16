@@ -54,7 +54,7 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
       ...edges.map(([a, b, weight]) => ({ a: layout[a], b: layout[b], ia: a, ib: b, weight })),
       ...layout.map((p, i) => ({ a: core, b: p, ia: -1, ib: i, weight: 0 })),
     ];
-    const signals = Array.from({ length: reduce ? 0 : 26 }, (_, i) => ({
+    const signals = Array.from({ length: reduce ? 0 : box.clientWidth < 640 ? 12 : 24 }, (_, i) => ({
       link: i % links.length,
       t: Math.random(),
       speed: 0.0016 + Math.random() * 0.0022,
@@ -168,16 +168,32 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
     const ro = new ResizeObserver(() => {
       resize();
       setNarrow(w < 640);
-      if (reduce) draw(performance.now());
+      if (reduce && started) draw(performance.now());
     });
-    ro.observe(box);
-    io.observe(box);
-    resize();
-    start = performance.now();
-    raf = requestAnimationFrame(draw);
+    ro.observe(box); // sizing (and the narrow layout) must be right on first paint
+    // Begin once the page is idle so the canvas never competes with first paint and hydration.
+    let started = false;
+    const begin = () => {
+      if (started) return;
+      started = true;
+      io.observe(box);
+      start = performance.now();
+      raf = requestAnimationFrame(draw);
+    };
+    const hasIdle = typeof window.requestIdleCallback === "function";
+    const idle = hasIdle ? window.requestIdleCallback(begin, { timeout: 1200 }) : 0;
+    const fallback = hasIdle ? undefined : setTimeout(begin, 400);
+    const onVisibility = () => {
+      visible = document.visibilityState === "visible";
+      if (visible && started && !reduce) raf = requestAnimationFrame(draw);
+    };
+    document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("pointermove", onMove, { passive: true });
 
     return () => {
+      if (hasIdle) window.cancelIdleCallback(idle);
+      clearTimeout(fallback);
+      document.removeEventListener("visibilitychange", onVisibility);
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
@@ -204,7 +220,7 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
                 onPointerLeave={() => setActive(null)}
                 onFocus={() => setActive(i)}
                 onBlur={() => setActive(null)}
-                className={`group absolute flex -translate-y-1/2 items-center gap-2.5 ${
+                className={`group absolute flex min-h-6 -translate-y-1/2 items-center gap-2.5 py-1 ${
                   right ? "flex-row text-left" : "-translate-x-full flex-row-reverse text-right"
                 }`}
                 style={{ left: right ? -5 : 5 }}

@@ -17,7 +17,8 @@ export default function ProjectsPage() {
         title="Lo que hemos construido."
         lede={`${projects.length} sistemas entre producción, despliegue y prototipo funcional. Sin nombres ni marcas de clientes: solo el problema, la solución y los datos del sistema.`}
       />
-      <section className="mx-auto max-w-[1440px] px-5 pb-28 md:px-10">
+      <section className="mx-auto max-w-[1440px] px-5 pb-28 md:px-10" aria-labelledby="portafolio">
+        <h2 id="portafolio" className="sr-only">Portafolio</h2>
         <ProjectExplorer
           categories={projectCategories}
           plates={projects.map((p) => ({ slug: p.slug, category: p.category, node: <ProjectPlate project={p} /> }))}

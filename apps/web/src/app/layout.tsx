@@ -3,7 +3,7 @@ import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
 import { serviceGroups, site, siteUrl } from "@/lib/content";
 import "./globals.css";
 
-const bodoni = Bodoni_Moda({ subsets: ["latin"], variable: "--font-bodoni", display: "swap", style: ["normal", "italic"] });
+const bodoni = Bodoni_Moda({ subsets: ["latin"], variable: "--font-bodoni", display: "swap" });
 const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
 
 export const metadata: Metadata = {
