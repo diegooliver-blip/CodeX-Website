@@ -21,9 +21,7 @@ export async function proxy(request: NextRequest) {
   // streaming the app shell first (which would send 200 and read as a soft 404).
   const [, section, slug, extra] = pathname.split("/");
   if (known[section]) {
-    if (extra !== undefined || !known[section].has(slug)) {
-      return NextResponse.rewrite(new URL("/no-encontrado", request.url), { status: 404 });
-    }
+    if (extra !== undefined || !known[section].has(slug)) return notFound(request);
     return NextResponse.next();
   }
 
@@ -57,6 +55,20 @@ export async function proxy(request: NextRequest) {
   const login = new URL("/portal/login", request.url);
   login.searchParams.set("next", pathname);
   return NextResponse.redirect(login);
+}
+
+// A rewrite to a prerendered page keeps the cached 200 status in production, so the
+// 404 page's HTML is fetched once and served with the right status code.
+let notFoundHtml: string | null = null;
+async function notFound(request: NextRequest) {
+  if (!notFoundHtml) {
+    const res = await fetch(new URL("/no-encontrado", request.url)).catch(() => null);
+    if (res?.ok) notFoundHtml = await res.text();
+  }
+  return new NextResponse(notFoundHtml ?? "Página no encontrada", {
+    status: 404,
+    headers: { "content-type": "text/html; charset=utf-8" },
+  });
 }
 
 export const config = {
