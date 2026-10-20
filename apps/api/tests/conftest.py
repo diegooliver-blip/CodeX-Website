@@ -1,14 +1,18 @@
-"""Tests run against a throwaway `codex_test` database on the docker-compose Postgres."""
+"""Tests run against a throwaway `codex_test` database on any reachable Postgres (docker compose locally, a service container in CI)."""
 
+import asyncio
 import os
 import subprocess
 import sys
 from pathlib import Path
 
+import asyncpg
 import pytest
 
 TEST_DB = "codex_test"
-os.environ["DATABASE_URL"] = f"postgresql+asyncpg://codex:codex@localhost:5432/{TEST_DB}"
+# Maintenance connection used only to drop/create the test database.
+ADMIN_DSN = os.environ.get("TEST_ADMIN_DSN", "postgresql://codex:codex@localhost:5432/codex")
+os.environ["DATABASE_URL"] = ADMIN_DSN.replace("postgresql://", "postgresql+asyncpg://").rsplit("/", 1)[0] + f"/{TEST_DB}"
 os.environ["ANTHROPIC_API_KEY"] = ""
 os.environ["LOOPS_API_KEY"] = ""
 os.environ["INTERNAL_API_KEY"] = ""
@@ -16,17 +20,18 @@ os.environ["INTERNAL_API_KEY"] = ""
 API_DIR = Path(__file__).resolve().parents[1]
 
 
-def _psql(sql: str) -> None:
-    subprocess.run(
-        ["docker", "compose", "exec", "-T", "db", "psql", "-U", "codex", "-d", "codex", "-c", sql],
-        cwd=API_DIR.parents[1], check=True, capture_output=True,
-    )
+async def _admin_sql(*statements: str) -> None:
+    conn = await asyncpg.connect(ADMIN_DSN)
+    try:
+        for sql in statements:
+            await conn.execute(sql)
+    finally:
+        await conn.close()
 
 
 @pytest.fixture(scope="session", autouse=True)
 def database():
-    _psql(f"DROP DATABASE IF EXISTS {TEST_DB} WITH (FORCE)")
-    _psql(f"CREATE DATABASE {TEST_DB}")
+    asyncio.run(_admin_sql(f"DROP DATABASE IF EXISTS {TEST_DB} WITH (FORCE)", f"CREATE DATABASE {TEST_DB}"))
     subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=API_DIR, check=True, env=os.environ)
     yield
 

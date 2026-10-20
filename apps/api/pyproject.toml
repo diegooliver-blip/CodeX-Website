@@ -4,6 +4,7 @@ version = "3.0.0"
 requires-python = ">=3.12"
 
 [tool.ruff]
+extend-exclude = ["alembic/versions"]  # applied migrations are immutable
 line-length = 120
 target-version = "py312"
 
