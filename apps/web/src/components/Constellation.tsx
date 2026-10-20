@@ -227,12 +227,12 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
               >
                 <span
                   className={`block size-2.5 shrink-0 rounded-full border transition-all duration-300 ${
-                    active === i ? "scale-150 border-champagne bg-champagne" : "border-gold bg-obsidian"
+                    active === i ? "scale-150 border-signal bg-signal" : "border-signal bg-paper"
                   }`}
                 />
                 <span
                   className={`w-max max-w-[7rem] text-[0.78rem] leading-tight transition-colors duration-300 sm:max-w-[9.5rem] md:text-[0.88rem] ${
-                    active === i ? "text-champagne" : active === null ? "text-ivory/70" : "text-ash/60"
+                    active === i ? "text-navy" : active === null ? "text-ink/70" : "text-slate/60"
                   }`}
                 >
                   {n.title}

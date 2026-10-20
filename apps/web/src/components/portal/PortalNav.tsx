@@ -20,12 +20,12 @@ export function PortalNav() {
   return (
     <nav aria-label="Portal" className="mt-6 flex gap-1 overflow-x-auto md:mt-10 md:flex-col">
       {items.map(({ href, label, icon: Icon }) => (
-        <Link key={href} href={href} className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-[0.95rem] text-ivory/80 hover:bg-graphite hover:text-ivory">
-          <Icon className="size-4 text-gold" aria-hidden />
+        <Link key={href} href={href} className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-[0.95rem] text-ink/80 hover:bg-mist hover:text-ink">
+          <Icon className="size-4 text-navy" aria-hidden />
           {label}
         </Link>
       ))}
-      <button type="button" onClick={logout} className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-[0.95rem] text-ash hover:text-ivory md:mt-6">
+      <button type="button" onClick={logout} className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-[0.95rem] text-slate hover:text-ink md:mt-6">
         <LogOut className="size-4" aria-hidden />
         Cerrar sesión
       </button>

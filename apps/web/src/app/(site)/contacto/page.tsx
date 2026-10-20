@@ -20,19 +20,19 @@ export default function ContactPage() {
         <LeadForm services={services.map((s) => ({ value: s.slug, label: s.title }))} />
         <aside className="space-y-10 lg:border-l lg:border-line lg:pl-12">
           <div>
-            <h2 className="text-gold">Consultoría gratuita</h2>
-            <p className="mt-3 text-ash">Treinta minutos para entender tu operación y decirte con honestidad qué haríamos.</p>
-            <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-gold mt-5">Elegir horario</a>
+            <h2 className="text-navy">Consultoría gratuita</h2>
+            <p className="mt-3 text-slate">Treinta minutos para entender tu operación y decirte con honestidad qué haríamos.</p>
+            <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-primary mt-5">Elegir horario</a>
           </div>
           <div>
-            <h2 className="text-gold">Directo</h2>
+            <h2 className="text-navy">Directo</h2>
             <ul className="mt-3 space-y-2">
               <li><a className="link-underline" href={site.contact.whatsapp} target="_blank" rel="noopener">WhatsApp {site.contact.phone}</a></li>
               <li><a className="link-underline" href={site.contact.phoneHref}>Llamar al {site.contact.phone}</a></li>
               <li><a className="link-underline" href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>
             </ul>
           </div>
-          <p className="text-[0.9rem] text-ash">{site.location}.</p>
+          <p className="text-[0.9rem] text-slate">{site.location}.</p>
         </aside>
       </section>
     </>

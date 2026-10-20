@@ -23,14 +23,14 @@ export function ProjectExplorer({
             aria-pressed={active === c}
             onClick={() => setActive(c)}
             className={`rounded-full border px-4 py-2 text-[0.9rem] transition-colors ${
-              active === c ? "border-gold bg-gold text-obsidian" : "border-line text-ivory/80 hover:border-gold"
+              active === c ? "border-signal bg-signal text-ink" : "border-line text-ink/80 hover:border-signal"
             }`}
           >
             {c}
           </button>
         ))}
       </div>
-      <p className="mt-6 text-[0.9rem] text-ash" aria-live="polite">
+      <p className="mt-6 text-[0.9rem] text-slate" aria-live="polite">
         {shown.length} {shown.length === 1 ? "proyecto" : "proyectos"}
       </p>
       <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">

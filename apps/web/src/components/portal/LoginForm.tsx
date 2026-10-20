@@ -36,15 +36,15 @@ export function LoginForm() {
   return (
     <form onSubmit={submit} className="space-y-6">
       <label className="block">
-        <span className="text-sm text-ash">Correo</span>
+        <span className="text-sm text-slate">Correo</span>
         <input name="email" type="email" required autoComplete="username" className="field" />
       </label>
       <label className="block">
-        <span className="text-sm text-ash">Contraseña</span>
+        <span className="text-sm text-slate">Contraseña</span>
         <input name="password" type="password" required minLength={8} autoComplete="current-password" className="field" />
       </label>
       {error && <p className="text-danger" role="alert">{error}</p>}
-      <button type="submit" disabled={busy} className="btn btn-gold w-full disabled:opacity-60">
+      <button type="submit" disabled={busy} className="btn btn-primary w-full disabled:opacity-60">
         {busy ? "Ingresando…" : "Ingresar"}
       </button>
     </form>

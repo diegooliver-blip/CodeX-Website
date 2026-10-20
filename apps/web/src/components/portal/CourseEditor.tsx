@@ -31,7 +31,7 @@ export function CourseEditor({ id }: { id: string }) {
   };
 
   if (error && !course) return <p className="text-danger" role="alert">{error}</p>;
-  if (!course) return <div className="h-80 animate-pulse rounded-2xl bg-graphite/60" />;
+  if (!course) return <div className="h-80 animate-pulse rounded-2xl bg-mist/60" />;
 
   async function saveDetails(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,14 +49,14 @@ export function CourseEditor({ id }: { id: string }) {
 
   return (
     <>
-      <Link href="/portal/cursos" className="link-underline text-[0.92rem] text-gold">Cursos</Link>
+      <Link href="/portal/cursos" className="link-underline text-[0.92rem] text-navy">Cursos</Link>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
         <h1 className="display text-5xl">{course.title}</h1>
         <div className="flex gap-2">
           {published && <Link href={`/academia/${course.slug}`} target="_blank" className="btn btn-ghost">Ver en la academia</Link>}
           <button
             type="button"
-            className={published ? "btn btn-ghost" : "btn btn-gold"}
+            className={published ? "btn btn-ghost" : "btn btn-primary"}
             onClick={() => run(() => portal(`courses/${id}`, { method: "PATCH", json: { status: published ? "draft" : "published" } }), published ? "Curso pasado a borrador." : "Curso publicado.")}
           >
             {published ? "Pasar a borrador" : "Publicar"}
@@ -64,7 +64,7 @@ export function CourseEditor({ id }: { id: string }) {
         </div>
       </div>
       <div className="mt-3 min-h-6" aria-live="polite">
-        {notice && !error && <p className="text-champagne">{notice}</p>}
+        {notice && !error && <p className="text-navy">{notice}</p>}
         {error && <p className="text-danger" role="alert">{error}</p>}
       </div>
 
@@ -73,14 +73,14 @@ export function CourseEditor({ id }: { id: string }) {
         <Field label="Slug (URL)" name="slug" defaultValue={course.slug} pattern="[a-z0-9\-]+" required />
         <Field label="Subtítulo" name="subtitle" defaultValue={course.subtitle} className="md:col-span-2" />
         <label className="block md:col-span-2">
-          <span className="text-sm text-ash">Descripción</span>
+          <span className="text-sm text-slate">Descripción</span>
           <textarea name="description" defaultValue={course.description} rows={5} className="field-box mt-1.5" />
         </label>
         <Field label="Categoría" name="category" defaultValue={course.category} />
         <Field label="Nivel" name="level" defaultValue={course.level} />
         <Field label="Precio en MXN (vacío = por anunciar)" name="price_mxn" type="number" min={0} defaultValue={course.price_mxn ?? ""} />
         <div className="flex items-end justify-end">
-          <button type="submit" className="btn btn-gold">Guardar cambios</button>
+          <button type="submit" className="btn btn-primary">Guardar cambios</button>
         </div>
       </form>
 
@@ -129,7 +129,7 @@ type Run = (fn: () => Promise<unknown>, done?: string) => Promise<void>;
 function Field({ label, className = "", ...props }: { label: string; className?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className={`block ${className}`}>
-      <span className="text-sm text-ash">{label}</span>
+      <span className="text-sm text-slate">{label}</span>
       <input {...props} className="field-box mt-1.5" />
     </label>
   );
@@ -157,8 +157,8 @@ function ModuleCard({ module: m, index, last, run, onMove }: { module: AdminModu
   return (
     <div className="rounded-2xl border border-line">
       <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4">
-        <p><span className="text-gold">Módulo {index + 1}</span> <span className="ml-2">{m.title}</span></p>
-        <div className="flex items-center gap-1 text-ash">
+        <p><span className="text-navy">Módulo {index + 1}</span> <span className="ml-2">{m.title}</span></p>
+        <div className="flex items-center gap-1 text-slate">
           <IconButton label="Subir módulo" disabled={index === 0} onClick={() => onMove(-1)}><ArrowUp className="size-4" /></IconButton>
           <IconButton label="Bajar módulo" disabled={last} onClick={() => onMove(1)}><ArrowDown className="size-4" /></IconButton>
           <IconButton
@@ -179,7 +179,7 @@ function ModuleCard({ module: m, index, last, run, onMove }: { module: AdminModu
             onSave={(data) => run(() => portal(`courses/modules/${m.id}/lessons`, { method: "POST", json: { ...data, position: m.lessons.length } }), "Lección agregada.").then(() => setAdding(false))}
           />
         ) : (
-          <button type="button" onClick={() => setAdding(true)} className="text-[0.92rem] text-champagne hover:underline">Agregar lección</button>
+          <button type="button" onClick={() => setAdding(true)} className="text-[0.92rem] text-navy hover:underline">Agregar lección</button>
         )}
       </div>
     </div>
@@ -202,13 +202,13 @@ function LessonRow({ lesson, run }: { lesson: AdminLesson; run: Run }) {
   }
   return (
     <li className="flex items-center justify-between gap-3 px-5 py-3">
-      <button type="button" onClick={() => setEditing(true)} className="flex min-w-0 items-center gap-3 text-left hover:text-champagne">
-        <Icon className="size-4 shrink-0 text-gold" aria-hidden />
+      <button type="button" onClick={() => setEditing(true)} className="flex min-w-0 items-center gap-3 text-left hover:text-navy">
+        <Icon className="size-4 shrink-0 text-navy" aria-hidden />
         <span className="truncate">{lesson.title}</span>
-        {lesson.is_free && <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[0.75rem] text-champagne">Gratis</span>}
+        {lesson.is_free && <span className="rounded-full bg-signal/15 px-2 py-0.5 text-[0.75rem] text-navy">Gratis</span>}
         {lesson.kind !== "text" && !lesson.asset_key && <span className="text-[0.78rem] text-danger">Falta archivo</span>}
       </button>
-      <span className="flex items-center gap-3 text-[0.85rem] text-ash">
+      <span className="flex items-center gap-3 text-[0.85rem] text-slate">
         {lesson.duration_min} min
         <IconButton label="Eliminar lección" onClick={() => window.confirm(`¿Eliminar "${lesson.title}"?`) && run(() => portal(`courses/lessons/${lesson.id}`, { method: "DELETE" }), "Lección eliminada.")}>
           <Trash2 className="size-4" />
@@ -255,15 +255,15 @@ function LessonForm({ initial, onSave, onCancel }: { initial?: AdminLesson; onSa
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-4 rounded-xl bg-graphite/60 p-4 md:grid-cols-2">
+    <form onSubmit={submit} className="grid gap-4 rounded-xl bg-mist/60 p-4 md:grid-cols-2">
       <Field label="Título de la lección" name="title" defaultValue={initial?.title} required />
       <Field label="Slug (vacío = automático)" name="slug" defaultValue={initial?.slug} pattern="[a-z0-9\-]*" />
       <fieldset className="md:col-span-2">
-        <legend className="text-sm text-ash">Tipo</legend>
+        <legend className="text-sm text-slate">Tipo</legend>
         <div className="mt-2 flex gap-2">
           {(["video", "pdf", "text"] as const).map((k) => (
             <button key={k} type="button" aria-pressed={kind === k} onClick={() => setKind(k)}
-              className={`rounded-full border px-4 py-1.5 text-[0.88rem] ${kind === k ? "border-gold bg-gold text-obsidian" : "border-line"}`}>
+              className={`rounded-full border px-4 py-1.5 text-[0.88rem] ${kind === k ? "border-signal bg-signal text-ink" : "border-line"}`}>
               {k === "video" ? "Video" : k === "pdf" ? "PDF" : "Texto"}
             </button>
           ))}
@@ -272,22 +272,22 @@ function LessonForm({ initial, onSave, onCancel }: { initial?: AdminLesson; onSa
       {kind !== "text" && (
         <div className="md:col-span-2">
           <label className="block">
-            <span className="text-sm text-ash">{kind === "video" ? "Archivo de video (MP4, WebM)" : "Archivo PDF"}</span>
+            <span className="text-sm text-slate">{kind === "video" ? "Archivo de video (MP4, WebM)" : "Archivo PDF"}</span>
             <input type="file" accept={kind === "video" ? "video/*" : "application/pdf"} onChange={(e) => onFile(e.target.files?.[0])}
-              className="mt-1.5 block w-full text-[0.9rem] text-ash file:mr-4 file:rounded-full file:border-0 file:bg-gold file:px-4 file:py-2 file:text-obsidian" />
+              className="mt-1.5 block w-full text-[0.9rem] text-slate file:mr-4 file:rounded-full file:border-0 file:bg-signal file:px-4 file:py-2 file:text-ink" />
           </label>
           {progress !== null && (
             <div className="mt-3" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label="Progreso de subida">
-              <div className="h-1.5 overflow-hidden rounded-full bg-line"><div className="h-full bg-gold transition-[width]" style={{ width: `${progress}%` }} /></div>
-              <p className="mt-1 text-[0.85rem] text-ash">Subiendo… {progress}%</p>
+              <div className="h-1.5 overflow-hidden rounded-full bg-line"><div className="h-full bg-signal transition-[width]" style={{ width: `${progress}%` }} /></div>
+              <p className="mt-1 text-[0.85rem] text-slate">Subiendo… {progress}%</p>
             </div>
           )}
-          {assetKey && progress === null && <p className="mt-2 text-[0.85rem] text-champagne">Archivo listo: {assetKey.split("/").pop()}</p>}
+          {assetKey && progress === null && <p className="mt-2 text-[0.85rem] text-navy">Archivo listo: {assetKey.split("/").pop()}</p>}
           {error && <p className="mt-2 text-[0.88rem] text-danger" role="alert">{error}</p>}
         </div>
       )}
       <label className="block md:col-span-2">
-        <span className="text-sm text-ash">{kind === "text" ? "Contenido" : "Notas de la lección (opcional)"}</span>
+        <span className="text-sm text-slate">{kind === "text" ? "Contenido" : "Notas de la lección (opcional)"}</span>
         <textarea name="body" defaultValue={initial?.body} rows={kind === "text" ? 8 : 3} className="field-box mt-1.5" />
       </label>
       <Field label="Duración (minutos)" name="duration_min" type="number" min={0} defaultValue={initial?.duration_min ?? 0} />
@@ -297,7 +297,7 @@ function LessonForm({ initial, onSave, onCancel }: { initial?: AdminLesson; onSa
       </label>
       <div className="flex justify-end gap-2 md:col-span-2">
         <button type="button" onClick={onCancel} className="btn btn-ghost">Cancelar</button>
-        <button type="submit" disabled={progress !== null} className="btn btn-gold disabled:opacity-50">Guardar lección</button>
+        <button type="submit" disabled={progress !== null} className="btn btn-primary disabled:opacity-50">Guardar lección</button>
       </div>
     </form>
   );
@@ -305,7 +305,7 @@ function LessonForm({ initial, onSave, onCancel }: { initial?: AdminLesson; onSa
 
 function IconButton({ label, children, ...props }: { label: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button type="button" aria-label={label} title={label} {...props} className="grid size-8 place-items-center rounded-md hover:bg-graphite hover:text-ivory disabled:opacity-30">
+    <button type="button" aria-label={label} title={label} {...props} className="grid size-8 place-items-center rounded-md hover:bg-mist hover:text-ink disabled:opacity-30">
       {children}
     </button>
   );

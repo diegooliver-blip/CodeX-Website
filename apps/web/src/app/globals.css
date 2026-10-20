@@ -1,130 +1,197 @@
 @import "tailwindcss";
 
-/* CODEX design tokens: obsidian + gold. Gold is a signal colour, not a fill. */
+/* CODEX v4 design tokens: bright consulting canvas, ink/navy depth sections,
+   signal blue for AI accents and ember for the one primary action. */
 @theme {
-  --color-obsidian: #0a0a0a;
-  --color-graphite: #16140f;
-  --color-graphite-2: #1f1c15;
-  --color-line: #2c281f;
-  --color-gold: #c9a55a;
-  --color-champagne: #e6d3a3;
-  --color-ivory: #eee9df;
-  --color-ash: #8e887c;
-  --color-danger: #e08a7a;
+  --color-paper: #ffffff;
+  --color-ink: #000209;
+  --color-mist: #eae9e6;
+  --color-mist-2: #f4f3f1;
+  --color-line: #d9d8d3;
+  --color-slate: #3d404b;
+  --color-steel: #7f8189;
+  --color-signal: #5a7ef2;
+  --color-navy: #03144f;
+  --color-navy-2: #0a2170;
+  --color-ember: #ff6b15;
+  --color-spark: #ffe550;
+  --color-danger: #c4321b;
 
-  --font-display: var(--font-bodoni), "Bodoni 72", Didot, serif;
-  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-madefor-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-madefor-text), ui-sans-serif, system-ui, sans-serif;
 
-  --ease-codex: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-codex: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Modular scale (1.25) anchored at 17px body */
+  /* Modular scale anchored at 17px body */
   --text-body: 1.0625rem;
   --text-lede: 1.3125rem;
   --text-h3: 1.75rem;
-  --text-h2: clamp(2.25rem, 4.6vw, 3.75rem);
-  --text-h1: clamp(2.75rem, 7.4vw, 6.5rem);
+  --text-h2: clamp(2.25rem, 5vw, 4.25rem);
+  --text-h1: clamp(2.9rem, 8vw, 7.5rem);
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
-  background: var(--color-obsidian);
+  background: var(--color-paper);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--color-obsidian);
-  color: var(--color-ivory);
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: 1.6;
-  font-feature-settings: "ss01", "kern";
 }
 
 ::selection {
-  background: var(--color-gold);
-  color: var(--color-obsidian);
+  background: var(--color-spark);
+  color: var(--color-ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-champagne);
+  outline: 2px solid var(--color-signal);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* Dark bands (ink / navy) flip text and focus colours for everything inside */
+.theme-dark {
+  color: var(--color-paper);
+  --tw-prose-body: var(--color-mist);
+}
+.theme-dark :focus-visible {
+  outline-color: var(--color-spark);
 }
 
 /* ---------- typography ---------- */
 .display {
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.035em;
   line-height: 0.98;
-  font-optical-sizing: auto;
   text-wrap: balance;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+.eyebrow::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--color-ember);
+}
+.theme-dark .eyebrow {
+  color: var(--color-spark);
 }
 
 .prose-codex {
   max-width: 64ch;
-  color: color-mix(in oklab, var(--color-ivory) 82%, var(--color-ash));
+  color: var(--color-slate);
+}
+.theme-dark .prose-codex {
+  color: color-mix(in oklab, var(--color-paper) 78%, var(--color-steel));
 }
 .prose-codex p + p {
   margin-top: 1em;
 }
 
-.gold-rule {
-  height: 1px;
-  background: linear-gradient(90deg, var(--color-gold), color-mix(in oklab, var(--color-gold) 10%, transparent) 70%);
+/* Highlighter stroke used on one or two words per page */
+.mark {
+  background-image: linear-gradient(transparent 62%, var(--color-spark) 62%, var(--color-spark) 92%, transparent 92%);
+  background-repeat: no-repeat;
 }
 
-/* Film-grain texture keeps the black from looking flat on large screens */
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 60;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+.rule {
+  height: 1px;
+  background: var(--color-line);
+}
+.theme-dark .rule {
+  background: color-mix(in oklab, var(--color-paper) 16%, transparent);
 }
 
 /* ---------- buttons ---------- */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  min-height: 3rem;
-  padding: 0 1.5rem;
+  min-height: 3.25rem;
+  padding: 0 1.6rem;
   border-radius: 999px;
   font-weight: 600;
-  font-size: 0.975rem;
-  letter-spacing: 0.005em;
-  transition: transform 0.35s var(--ease-codex), background-color 0.25s, color 0.25s, border-color 0.25s;
-  will-change: transform;
+  font-size: 0.98rem;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.35s var(--ease-codex), border-color 0.35s, background-color 0.35s;
+}
+/* Fill that wipes up from the bottom on hover */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: translateY(101%);
+  border-radius: inherit;
+  transition: transform 0.5s var(--ease-codex);
+}
+.btn:hover::before {
+  transform: none;
 }
 .btn:active {
-  transform: scale(0.97);
+  scale: 0.97;
 }
-.btn-gold {
-  background: var(--color-gold);
-  color: var(--color-obsidian);
-  box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-gold) 40%, transparent);
+.btn-primary {
+  background: var(--color-ember);
+  color: var(--color-ink);
 }
-.btn-gold:hover {
-  background: var(--color-champagne);
-  box-shadow: 0 10px 40px -12px color-mix(in oklab, var(--color-gold) 70%, transparent);
+.btn-primary::before {
+  background: var(--color-ink);
+}
+.btn-primary:hover {
+  color: var(--color-paper);
 }
 .btn-ghost {
-  border: 1px solid var(--color-line);
-  color: var(--color-ivory);
+  border: 1px solid currentColor;
+  color: var(--color-ink);
+}
+.btn-ghost::before {
+  background: var(--color-ink);
 }
 .btn-ghost:hover {
-  border-color: var(--color-gold);
-  color: var(--color-champagne);
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
+.theme-dark .btn-ghost {
+  color: var(--color-paper);
+}
+.theme-dark .btn-ghost::before {
+  background: var(--color-paper);
+}
+.theme-dark .btn-ghost:hover {
+  color: var(--color-ink);
+  border-color: var(--color-paper);
+}
+.btn-dark {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.btn-dark::before {
+  background: var(--color-signal);
 }
 
 .link-underline {
@@ -132,7 +199,7 @@ body {
   background-size: 0% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
-  transition: background-size 0.4s var(--ease-out-soft);
+  transition: background-size 0.4s var(--ease-codex);
 }
 .link-underline:hover {
   background-size: 100% 1px;
@@ -145,35 +212,41 @@ body {
   border: 0;
   border-bottom: 1px solid var(--color-line);
   padding: 0.85rem 0;
-  color: var(--color-ivory);
+  color: inherit;
   font-size: 1.05rem;
   transition: border-color 0.25s;
 }
 .field::placeholder {
-  color: var(--color-ash);
+  color: var(--color-steel);
 }
 .field:focus {
   outline: none;
-  border-color: var(--color-gold);
+  border-color: var(--color-signal);
 }
 .field-box {
   width: 100%;
-  background: var(--color-graphite);
+  background: var(--color-paper);
   border: 1px solid var(--color-line);
   border-radius: 10px;
   padding: 0.7rem 0.9rem;
-  color: var(--color-ivory);
+  color: var(--color-ink);
 }
 .field-box:focus {
   outline: none;
-  border-color: var(--color-gold);
+  border-color: var(--color-signal);
 }
 
 /* ---------- motion ---------- */
+/* Pre-JS states only apply once the motion layer has booted (html.motion-ok),
+   so content is never hidden when JS fails or the user prefers reduced motion. */
+.motion-ok [data-reveal] {
+  visibility: hidden;
+}
+
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s var(--ease-out-soft), transform 0.8s var(--ease-out-soft);
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease-codex), transform 0.8s var(--ease-codex);
 }
 .reveal.is-in {
   opacity: 1;
@@ -185,7 +258,7 @@ body {
 @keyframes rise {
   from {
     opacity: 0.25;
-    transform: translateY(0.45em);
+    transform: translateY(0.4em);
   }
   to {
     opacity: 1;
@@ -193,19 +266,61 @@ body {
   }
 }
 .hero-line {
-  animation: rise 1.2s var(--ease-out-soft) both;
+  animation: rise 1.2s var(--ease-codex) both;
 }
 span.hero-line {
   display: block;
 }
 
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
 @keyframes pulse-dot {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* View transitions between routes */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root) {
+  animation: 0.4s var(--ease-codex) both vt-out;
+}
+::view-transition-new(root) {
+  animation: 0.6s var(--ease-codex) both vt-in;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
@@ -215,9 +330,19 @@ span.hero-line {
     opacity: 1;
     transform: none;
   }
+  .marquee-track {
+    animation: none;
+  }
 }
 
 /* Lenis */
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}

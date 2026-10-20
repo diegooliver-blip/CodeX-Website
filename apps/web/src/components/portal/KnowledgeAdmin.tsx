@@ -47,40 +47,40 @@ export function KnowledgeAdmin() {
   return (
     <>
       <h1 className="display text-5xl">Conocimiento</h1>
-      <p className="mt-3 max-w-2xl text-ash">
+      <p className="mt-3 max-w-2xl text-slate">
         Lo que el asistente puede consultar. Los servicios, proyectos y cursos publicados se indexan solos al reindexar;
         aquí también puedes subir documentos propios (PDF, Markdown o texto, máximo 15 MB).
       </p>
       <div className="mt-8 flex flex-wrap items-center gap-3">
-        <button type="button" onClick={reindex} disabled={busy} className="btn btn-gold disabled:opacity-50">Reindexar sitio y cursos</button>
+        <button type="button" onClick={reindex} disabled={busy} className="btn btn-primary disabled:opacity-50">Reindexar sitio y cursos</button>
         <label className={`btn btn-ghost cursor-pointer ${busy ? "pointer-events-none opacity-50" : ""}`}>
           Subir documento
           <input type="file" accept=".pdf,.md,.txt" className="sr-only" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
         </label>
       </div>
       <div className="mt-4 min-h-6" aria-live="polite">
-        {busy && <p className="text-ash">Procesando…</p>}
-        {!busy && status && !error && <p className="text-champagne">{status}</p>}
+        {busy && <p className="text-slate">Procesando…</p>}
+        {!busy && status && !error && <p className="text-navy">{status}</p>}
         {error && <p className="text-danger" role="alert">{error}</p>}
       </div>
 
       {!docs ? (
-        <div className="mt-8 h-60 animate-pulse rounded-2xl bg-graphite/60" />
+        <div className="mt-8 h-60 animate-pulse rounded-2xl bg-mist/60" />
       ) : docs.length === 0 ? (
-        <p className="mt-8 text-ash">El índice está vacío. Pulsa «Reindexar sitio y cursos» para crearlo.</p>
+        <p className="mt-8 text-slate">El índice está vacío. Pulsa «Reindexar sitio y cursos» para crearlo.</p>
       ) : (
         <ul className="mt-8 divide-y divide-line border-y border-line">
           {docs.map((d) => (
             <li key={d.id} className="flex items-center justify-between gap-4 py-3">
               <span className="min-w-0">
-                <span className="mr-3 rounded-full border border-line px-2 py-0.5 text-[0.75rem] text-ash">{sourceLabel[d.source] ?? d.source}</span>
+                <span className="mr-3 rounded-full border border-line px-2 py-0.5 text-[0.75rem] text-slate">{sourceLabel[d.source] ?? d.source}</span>
                 <span className="truncate">{d.title}</span>
               </span>
               {d.source === "upload" && (
                 <button
                   type="button"
                   aria-label={`Eliminar ${d.title}`}
-                  className="grid size-8 place-items-center rounded-md text-ash hover:bg-graphite hover:text-ivory"
+                  className="grid size-8 place-items-center rounded-md text-slate hover:bg-mist hover:text-ink"
                   onClick={() => window.confirm(`¿Quitar "${d.title}" del asistente?`) && act(async () => { await portal(`rag/documents/${d.id}`, { method: "DELETE" }); return "Documento eliminado."; })}
                 >
                   <Trash2 className="size-4" />

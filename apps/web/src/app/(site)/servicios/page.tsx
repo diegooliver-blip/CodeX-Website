@@ -20,16 +20,16 @@ export default function ServicesPage() {
       <div className="mx-auto max-w-[1440px] px-5 pb-28 md:px-10">
         {serviceGroups.map((g) => (
           <section key={g.group} className="border-t border-line py-14" aria-labelledby={`g-${g.group}`}>
-            <h2 id={`g-${g.group}`} className="text-gold">{g.group}</h2>
+            <h2 id={`g-${g.group}`} className="text-navy">{g.group}</h2>
             <div className="mt-8 grid gap-x-12 gap-y-14 lg:grid-cols-2">
               {g.items.map((s) => {
                 const count = projectsForService(s.slug).length;
                 return (
                   <Link key={s.slug} href={`/servicios/${s.slug}`} className="group block">
-                    <ServiceIcon name={s.icon} className="size-7 text-gold" />
-                    <h3 className="display mt-5 text-[clamp(2rem,3vw,2.75rem)] leading-[1.04] group-hover:text-champagne">{s.title}</h3>
-                    <p className="mt-4 max-w-xl text-ash">{s.description}</p>
-                    <p className="mt-5 text-[0.9rem] text-champagne">
+                    <ServiceIcon name={s.icon} className="size-7 text-navy" />
+                    <h3 className="display mt-5 text-[clamp(2rem,3vw,2.75rem)] leading-[1.04] group-hover:text-navy">{s.title}</h3>
+                    <p className="mt-4 max-w-xl text-slate">{s.description}</p>
+                    <p className="mt-5 text-[0.9rem] text-navy">
                       {count > 0 ? `${count} ${count === 1 ? "proyecto" : "proyectos"} construidos` : "Conoce el servicio"}
                     </p>
                   </Link>

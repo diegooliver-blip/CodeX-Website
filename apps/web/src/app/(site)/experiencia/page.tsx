@@ -28,24 +28,24 @@ export default function ExperiencePage() {
         <div className="divide-y divide-line border-y border-line">
           {cases.map((c) => (
             <article key={c.slug} className="grid gap-4 py-12 lg:grid-cols-[14rem_1fr_1fr] lg:gap-12">
-              <p className="text-gold">{c.sector}</p>
+              <p className="text-navy">{c.sector}</p>
               <h2 className="display text-[clamp(1.9rem,3vw,2.6rem)] leading-[1.05]">{c.title}</h2>
               <div>
-                <p className="text-ash">{c.text}</p>
-                <p className="mt-4 text-[0.9rem] text-champagne">{c.tags.join(", ")}</p>
+                <p className="text-slate">{c.text}</p>
+                <p className="mt-4 text-[0.9rem] text-navy">{c.tags.join(", ")}</p>
               </div>
             </article>
           ))}
         </div>
       </section>
-      <section className="border-t border-line bg-graphite/30">
+      <section className="border-t border-line bg-mist/30">
         <div className="mx-auto max-w-[1440px] px-5 py-24 md:px-10">
           <h2 className="display text-[length:var(--text-h2)]">Dominio técnico y regulatorio.</h2>
           <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
             {domains.map((d) => (
               <div key={d.title}>
-                <h3 className="text-lg font-semibold text-champagne">{d.title}</h3>
-                <p className="mt-2 text-ash">{d.text}</p>
+                <h3 className="text-lg font-semibold text-navy">{d.title}</h3>
+                <p className="mt-2 text-slate">{d.text}</p>
               </div>
             ))}
           </div>

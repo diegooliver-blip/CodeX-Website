@@ -41,9 +41,9 @@ export function LeadForm({
 
   if (state === "sent") {
     return (
-      <div className="rounded-2xl border border-gold/40 p-8" role="status">
-        <p className="display text-3xl text-champagne">Mensaje recibido.</p>
-        <p className="mt-3 text-ash">
+      <div className="rounded-2xl border border-signal/40 p-8" role="status">
+        <p className="display text-3xl text-navy">Mensaje recibido.</p>
+        <p className="mt-3 text-slate">
           {source === "academia"
             ? "Te avisaremos por correo en cuanto abran las inscripciones."
             : "Te respondemos en menos de un día hábil. Si es urgente, escríbenos por WhatsApp."}
@@ -55,43 +55,43 @@ export function LeadForm({
   return (
     <form onSubmit={submit} className="grid gap-6 sm:grid-cols-2">
       <label className="block">
-        <span className="text-sm text-ash">Nombre</span>
+        <span className="text-sm text-slate">Nombre</span>
         <input name="name" required minLength={2} autoComplete="name" className="field" />
       </label>
       <label className="block">
-        <span className="text-sm text-ash">Correo</span>
+        <span className="text-sm text-slate">Correo</span>
         <input name="email" type="email" required autoComplete="email" className="field" />
       </label>
       {source === "contacto" && (
         <>
           <label className="block">
-            <span className="text-sm text-ash">Empresa (opcional)</span>
+            <span className="text-sm text-slate">Empresa (opcional)</span>
             <input name="company" autoComplete="organization" className="field" />
           </label>
           <label className="block">
-            <span className="text-sm text-ash">Teléfono (opcional)</span>
+            <span className="text-sm text-slate">Teléfono (opcional)</span>
             <input name="phone" type="tel" autoComplete="tel" className="field" />
           </label>
           {services && (
             <label className="block sm:col-span-2">
-              <span className="text-sm text-ash">¿Qué te interesa?</span>
+              <span className="text-sm text-slate">¿Qué te interesa?</span>
               <select name="service" defaultValue="" className="field appearance-none">
-                <option value="" className="bg-graphite">Todavía no lo sé</option>
+                <option value="" className="bg-mist">Todavía no lo sé</option>
                 {services.map((s) => (
-                  <option key={s.value} value={s.value} className="bg-graphite">{s.label}</option>
+                  <option key={s.value} value={s.value} className="bg-mist">{s.label}</option>
                 ))}
               </select>
             </label>
           )}
           <label className="block sm:col-span-2">
-            <span className="text-sm text-ash">Cuéntanos sobre tu operación</span>
+            <span className="text-sm text-slate">Cuéntanos sobre tu operación</span>
             <textarea name="message" rows={4} maxLength={4000} className="field resize-none" />
           </label>
         </>
       )}
       <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[0.85rem] text-ash">Usamos tus datos solo para responderte.</p>
-        <button type="submit" disabled={state === "sending"} className="btn btn-gold disabled:opacity-60">
+        <p className="text-[0.85rem] text-slate">Usamos tus datos solo para responderte.</p>
+        <button type="submit" disabled={state === "sending"} className="btn btn-primary disabled:opacity-60">
           {state === "sending" ? "Enviando…" : submitLabel}
         </button>
       </div>

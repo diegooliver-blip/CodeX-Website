@@ -82,25 +82,25 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
   };
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-[22px] border border-line bg-graphite/70">
+    <div className="flex h-full flex-col overflow-hidden rounded-[22px] border border-line bg-mist/70">
       <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
         <p className="flex items-center gap-2.5 text-[0.9rem]">
-          <span className="size-2 rounded-full bg-gold [animation:pulse-dot_2.4s_ease-in-out_infinite]" />
+          <span className="size-2 rounded-full bg-signal [animation:pulse-dot_2.4s_ease-in-out_infinite]" />
           Asistente CODEX
         </p>
-        <p className="text-[0.8rem] text-ash">Responde con nuestros proyectos reales</p>
+        <p className="text-[0.8rem] text-slate">Responde con nuestros proyectos reales</p>
       </div>
 
       <div ref={log} className={`flex-1 space-y-5 overflow-y-auto px-5 py-5 ${compact ? "min-h-64" : "min-h-80"}`} aria-live="polite">
         {messages.length === 0 && (
           <div className="space-y-2.5">
-            <p className="mb-4 text-ash">Pregunta lo que quieras sobre lo que construimos.</p>
+            <p className="mb-4 text-slate">Pregunta lo que quieras sobre lo que construimos.</p>
             {starters.map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => ask(s)}
-                className="block w-full rounded-xl border border-line px-4 py-3 text-left text-[0.92rem] text-ivory/85 transition-colors hover:border-gold hover:text-ivory"
+                className="block w-full rounded-xl border border-line px-4 py-3 text-left text-[0.92rem] text-ink/85 transition-colors hover:border-signal hover:text-ink"
               >
                 {s}
               </button>
@@ -109,15 +109,15 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
         )}
         {messages.map((m, i) =>
           m.role === "user" ? (
-            <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-gold/12 px-4 py-2.5 text-[0.95rem] text-champagne">
+            <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-signal/12 px-4 py-2.5 text-[0.95rem] text-navy">
               {m.content}
             </p>
           ) : (
             <div key={i} className="max-w-[92%]">
               {m.content ? (
-                <p className="whitespace-pre-wrap text-[0.96rem] leading-relaxed text-ivory/90">{m.content}</p>
+                <p className="whitespace-pre-wrap text-[0.96rem] leading-relaxed text-ink/90">{m.content}</p>
               ) : (
-                <LoaderCircle className="size-4 animate-spin text-gold" aria-label="Escribiendo" />
+                <LoaderCircle className="size-4 animate-spin text-navy" aria-label="Escribiendo" />
               )}
               {m.sources && m.content && m.sources.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -125,7 +125,7 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
                     <Link
                       key={s.url + s.title}
                       href={s.url}
-                      className="rounded-full border border-line px-3 py-1 text-[0.78rem] text-ash transition-colors hover:border-gold hover:text-champagne"
+                      className="rounded-full border border-line px-3 py-1 text-[0.78rem] text-slate transition-colors hover:border-signal hover:text-navy"
                     >
                       {s.title.replace(/^(Servicio|Proyecto|Caso|Curso) — /, "")}
                     </Link>
@@ -146,13 +146,13 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
           placeholder="Escribe tu pregunta"
           maxLength={1000}
           autoComplete="off"
-          className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-[0.98rem] placeholder:text-ash focus:outline-none"
+          className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-[0.98rem] placeholder:text-slate focus:outline-none"
         />
         <button
           type="submit"
           disabled={busy || !input.trim()}
           aria-label="Enviar pregunta"
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-gold text-obsidian transition-opacity disabled:opacity-30"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-signal text-ink transition-opacity disabled:opacity-30"
         >
           <ArrowUp className="size-4.5" />
         </button>

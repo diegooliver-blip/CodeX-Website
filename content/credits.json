@@ -1,0 +1,173 @@
+[
+  {
+    "file": "/images/v4/hero.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Thirdman",
+    "authorUrl": "https://www.pexels.com/@thirdman",
+    "source": "https://www.pexels.com/photo/colleagues-in-an-office-7653580/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/statement.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Georgie  Devlin",
+    "authorUrl": "https://www.pexels.com/@gstudio",
+    "source": "https://www.pexels.com/photo/glowing-blue-neons-8640331/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/automatizacion.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Tiger Lily",
+    "authorUrl": "https://www.pexels.com/@tiger-lily",
+    "source": "https://www.pexels.com/photo/workers-in-warehouse-4483862/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/ia.jpg",
+    "width": 3840,
+    "height": 2563,
+    "author": "Kampus Production",
+    "authorUrl": "https://www.pexels.com/@kampus",
+    "source": "https://www.pexels.com/photo/woman-in-yellow-long-sleeve-shirt-looking-at-computer-data-8204355/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/plataformas.jpg",
+    "width": 3840,
+    "height": 2564,
+    "author": "Christina Morillo",
+    "authorUrl": "https://www.pexels.com/@divinetechygirl",
+    "source": "https://www.pexels.com/photo/man-wearing-blue-dress-shirt-facing-whiteboard-1181343/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/diagnostico.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Anna Shvets",
+    "authorUrl": "https://www.pexels.com/@shvetsa",
+    "source": "https://www.pexels.com/photo/cheerful-woman-showing-charts-at-whiteboard-5324935/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/diseno.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "picjumbo.com",
+    "authorUrl": "https://www.pexels.com/@picjumbo-com-55570",
+    "source": "https://www.pexels.com/photo/blue-pen-beside-black-smartphone-on-white-paper-196646/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/construccion.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Nemuel Sereti",
+    "authorUrl": "https://www.pexels.com/@nemuel",
+    "source": "https://www.pexels.com/photo/monitor-displaying-lines-of-code-6424583/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/puesta-en-marcha.jpg",
+    "width": 3840,
+    "height": 2564,
+    "author": "Kampus Production",
+    "authorUrl": "https://www.pexels.com/@kampus",
+    "source": "https://www.pexels.com/photo/woman-in-white-suit-discussing-stock-market-data-to-her-colleagues-8353802/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/operacion.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Atlantic Ambience",
+    "authorUrl": "https://www.pexels.com/@freestockpro",
+    "source": "https://www.pexels.com/photo/close-up-shot-of-a-laptop-computer-12969403/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/retail.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Tom Tillhub",
+    "authorUrl": "https://www.pexels.com/@tillhub",
+    "source": "https://www.pexels.com/photo/woman-with-mobile-at-counter-in-shop-6925800/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/ecommerce.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Cup of  Couple",
+    "authorUrl": "https://www.pexels.com/@cup-of-couple",
+    "source": "https://www.pexels.com/photo/macbook-pro-with-shopping-bags-and-boxes-on-blue-couch-6956903/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/energia.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Scott Platt",
+    "authorUrl": "https://www.pexels.com/@scott-platt-529822",
+    "source": "https://www.pexels.com/photo/white-wind-turbines-under-the-blue-sky-10174791/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/educacion.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Annushka  Ahuja",
+    "authorUrl": "https://www.pexels.com/@annushka-ahuja",
+    "source": "https://www.pexels.com/photo/a-girl-attending-an-online-class-8055848/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/salud.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Cedric Fauntleroy",
+    "authorUrl": "https://www.pexels.com/@cedric-fauntleroy",
+    "source": "https://www.pexels.com/photo/a-doctor-talking-to-a-patient-while-holding-a-tablet-4266931/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/logistica.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Nezaket",
+    "authorUrl": "https://www.pexels.com/@nezaket-2150013581",
+    "source": "https://www.pexels.com/photo/vibrant-container-port-with-cargo-cranes-31244440/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/finanzas.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "Essow K",
+    "authorUrl": "https://www.pexels.com/@essow-k-251295",
+    "source": "https://www.pexels.com/photo/worm-view-of-building-936721/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/hospitality.jpg",
+    "width": 3840,
+    "height": 2560,
+    "author": "cottonbro studio",
+    "authorUrl": "https://www.pexels.com/@cottonbro",
+    "source": "https://www.pexels.com/photo/man-in-black-vest-and-white-dress-shirt-standing-beside-man-in-black-vest-4253297/",
+    "license": "Pexels License"
+  },
+  {
+    "file": "/images/v4/cierre.jpg",
+    "width": 3840,
+    "height": 2556,
+    "author": "Anya  Juárez Tenorio",
+    "authorUrl": "https://www.pexels.com/@anyajuarez",
+    "source": "https://www.pexels.com/photo/city-with-mountains-in-background-16152997/",
+    "license": "Pexels License"
+  }
+]

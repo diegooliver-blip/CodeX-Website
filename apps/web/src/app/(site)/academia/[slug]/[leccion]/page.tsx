@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps<"/academia/[slug]/[
 
 export default function LessonPage({ params }: PageProps<"/academia/[slug]/[leccion]">) {
   return (
-    <Suspense fallback={<div className="mx-auto h-[70vh] max-w-5xl px-5 pt-40"><div className="h-full animate-pulse rounded-2xl bg-graphite/50" /></div>}>
+    <Suspense fallback={<div className="mx-auto h-[70vh] max-w-5xl px-5 pt-40"><div className="h-full animate-pulse rounded-2xl bg-mist/50" /></div>}>
       <Lesson params={params} />
     </Suspense>
   );
@@ -40,25 +40,25 @@ async function Lesson({ params }: { params: PageProps<"/academia/[slug]/[leccion
 
   return (
     <article className="mx-auto max-w-5xl px-5 pb-28 pt-32 md:pt-40">
-      <Link href={`/academia/${course.slug}`} className="link-underline text-[0.92rem] text-gold">{course.title}</Link>
+      <Link href={`/academia/${course.slug}`} className="link-underline text-[0.92rem] text-navy">{course.title}</Link>
       <h1 className="display mt-5 text-[clamp(2.2rem,4.5vw,3.75rem)]">{lesson.title}</h1>
 
       {lesson.locked ? (
         <div className="mt-12 rounded-[22px] border border-line p-10">
           <p className="display text-3xl">Esta lección es parte del curso completo.</p>
-          <p className="mt-3 text-ash">Regístrate en la página del curso para recibir acceso cuando abran las inscripciones.</p>
-          <Link href={`/academia/${course.slug}`} className="btn btn-gold mt-6">Ir al curso</Link>
+          <p className="mt-3 text-slate">Regístrate en la página del curso para recibir acceso cuando abran las inscripciones.</p>
+          <Link href={`/academia/${course.slug}`} className="btn btn-primary mt-6">Ir al curso</Link>
         </div>
       ) : (
         <div className="mt-12 space-y-10">
           {lesson.kind === "video" && lesson.asset_url && (
-            <video controls preload="metadata" className="aspect-video w-full rounded-[22px] border border-line bg-graphite" src={lesson.asset_url}>
+            <video controls preload="metadata" className="aspect-video w-full rounded-[22px] border border-line bg-mist" src={lesson.asset_url}>
               Tu navegador no puede reproducir este video.
             </video>
           )}
           {lesson.kind === "pdf" && lesson.asset_url && (
             <div className="space-y-4">
-              <iframe title={lesson.title} src={lesson.asset_url} className="h-[75vh] w-full rounded-[22px] border border-line bg-graphite" />
+              <iframe title={lesson.title} src={lesson.asset_url} className="h-[75vh] w-full rounded-[22px] border border-line bg-mist" />
               <a href={lesson.asset_url} target="_blank" rel="noopener" className="btn btn-ghost">Descargar PDF</a>
             </div>
           )}

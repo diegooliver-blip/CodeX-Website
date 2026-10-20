@@ -5,7 +5,7 @@ export const metadata = { title: "Editar curso" };
 
 export default function EditCoursePage({ params }: PageProps<"/portal/cursos/[id]">) {
   return (
-    <Suspense fallback={<div className="h-80 animate-pulse rounded-2xl bg-graphite/60" />}>
+    <Suspense fallback={<div className="h-80 animate-pulse rounded-2xl bg-mist/60" />}>
       <Editor params={params} />
     </Suspense>
   );

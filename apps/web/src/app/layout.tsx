@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
+import { Wix_Madefor_Display, Wix_Madefor_Text } from "next/font/google";
 import { serviceGroups, site, siteUrl } from "@/lib/content";
 import "./globals.css";
 
-const bodoni = Bodoni_Moda({ subsets: ["latin"], variable: "--font-bodoni", display: "swap" });
-const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
+const display = Wix_Madefor_Display({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-madefor-display", display: "swap" });
+const text = Wix_Madefor_Text({ subsets: ["latin"], variable: "--font-madefor-text", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-export const viewport: Viewport = { themeColor: "#0a0a0a", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#ffffff", colorScheme: "light" };
 
 const orgJsonLd = {
   "@context": "https://schema.org",
@@ -37,8 +37,8 @@ const orgJsonLd = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-MX" className={`${bodoni.variable} ${hanken.variable}`}>
-      <body className="grain min-h-dvh">
+    <html lang="es-MX" className={`${display.variable} ${text.variable}`}>
+      <body className="min-h-dvh">
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
       </body>

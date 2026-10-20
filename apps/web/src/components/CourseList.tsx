@@ -16,17 +16,17 @@ export function CourseList({ courses, empty }: { courses: CourseCard[]; empty: R
             className="group grid gap-3 py-7 transition-colors md:grid-cols-[1fr_auto] md:items-end md:gap-10"
           >
             <div>
-              <p className="text-[0.85rem] text-ash">
+              <p className="text-[0.85rem] text-slate">
                 {c.category}
                 <span className="mx-2 text-line">/</span>
                 {c.level}
               </p>
-              <h3 className="display mt-2 text-[clamp(1.7rem,2.6vw,2.4rem)] group-hover:text-champagne">{c.title}</h3>
-              {c.subtitle && <p className="mt-2 max-w-2xl text-ash">{c.subtitle}</p>}
+              <h3 className="display mt-2 text-[clamp(1.7rem,2.6vw,2.4rem)] group-hover:text-navy">{c.title}</h3>
+              {c.subtitle && <p className="mt-2 max-w-2xl text-slate">{c.subtitle}</p>}
             </div>
-            <p className="text-[0.92rem] text-ash md:text-right">
+            <p className="text-[0.92rem] text-slate md:text-right">
               {c.lessons} lecciones, {Math.round(c.minutes / 6) / 10} h
-              <span className="block text-champagne">{formatPrice(c.price_mxn)}</span>
+              <span className="block text-navy">{formatPrice(c.price_mxn)}</span>
             </p>
           </Link>
         </li>

@@ -55,14 +55,14 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
         scrolled || mega || mobile
-          ? "border-b border-line bg-obsidian/80 backdrop-blur-xl"
+          ? "border-b border-line bg-paper/80 backdrop-blur-xl"
           : "border-b border-transparent"
       }`}
     >
       <div className="mx-auto flex h-18 max-w-[1440px] items-center justify-between px-5 md:px-10">
         <Link href="/" onClick={close} className="group flex items-baseline gap-2" aria-label="CODEX, inicio">
-          <span className="display text-[1.7rem] leading-none tracking-[0.06em] text-ivory">CODEX</span>
-          <span className="hidden text-[0.8rem] text-ash sm:inline">AI Consulting</span>
+          <span className="display text-[1.7rem] leading-none tracking-[0.06em] text-ink">CODEX</span>
+          <span className="hidden text-[0.8rem] text-slate sm:inline">AI Consulting</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">
@@ -72,28 +72,28 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
               aria-expanded={mega}
               aria-controls="mega-servicios"
               onClick={() => setMega((v) => !v)}
-              className={`rounded-full px-4 py-2 text-[0.95rem] transition-colors ${mega ? "text-champagne" : "text-ivory/85 hover:text-ivory"}`}
+              className={`rounded-full px-4 py-2 text-[0.95rem] transition-colors ${mega ? "text-navy" : "text-ink/85 hover:text-ink"}`}
             >
               Servicios
             </button>
             <div
               id="mega-servicios"
               hidden={!mega}
-              className="fixed inset-x-0 top-18 border-b border-line bg-obsidian/95 backdrop-blur-xl"
+              className="fixed inset-x-0 top-18 border-b border-line bg-paper/95 backdrop-blur-xl"
             >
               <div className="mx-auto grid max-w-[1440px] grid-cols-3 gap-x-10 gap-y-8 px-10 py-10 xl:grid-cols-6">
                 {groups.map((g) => (
                   <div key={g.group}>
-                    <p className="mb-4 text-sm text-gold">{g.group}</p>
+                    <p className="mb-4 text-sm text-navy">{g.group}</p>
                     <ul className="space-y-4">
                       {g.items.map((s) => (
                         <li key={s.slug}>
                           <Link href={`/servicios/${s.slug}`} onClick={close} className="group block">
-                            <span className="flex items-center gap-2 text-[0.95rem] text-ivory group-hover:text-champagne">
-                              <ServiceIcon name={s.icon} className="size-4 text-gold" />
+                            <span className="flex items-center gap-2 text-[0.95rem] text-ink group-hover:text-navy">
+                              <ServiceIcon name={s.icon} className="size-4 text-navy" />
                               {s.title}
                             </span>
-                            <span className="mt-1 block text-[0.82rem] leading-snug text-ash">{s.short}</span>
+                            <span className="mt-1 block text-[0.82rem] leading-snug text-slate">{s.short}</span>
                           </Link>
                         </li>
                       ))}
@@ -102,22 +102,22 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
                 ))}
               </div>
               <div className="mx-auto flex max-w-[1440px] items-center justify-between border-t border-line px-10 py-4 text-sm">
-                <span className="text-ash">Doce disciplinas, un mismo equipo.</span>
-                <Link href="/servicios" onClick={close} className="link-underline text-champagne">
+                <span className="text-slate">Doce disciplinas, un mismo equipo.</span>
+                <Link href="/servicios" onClick={close} className="link-underline text-navy">
                   Ver todos los servicios
                 </Link>
               </div>
             </div>
           </div>
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} onClick={close} className="rounded-full px-4 py-2 text-[0.95rem] text-ivory/85 transition-colors hover:text-ivory">
+            <Link key={n.href} href={n.href} onClick={close} className="rounded-full px-4 py-2 text-[0.95rem] text-ink/85 transition-colors hover:text-ink">
               {n.label}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
-          <a href={calendly} target="_blank" rel="noopener" className="btn btn-gold hidden min-h-11 px-5 text-[0.9rem] sm:inline-flex">
+          <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary hidden min-h-11 px-5 text-[0.9rem] sm:inline-flex">
             Agendar llamada
           </a>
           <button
@@ -143,7 +143,7 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
               </li>
             ))}
           </ul>
-          <a href={calendly} target="_blank" rel="noopener" className="btn btn-gold mt-8 w-full">
+          <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary mt-8 w-full">
             Agendar llamada gratuita
           </a>
         </div>
