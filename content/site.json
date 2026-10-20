@@ -33,5 +33,12 @@
     { "title": "Producción, no demos", "text": "Cada sistema que mostramos corre con datos reales o está listo para hacerlo." },
     { "title": "El humano aprueba", "text": "Nuestros agentes proponen; las acciones sensibles pasan por una persona. IA con control." },
     { "title": "Confidencialidad total", "text": "Nunca exponemos nombres, marcas ni datos de nuestros clientes. Tampoco aquí." }
-  ]
+  ],
+  "statement": "Combinamos estrategia, ingeniería e inteligencia artificial para convertir procesos lentos en sistemas que trabajan solos: agentes que atienden, plataformas que venden y datos que deciden. Sin presentaciones eternas, con software en producción.",
+  "founder": {
+    "name": "Diego Oliver Martínez",
+    "role": "Fundador y director técnico",
+    "text": "Diego fundó CODEX para llevar la inteligencia artificial del discurso a la operación diaria. Dirige cada proyecto de principio a fin: diagnóstico, arquitectura y puesta en producción, con el mismo cuidado en el código que en el resultado de negocio.",
+    "photo": null
+  }
 }

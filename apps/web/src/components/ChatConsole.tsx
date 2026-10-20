@@ -82,10 +82,10 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
   };
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-[22px] border border-line bg-mist/70">
+    <div className="flex h-full flex-col overflow-hidden rounded-[22px] border border-line bg-paper text-ink shadow-[0_40px_80px_-30px_rgba(0,2,9,0.55)]">
       <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
         <p className="flex items-center gap-2.5 text-[0.9rem]">
-          <span className="size-2 rounded-full bg-signal [animation:pulse-dot_2.4s_ease-in-out_infinite]" />
+          <span className="size-2 rounded-full bg-ember [animation:pulse-dot_2.4s_ease-in-out_infinite]" />
           Asistente CODEX
         </p>
         <p className="text-[0.8rem] text-slate">Responde con nuestros proyectos reales</p>
@@ -109,7 +109,7 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
         )}
         {messages.map((m, i) =>
           m.role === "user" ? (
-            <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-signal/12 px-4 py-2.5 text-[0.95rem] text-navy">
+            <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-navy text-paper px-4 py-2.5 text-[0.95rem]">
               {m.content}
             </p>
           ) : (
@@ -152,7 +152,7 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
           type="submit"
           disabled={busy || !input.trim()}
           aria-label="Enviar pregunta"
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-signal text-ink transition-opacity disabled:opacity-30"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-ember text-ink transition-opacity disabled:opacity-30"
         >
           <ArrowUp className="size-4.5" />
         </button>

@@ -29,6 +29,7 @@ export type Project = {
   facts: { value: string; label: string }[];
   services: string[];
   status: string;
+  cover: string;
 };
 
 export type Case = { slug: string; sector: string; title: string; text: string; tags: string[] };

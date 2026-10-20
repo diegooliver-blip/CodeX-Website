@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { ServiceIcon } from "@/components/icons";
+import { Magnetic } from "@/components/motion/primitives";
 
 type Group = { group: string; items: { slug: string; title: string; short: string; icon: string }[] };
 
@@ -14,20 +15,32 @@ const nav = [
   { href: "/contacto", label: "Contacto" },
 ];
 
+/**
+ * Every public page opens on a dark photographic hero, so the header starts transparent with light text
+ * and turns into a solid white bar once the page scrolls. It tucks away while reading down and comes back on the way up.
+ */
 export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: string }) {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [mega, setMega] = useState(false);
   const [mobile, setMobile] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      setHidden(y > 480 && y > last + 4);
+      if (y < last - 4 || y <= 480) setHidden(false);
+      last = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Click-to-pin mega menu (ported from the legacy site): outside click or Escape closes it.
+  // Click-to-pin mega menu: outside click or Escape closes it.
   useEffect(() => {
     if (!mega) return;
     const onDown = (e: PointerEvent) => {
@@ -44,6 +57,10 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
 
   useEffect(() => {
     document.documentElement.style.overflow = mobile ? "hidden" : "";
+    if (!mobile) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobile(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [mobile]);
 
   const close = () => {
@@ -51,18 +68,24 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
     setMobile(false);
   };
 
+  const solid = scrolled || mega;
+  const light = !solid && !mobile; // light text over the hero photo or the mobile panel
+
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
-        scrolled || mega || mobile
-          ? "border-b border-line bg-paper/80 backdrop-blur-xl"
-          : "border-b border-transparent"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,color,box-shadow] duration-500 ease-[var(--ease-codex)] ${
+        hidden && !mega && !mobile ? "-translate-y-full" : ""
+      } ${solid && !mobile ? "bg-paper/90 text-ink shadow-[0_1px_0_var(--color-line)] backdrop-blur-xl" : "text-paper"}`}
     >
-      <div className="mx-auto flex h-18 max-w-[1440px] items-center justify-between px-5 md:px-10">
-        <Link href="/" onClick={close} className="group flex items-baseline gap-2" aria-label="CODEX, inicio">
-          <span className="display text-[1.7rem] leading-none tracking-[0.06em] text-ink">CODEX</span>
-          <span className="hidden text-[0.8rem] text-slate sm:inline">AI Consulting</span>
+      <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 md:px-10">
+        <Link href="/" onClick={close} className="group flex items-center gap-3" aria-label="CODEX, inicio">
+          <span aria-hidden className="grid size-9 place-items-center rounded-[10px] bg-ember text-ink transition-transform duration-500 group-hover:rotate-90">
+            <svg viewBox="0 0 20 20" className="size-4" fill="currentColor">
+              <path d="M10 0 12.2 7.8 20 10l-7.8 2.2L10 20l-2.2-7.8L0 10l7.8-2.2z" />
+            </svg>
+          </span>
+          <span className="display text-[1.45rem] leading-none tracking-[0.02em]">CODEX</span>
+          <span className={`hidden text-[0.8rem] sm:inline ${light ? "text-paper/70" : "text-slate"}`}>AI Consulting</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">
@@ -72,25 +95,25 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
               aria-expanded={mega}
               aria-controls="mega-servicios"
               onClick={() => setMega((v) => !v)}
-              className={`rounded-full px-4 py-2 text-[0.95rem] transition-colors ${mega ? "text-navy" : "text-ink/85 hover:text-ink"}`}
+              className="rounded-full px-4 py-2 text-[0.95rem] opacity-90 transition-opacity hover:opacity-100"
             >
               Servicios
             </button>
             <div
               id="mega-servicios"
               hidden={!mega}
-              className="fixed inset-x-0 top-18 border-b border-line bg-paper/95 backdrop-blur-xl"
+              className="fixed inset-x-0 top-20 border-t border-line bg-paper text-ink shadow-[0_30px_60px_-30px_rgba(0,2,9,0.35)]"
             >
               <div className="mx-auto grid max-w-[1440px] grid-cols-3 gap-x-10 gap-y-8 px-10 py-10 xl:grid-cols-6">
                 {groups.map((g) => (
                   <div key={g.group}>
-                    <p className="mb-4 text-sm text-navy">{g.group}</p>
+                    <p className="eyebrow mb-4 text-sm">{g.group}</p>
                     <ul className="space-y-4">
                       {g.items.map((s) => (
                         <li key={s.slug}>
                           <Link href={`/servicios/${s.slug}`} onClick={close} className="group block">
-                            <span className="flex items-center gap-2 text-[0.95rem] text-ink group-hover:text-navy">
-                              <ServiceIcon name={s.icon} className="size-4 text-navy" />
+                            <span className="flex items-center gap-2 text-[0.95rem] font-semibold group-hover:text-navy">
+                              <ServiceIcon name={s.icon} className="size-4 text-signal" />
                               {s.title}
                             </span>
                             <span className="mt-1 block text-[0.82rem] leading-snug text-slate">{s.short}</span>
@@ -101,30 +124,42 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
                   </div>
                 ))}
               </div>
-              <div className="mx-auto flex max-w-[1440px] items-center justify-between border-t border-line px-10 py-4 text-sm">
-                <span className="text-slate">Doce disciplinas, un mismo equipo.</span>
-                <Link href="/servicios" onClick={close} className="link-underline text-navy">
-                  Ver todos los servicios
-                </Link>
+              <div className="bg-mist-2">
+                <div className="mx-auto flex max-w-[1440px] items-center justify-between px-10 py-4 text-sm">
+                  <span className="text-slate">Doce disciplinas, un mismo equipo.</span>
+                  <Link href="/servicios" onClick={close} className="link-underline font-semibold text-navy">
+                    Ver todos los servicios
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} onClick={close} className="rounded-full px-4 py-2 text-[0.95rem] text-ink/85 transition-colors hover:text-ink">
+            <Link
+              key={n.href}
+              href={n.href}
+              onClick={close}
+              className="rounded-full px-4 py-2 text-[0.95rem] opacity-90 transition-opacity hover:opacity-100"
+            >
               {n.label}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
-          <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary hidden min-h-11 px-5 text-[0.9rem] sm:inline-flex">
-            Agendar llamada
-          </a>
+          <span className="hidden sm:block">
+            <Magnetic>
+              <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary min-h-11 px-5 text-[0.9rem]">
+                Agendar llamada
+              </a>
+            </Magnetic>
+          </span>
           <button
             type="button"
-            className="grid size-11 place-items-center rounded-full border border-line lg:hidden"
+            className="grid size-11 place-items-center rounded-full border border-current/30 lg:hidden"
             aria-label={mobile ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={mobile}
+            aria-controls="menu-movil"
             onClick={() => setMobile((v) => !v)}
           >
             {mobile ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -132,22 +167,31 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
         </div>
       </div>
 
-      {mobile && (
-        <div className="h-[calc(100dvh-4.5rem)] overflow-y-auto px-5 pb-10 lg:hidden">
-          <ul className="divide-y divide-line border-y border-line">
-            {[{ href: "/servicios", label: "Servicios" }, ...nav].map((n) => (
-              <li key={n.href}>
-                <Link href={n.href} onClick={close} className="display block py-5 text-4xl">
-                  {n.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary mt-8 w-full">
-            Agendar llamada gratuita
-          </a>
-        </div>
-      )}
+      <div
+        id="menu-movil"
+        hidden={!mobile}
+        className="theme-dark fixed inset-0 top-20 -z-10 overflow-y-auto bg-ink px-5 pb-10 lg:hidden"
+      >
+        <ul className="border-b border-paper/15">
+          {[{ href: "/servicios", label: "Servicios" }, ...nav].map((n, i) => (
+            <li key={n.href} className="border-t border-paper/15">
+              <Link
+                href={n.href}
+                onClick={close}
+                className="display flex items-baseline justify-between py-5 text-4xl"
+                style={{ animation: mobile ? `rise 0.8s var(--ease-codex) ${i * 60}ms both` : undefined }}
+              >
+                {n.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary mt-8 w-full">
+          Agendar llamada gratuita
+        </a>
+      </div>
+      {/* Fixed full-screen panel needs the header shell itself to paint black while open */}
+      {mobile && <div aria-hidden className="absolute inset-0 -z-10 bg-ink" />}
     </header>
   );
 }

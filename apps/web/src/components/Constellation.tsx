@@ -112,7 +112,7 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
           }
         }
         const base = l.ia === -1 ? 0.13 : 0.16 + Math.min(l.weight, 4) * 0.06;
-        ctx.strokeStyle = `rgba(201,165,90,${lit ? 0.75 : hot !== null ? base * 0.45 : base})`;
+        ctx.strokeStyle = `rgba(122,152,255,${lit ? 0.75 : hot !== null ? base * 0.45 : base})`;
         ctx.lineWidth = lit ? 1.2 : 0.8;
         ctx.stroke();
       }
@@ -120,13 +120,13 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
       // core
       const c = toPx(core, 0.3);
       const glow = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, 90);
-      glow.addColorStop(0, "rgba(230,211,163,0.22)");
-      glow.addColorStop(1, "rgba(230,211,163,0)");
+      glow.addColorStop(0, "rgba(255,229,80,0.28)");
+      glow.addColorStop(1, "rgba(255,229,80,0)");
       ctx.fillStyle = glow;
       ctx.fillRect(c.x - 90, c.y - 90, 180, 180);
       ctx.beginPath();
       ctx.arc(c.x, c.y, 3.2, 0, Math.PI * 2);
-      ctx.fillStyle = "#e6d3a3";
+      ctx.fillStyle = "#ffe550";
       ctx.fill();
 
       if (intro >= 1) {
@@ -143,7 +143,7 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
           const fade = Math.sin(s.t * Math.PI);
           ctx.beginPath();
           ctx.arc(x, y, 1.6, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(230,211,163,${0.85 * fade})`;
+          ctx.fillStyle = `rgba(255,229,80,${0.9 * fade})`;
           ctx.fill();
         }
       }
@@ -227,12 +227,12 @@ export function Constellation({ nodes, edges }: { nodes: ConstellationNode[]; ed
               >
                 <span
                   className={`block size-2.5 shrink-0 rounded-full border transition-all duration-300 ${
-                    active === i ? "scale-150 border-signal bg-signal" : "border-signal bg-paper"
+                    active === i ? "scale-150 border-spark bg-spark" : "border-spark bg-navy"
                   }`}
                 />
                 <span
                   className={`w-max max-w-[7rem] text-[0.78rem] leading-tight transition-colors duration-300 sm:max-w-[9.5rem] md:text-[0.88rem] ${
-                    active === i ? "text-navy" : active === null ? "text-ink/70" : "text-slate/60"
+                    active === i ? "text-spark" : active === null ? "text-paper/80" : "text-paper/40"
                   }`}
                 >
                   {n.title}

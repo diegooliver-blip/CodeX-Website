@@ -11,7 +11,8 @@
     "stack": ["React 19", "TanStack Start", "Tailwind 4", "Supabase", "PostgreSQL + RLS", "Playwright"],
     "facts": [{ "value": "2M+", "label": "líneas de pedido reales analizadas" }, { "value": "100+", "label": "sucursales" }, { "value": "9K+", "label": "reglas de posición de bordado" }],
     "services": ["dashboards", "websites-ia"],
-    "status": "En desarrollo avanzado"
+    "status": "En desarrollo avanzado",
+    "cover": "/images/v4/retail.jpg"
   },
   {
     "slug": "kiosko-3d",
@@ -25,7 +26,8 @@
     "stack": ["React", "Vite", "Three.js", "Express", "Docker", "Vercel"],
     "facts": [{ "value": "3D", "label": "vista previa en tiempo real" }, { "value": "5 min", "label": "ciclo de sincronización" }],
     "services": ["websites-ia", "apps-moviles"],
-    "status": "Prototipo funcional"
+    "status": "Prototipo funcional",
+    "cover": "/images/v4/diseno.jpg"
   },
   {
     "slug": "operador-ia-n8n",
@@ -39,7 +41,8 @@
     "stack": ["Node.js", "TypeScript", "n8n", "Claude", "Hono"],
     "facts": [{ "value": "55/55", "label": "pruebas unitarias" }, { "value": "60", "label": "verificaciones end-to-end" }, { "value": "6", "label": "fases completadas" }],
     "services": ["automatizacion", "sistemas-multiagente"],
-    "status": "Operando en servidor real"
+    "status": "Operando en servidor real",
+    "cover": "/images/v4/automatizacion.jpg"
   },
   {
     "slug": "orquestador-whatsapp",
@@ -53,7 +56,8 @@
     "stack": ["NestJS", "Prisma", "Redis", "Evolution API", "Claude", "Next.js", "Railway"],
     "facts": [{ "value": "150", "label": "grupos simulados × 3 clientes" }, { "value": "~5K", "label": "mensajes históricos procesados" }],
     "services": ["agentes-whatsapp"],
-    "status": "Listo para producción"
+    "status": "Listo para producción",
+    "cover": "/images/v4/ia.jpg"
   },
   {
     "slug": "ecosistema-dtc",
@@ -67,7 +71,8 @@
     "stack": ["React", "Vite", "Supabase", "Mercado Pago", "Claude", "Meta APIs", "Resend"],
     "facts": [{ "value": "165", "label": "pruebas automatizadas" }, { "value": "50–63%", "label": "margen validado por paquete" }, { "value": "6", "label": "agentes de IA" }],
     "services": ["ecommerce", "campanas-meta", "email-automation"],
-    "status": "En integración final"
+    "status": "En integración final",
+    "cover": "/images/v4/ecommerce.jpg"
   },
   {
     "slug": "tienda-coleccionables",
@@ -81,7 +86,8 @@
     "stack": ["Next.js 16", "React 19", "Neon Postgres", "Drizzle", "Mercado Pago", "Vercel Cron"],
     "facts": [{ "value": "4", "label": "verificaciones en cada push" }, { "value": "0", "label": "sobreventa por diseño" }],
     "services": ["ecommerce"],
-    "status": "Demo funcional"
+    "status": "Demo funcional",
+    "cover": "/images/v4/puesta-en-marcha.jpg"
   },
   {
     "slug": "agencia-50-agentes",
@@ -95,7 +101,8 @@
     "stack": ["Next.js", "Phaser", "PostgreSQL", "Claude", "WhatsApp Cloud API"],
     "facts": [{ "value": "50", "label": "agentes especializados" }, { "value": "24/7", "label": "operación programada" }, { "value": "33", "label": "procedimientos" }],
     "services": ["sistemas-multiagente", "campanas-meta"],
-    "status": "En activación"
+    "status": "En activación",
+    "cover": "/images/v4/statement.jpg"
   },
   {
     "slug": "oficina-virtual",
@@ -109,7 +116,8 @@
     "stack": ["Next.js", "Phaser", "Neon Postgres", "Drizzle", "Claude"],
     "facts": [{ "value": "29", "label": "agentes" }, { "value": "10", "label": "rutinas autónomas" }, { "value": "USD 5", "label": "tope diario por defecto" }],
     "services": ["sistemas-multiagente", "dashboards"],
-    "status": "Operativo"
+    "status": "Operativo",
+    "cover": "/images/v4/diagnostico.jpg"
   },
   {
     "slug": "asistente-ejecutivo",
@@ -123,7 +131,8 @@
     "stack": ["Claude", "Gmail API", "Calendar API", "Meta Ads API", "WhatsApp Cloud API", "Vercel"],
     "facts": [{ "value": "4", "label": "canales integrados" }, { "value": "Diario", "label": "resumen automático" }],
     "services": ["email-automation", "campanas-meta", "agentes-whatsapp"],
-    "status": "Prototipo"
+    "status": "Prototipo",
+    "cover": "/images/v4/finanzas.jpg"
   },
   {
     "slug": "tutor-posgrado",
@@ -137,7 +146,8 @@
     "stack": ["Next.js", "Claude", "Neon Postgres", "Vercel Blob", "isomorphic-git"],
     "facts": [{ "value": "8", "label": "modos de tutoría" }, { "value": "3", "label": "bases académicas" }],
     "services": ["e-learning"],
-    "status": "Desplegado"
+    "status": "Desplegado",
+    "cover": "/images/v4/educacion.jpg"
   },
   {
     "slug": "academia-python-sql",
@@ -151,7 +161,8 @@
     "stack": ["React", "Vite", "Pyodide", "sql.js", "Supabase", "Vercel"],
     "facts": [{ "value": "23", "label": "unidades" }, { "value": "100%", "label": "retos verificados" }],
     "services": ["e-learning"],
-    "status": "Desplegado"
+    "status": "Desplegado",
+    "cover": "/images/v4/construccion.jpg"
   },
   {
     "slug": "simulacion-energetica",
@@ -165,7 +176,8 @@
     "stack": ["Python 3.12", "FastAPI", "TimescaleDB", "React", "Three.js"],
     "facts": [{ "value": "~150", "label": "máquinas modeladas" }, { "value": "2", "label": "transformadores" }, { "value": "5+", "label": "normas verificadas" }],
     "services": ["simulacion-energetica", "dashboards"],
-    "status": "En investigación aplicada"
+    "status": "En investigación aplicada",
+    "cover": "/images/v4/energia.jpg"
   },
   {
     "slug": "reservas-belleza-lujo",
@@ -179,7 +191,8 @@
     "stack": ["TanStack Start", "React", "Supabase", "Stripe", "Nodemailer", "Vercel"],
     "facts": [{ "value": "Live", "label": "en producción" }],
     "services": ["websites-ia", "email-automation"],
-    "status": "En producción"
+    "status": "En producción",
+    "cover": "/images/v4/hospitality.jpg"
   },
   {
     "slug": "sitio-despacho-legal",
@@ -193,7 +206,8 @@
     "stack": ["Next.js 16", "React 19", "Tailwind v4", "Framer Motion", "Lenis", "GitHub Actions"],
     "facts": [{ "value": "100%", "label": "contenido tipado" }],
     "services": ["websites-ia"],
-    "status": "Demo"
+    "status": "Demo",
+    "cover": "/images/v4/cierre.jpg"
   },
   {
     "slug": "catalogacion-fotografica",
@@ -207,7 +221,8 @@
     "stack": ["Python", "Scripts", "Excel"],
     "facts": [{ "value": "2,600+", "label": "fotografías procesadas" }, { "value": "~300", "label": "carpetas por SKU" }],
     "services": ["automatizacion"],
-    "status": "Entregado"
+    "status": "Entregado",
+    "cover": "/images/v4/logistica.jpg"
   },
   {
     "slug": "analitica-deportiva",
@@ -221,7 +236,8 @@
     "stack": ["Node.js", "API pública", "Excel"],
     "facts": [{ "value": "3,000", "label": "simulaciones" }, { "value": "3", "label": "temporadas de historial" }],
     "services": ["dashboards"],
-    "status": "Entregado"
+    "status": "Entregado",
+    "cover": "/images/v4/operacion.jpg"
   },
   {
     "slug": "control-plane-dev",
@@ -235,6 +251,7 @@
     "stack": ["Node.js", "Next.js", "GitHub OAuth", "Claude Code", "Vercel"],
     "facts": [{ "value": "0–100", "label": "puntaje de salud explicado" }],
     "services": ["dashboards", "sistemas-multiagente"],
-    "status": "Interno"
+    "status": "Interno",
+    "cover": "/images/v4/plataformas.jpg"
   }
 ]

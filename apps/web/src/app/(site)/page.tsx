@@ -5,208 +5,270 @@ import { Suspense } from "react";
 import { ChatConsole } from "@/components/ChatConsole";
 import { Constellation } from "@/components/Constellation";
 import { CourseList } from "@/components/CourseList";
-import { ServiceIcon } from "@/components/icons";
-import { ProjectPlate } from "@/components/ProjectPlate";
+import { Hero } from "@/components/home/Hero";
+import { MethodSteps } from "@/components/home/MethodSteps";
+import { ProjectIndex } from "@/components/home/ProjectIndex";
+import { ServicesRail } from "@/components/home/ServicesRail";
+import { Counter, Magnetic, Marquee, ParallaxImage, ScrubText, SplitReveal } from "@/components/motion/primitives";
 import { Reveal } from "@/components/Reveal";
 import { getCourses } from "@/lib/api";
-import { capabilityGraph, featuredProjects, projects, serviceGroups, site } from "@/lib/content";
+import { capabilityGraph, cases, featuredProjects, projects, serviceGroups, services, site } from "@/lib/content";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const graph = capabilityGraph();
 
+/** Three pillars that group the six service families, each with its own photograph. */
+const pillars = [
+  {
+    title: "Agentes e inteligencia artificial",
+    groups: ["Agentes de IA", "Estrategia"],
+    image: "/images/v4/ia.jpg",
+    alt: "Analista frente a monitores con dashboards de datos",
+  },
+  {
+    title: "Producto digital y crecimiento",
+    groups: ["Producto digital", "Crecimiento"],
+    image: "/images/v4/plataformas.jpg",
+    alt: "Desarrollador frente a un pizarrón con diagramas de arquitectura",
+  },
+  {
+    title: "Operación e ingeniería",
+    groups: ["Operación", "Ingeniería"],
+    image: "/images/v4/automatizacion.jpg",
+    alt: "Pasillo de almacén con estanterías naranjas y personal trabajando",
+  },
+].map((p) => ({ ...p, items: serviceGroups.filter((g) => p.groups.includes(g.group)).flatMap((g) => g.items) }));
+
+const methodImages = [
+  ["/images/v4/diagnostico.jpg", "Facilitadora explicando un diagnóstico en un pizarrón"],
+  ["/images/v4/diseno.jpg", "Bocetos de interfaz dibujados a mano en una libreta"],
+  ["/images/v4/construccion.jpg", "Código en pantalla durante el desarrollo"],
+  ["/images/v4/puesta-en-marcha.jpg", "Equipo revisando dashboards en una presentación"],
+  ["/images/v4/operacion.jpg", "Dashboard de analítica en operación sobre una laptop"],
+];
+
+const sectors = [...new Set([...projects.flatMap((p) => p.sector.split(", ")), ...cases.map((c) => c.sector)])];
+
 export default function HomePage() {
-  const [lead, ...rest] = featuredProjects;
   return (
     <>
-      {/* ---------- hero ---------- */}
-      <section className="relative isolate overflow-hidden pt-18">
-        <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-[1440px] items-center gap-6 px-5 md:px-10 lg:grid-cols-[1.05fr_1fr]">
-          <div className="relative z-10 py-14 lg:py-0">
-            <h1 className="display text-[length:var(--text-h1)]">
-              <span className="hero-line">Inteligencia</span>
-              <span className="hero-line [animation-delay:120ms]">artificial que</span>
-              <span className="hero-line [animation-delay:240ms]">opera tu negocio.</span>
-            </h1>
-            <p className="hero-line mt-8 max-w-[34rem] text-[length:var(--text-lede)] leading-relaxed text-ink/80 [animation-delay:420ms]">
-              Agentes, plataformas, tiendas, apps y automatizaciones construidas a la medida y puestas en producción.
-              Desde México, para empresas que quieren resultados y no presentaciones.
-            </p>
-            <div className="hero-line mt-10 flex flex-wrap gap-3 [animation-delay:560ms]">
-              <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-primary">
-                Agendar consultoría gratuita
-              </a>
-              <Link href="/proyectos" className="btn btn-ghost">
-                Ver {projects.length} proyectos
-              </Link>
-            </div>
-          </div>
-          <div className="relative -mx-5 h-[min(110vw,560px)] md:mx-0 lg:h-[min(78vh,720px)]">
-            <Constellation nodes={graph.nodes} edges={graph.edges} />
-          </div>
+      <Hero calendly={site.contact.calendly} projectCount={projects.length} />
+
+      {/* ---------- statement ---------- */}
+      <section className="mx-auto grid max-w-[1440px] gap-14 px-5 py-28 md:px-10 md:py-40 lg:grid-cols-[1fr_22rem] lg:items-end">
+        <div>
+          <p className="eyebrow">Quiénes somos</p>
+          <ScrubText text={site.statement} className="display mt-8 text-[clamp(1.9rem,4.2vw,3.6rem)] leading-[1.12] tracking-[-0.025em]" />
         </div>
-        <div className="mx-auto max-w-[1440px] px-5 pb-10 md:px-10">
-          <dl className="grid grid-cols-2 gap-y-6 border-t border-line pt-6 md:grid-cols-4">
+        <ParallaxImage
+          src="/images/v4/statement.jpg"
+          alt="Fibras ópticas iluminadas en azul"
+          sizes="(min-width: 1024px) 22rem, 100vw"
+          className="aspect-[4/5] rounded-[28px]"
+        />
+      </section>
+
+      {/* ---------- pillars ---------- */}
+      <section className="mx-auto max-w-[1440px] px-5 pb-28 md:px-10 md:pb-40" aria-labelledby="pilares">
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+          <SplitReveal className="display text-[length:var(--text-h2)]">
+            <span id="pilares">Todo lo que construimos, bajo un mismo techo.</span>
+          </SplitReveal>
+          <Reveal>
+            <p className="max-w-xl text-[length:var(--text-lede)] text-slate">
+              Disciplinas que normalmente requieren cuatro proveedores. Aquí comparten arquitectura, datos y equipo,
+              así que tu agente de WhatsApp, tu tienda y tu dashboard hablan entre sí desde el primer día.
+            </p>
+          </Reveal>
+        </div>
+        <Reveal variant="stagger" className="mt-16 grid gap-5 lg:grid-cols-3">
+          {pillars.map((p) => (
+            <article key={p.title} className="group relative isolate flex min-h-[34rem] flex-col justify-end overflow-hidden rounded-[28px] bg-navy p-8 text-paper">
+              <Image
+                src={p.image}
+                alt={p.alt}
+                fill
+                sizes="(min-width: 1024px) 33vw, 100vw"
+                quality={70}
+                className="-z-10 object-cover transition-transform duration-[1400ms] ease-[var(--ease-codex)] group-hover:scale-110"
+              />
+              <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/60 to-ink/0" />
+              <h3 className="display text-[2rem] leading-[1.05]">{p.title}</h3>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {p.items.map((s) => (
+                  <li key={s.slug}>
+                    <Link
+                      href={`/servicios/${s.slug}`}
+                      className="block rounded-full border border-paper/30 bg-paper/10 px-3.5 py-1.5 text-sm backdrop-blur-md transition-colors hover:border-ember hover:bg-ember hover:text-ink"
+                    >
+                      {s.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </Reveal>
+      </section>
+
+      <ServicesRail items={services.map(({ slug, title, short, icon, group }) => ({ slug, title, short, icon, group }))} />
+
+      <MethodSteps
+        steps={site.method.map((m, i) => ({ ...m, image: methodImages[i][0], alt: methodImages[i][1] }))}
+      />
+
+      {/* ---------- proof ---------- */}
+      <section className="theme-dark relative isolate overflow-hidden bg-navy" aria-labelledby="cifras">
+        <div aria-hidden className="absolute -right-40 -top-40 -z-10 size-[36rem] rounded-full bg-signal/30 blur-3xl" />
+        <div className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-36">
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+            <SplitReveal className="display text-[length:var(--text-h2)]">
+              <span id="cifras">Cifras de sistemas reales.</span>
+            </SplitReveal>
+            <p className="prose-codex text-[length:var(--text-lede)]">
+              Sin clientes inventados ni porcentajes de catálogo: estos números salen de lo que construimos y operamos.
+            </p>
+          </div>
+          <dl className="mt-20 grid gap-px overflow-hidden rounded-[28px] bg-paper/15 sm:grid-cols-2 lg:grid-cols-4">
             {site.proof.map((p) => (
-              <div key={p.label} className="pr-6">
-                <dt className="sr-only">{p.label}</dt>
-                <dd className="display text-4xl text-navy">{p.value}</dd>
-                <dd className="mt-1 max-w-[16rem] text-[0.88rem] text-slate">{p.label}</dd>
+              <div key={p.label} className="flex flex-col-reverse justify-end bg-navy p-8 md:p-10">
+                <dt className="mt-4 max-w-[16rem] text-[0.95rem] text-paper/75">{p.label}</dt>
+                <dd className="display text-[clamp(3.5rem,6vw,5.5rem)] leading-none text-spark">
+                  <Counter value={p.value} />
+                </dd>
               </div>
             ))}
           </dl>
         </div>
       </section>
 
-      {/* ---------- capabilities index ---------- */}
-      <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-36" aria-labelledby="servicios">
-        <Reveal className="grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-end">
-          <h2 id="servicios" className="display text-[length:var(--text-h2)]">
-            Todo lo que construimos, bajo un mismo techo.
-          </h2>
-          <p className="max-w-xl text-[length:var(--text-lede)] text-slate">
-            Doce disciplinas que normalmente requieren cuatro proveedores. Aquí comparten arquitectura, datos y equipo,
-            así que tu agente de WhatsApp, tu tienda y tu dashboard hablan entre sí desde el primer día.
-          </p>
-        </Reveal>
-
-        <div className="mt-20 divide-y divide-line border-y border-line">
-          {serviceGroups.map((g) => (
-            <div key={g.group} className="grid gap-4 py-8 lg:grid-cols-[14rem_1fr] lg:gap-10">
-              <p className="pt-2 text-navy">{g.group}</p>
-              <ul className="grid gap-x-10 md:grid-cols-2">
-                {g.items.map((s) => (
-                  <li key={s.slug}>
-                    <Link href={`/servicios/${s.slug}`} className="group flex gap-5 py-4">
-                      <ServiceIcon name={s.icon} className="mt-1.5 size-6 shrink-0 text-navy/80 transition-colors group-hover:text-navy" />
-                      <span>
-                        <span className="display block text-[1.7rem] leading-tight transition-colors group-hover:text-navy">
-                          {s.title}
-                        </span>
-                        <span className="mt-1.5 block max-w-md text-[0.95rem] text-slate">{s.short}</span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ---------- projects ---------- */}
-      <section className="border-t border-line bg-mist/30" aria-labelledby="proyectos">
-        <div className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-36">
-          <Reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <h2 id="proyectos" className="display max-w-3xl text-[length:var(--text-h2)]">
-              Sistemas en producción, contados sin nombres.
-            </h2>
-            <Link href="/proyectos" className="link-underline w-fit shrink-0 text-navy">
-              Ver los {projects.length} proyectos
-            </Link>
-          </Reveal>
-          <p className="mt-6 max-w-2xl text-slate">
-            Protegemos a cada cliente: no verás marcas ni nombres, pero sí lo que construimos, con qué tecnología y los
-            datos reales del sistema.
-          </p>
-          <div className="mt-16 grid gap-5 lg:grid-cols-3">
-            <div className="lg:col-span-2 lg:row-span-2">
-              <ProjectPlate project={lead} large />
-            </div>
-            {rest.map((p) => (
-              <ProjectPlate key={p.slug} project={p} />
-            ))}
+      <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-40" aria-labelledby="proyectos">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="eyebrow">Proyectos</p>
+            <SplitReveal className="display mt-4 max-w-3xl text-[length:var(--text-h2)]">
+              <span id="proyectos">Sistemas en producción, contados sin nombres.</span>
+            </SplitReveal>
           </div>
+          <Link href="/proyectos" className="link-underline w-fit shrink-0 font-semibold text-navy">
+            Ver los {projects.length} proyectos
+          </Link>
+        </div>
+        <p className="mt-6 max-w-2xl text-slate">
+          Protegemos a cada cliente: no verás marcas ni nombres, pero sí lo que construimos, con qué tecnología y los
+          datos reales del sistema.
+        </p>
+        <div className="mt-14">
+          <ProjectIndex
+            rows={featuredProjects.map(({ slug, title, category, sector, cover }) => ({ slug, title, category, sector, cover }))}
+          />
         </div>
       </section>
 
-      {/* ---------- method (a real sequence, so it is numbered) ---------- */}
-      <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-36" aria-labelledby="metodo">
-        <Reveal>
-          <h2 id="metodo" className="display max-w-3xl text-[length:var(--text-h2)]">
-            Cinco etapas, cero cajas negras.
-          </h2>
-        </Reveal>
-        <ol className="mt-16 grid gap-px overflow-hidden rounded-[22px] border border-line bg-line md:grid-cols-5">
-          {site.method.map((m) => (
-            <li key={m.step} className="bg-paper p-7">
-              <span className="display text-5xl text-navy/90">{m.step}</span>
-              <h3 className="mt-6 text-lg font-semibold">{m.title}</h3>
-              <p className="mt-3 text-[0.94rem] text-slate">{m.text}</p>
-            </li>
-          ))}
-        </ol>
-        <p className="mt-10 max-w-4xl text-[0.95rem] leading-loose text-slate">
-          Trabajamos con {site.stack.join(", ")}.
-        </p>
+      {/* ---------- sectors ---------- */}
+      <section aria-label="Sectores en los que hemos trabajado" className="border-y border-line bg-mist-2 py-10">
+        <Marquee items={sectors} className="display text-[clamp(1.6rem,3vw,2.6rem)] text-ink/85" />
       </section>
 
       {/* ---------- assistant ---------- */}
-      <section className="border-y border-line bg-mist/30" aria-labelledby="asistente">
-        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-28 md:px-10 md:py-36 lg:grid-cols-[1fr_1.15fr] lg:items-center">
-          <Reveal>
-            <h2 id="asistente" className="display text-[length:var(--text-h2)]">Pregúntale a CODEX.</h2>
-            <p className="mt-6 max-w-lg text-[length:var(--text-lede)] text-slate">
+      <section className="theme-dark relative isolate overflow-hidden bg-navy" aria-labelledby="asistente">
+        <div aria-hidden className="absolute inset-0 -z-10 opacity-70">
+          <Constellation nodes={graph.nodes} edges={graph.edges} />
+        </div>
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-navy via-navy/85 to-navy/40" />
+        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-28 md:px-10 md:py-40 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+          <div>
+            <p className="eyebrow">Asistente</p>
+            <SplitReveal className="display mt-4 text-[length:var(--text-h2)]">
+              <span id="asistente">Pregúntale a CODEX.</span>
+            </SplitReveal>
+            <p className="prose-codex mt-6 max-w-lg text-[length:var(--text-lede)]">
               Nuestro asistente responde con lo que de verdad hemos construido: lee nuestros servicios, proyectos y
               cursos antes de contestar, y te dice de dónde sacó cada respuesta.
             </p>
-            <p className="mt-6 max-w-lg text-slate">
+            <p className="prose-codex mt-6 max-w-lg">
               Es el mismo tipo de agente que instalamos en empresas: con fuentes, con límites y sin inventar.
             </p>
-          </Reveal>
-          <div className="h-[540px]">
-            <ChatConsole />
           </div>
+          <Reveal variant="right" className="h-[560px] text-ink">
+            <ChatConsole />
+          </Reveal>
         </div>
       </section>
 
       {/* ---------- academy ---------- */}
-      <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-36" aria-labelledby="academia">
-        <Reveal className="grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-end">
-          <h2 id="academia" className="display text-[length:var(--text-h2)]">Academia CODEX.</h2>
+      <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-40" aria-labelledby="academia">
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+          <div>
+            <p className="eyebrow">Academia</p>
+            <SplitReveal className="display mt-4 text-[length:var(--text-h2)]">
+              <span id="academia">Academia CODEX.</span>
+            </SplitReveal>
+          </div>
           <p className="max-w-xl text-[length:var(--text-lede)] text-slate">
             Lo que aplicamos en proyectos reales, convertido en cursos: agentes, automatización y producto digital con IA.
           </p>
-        </Reveal>
+        </div>
         <div className="mt-14">
-          <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-mist/60" />}>
+          <Suspense fallback={<div className="h-40 animate-pulse rounded-[22px] bg-mist" />}>
             <AcademyPreview />
           </Suspense>
         </div>
       </section>
 
-      {/* ---------- closing ---------- */}
-      <section className="relative isolate overflow-hidden border-t border-line">
-        <Image
-          src="/images/hero-bg.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          quality={70}
-          loading="lazy"
-          className="-z-10 object-cover opacity-25 mix-blend-luminosity"
-        />
-        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-paper via-paper/80 to-paper" />
-        <div className="mx-auto max-w-[1440px] px-5 py-32 md:px-10 md:py-44">
-          <div className="grid gap-10 md:grid-cols-3">
-            {site.principles.map((p) => (
-              <div key={p.title}>
-                <h3 className="text-lg font-semibold text-navy">{p.title}</h3>
-                <p className="mt-2 text-slate">{p.text}</p>
-              </div>
-            ))}
+      {/* ---------- founder ---------- */}
+      <section className="border-t border-line bg-mist-2" aria-labelledby="fundador">
+        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-28 md:px-10 md:py-36 lg:grid-cols-[1fr_1.4fr]">
+          <div>
+            <p className="eyebrow">Quién está detrás</p>
+            <h2 id="fundador" className="display mt-4 text-[length:var(--text-h2)]">{site.founder.name}</h2>
+            <p className="mt-3 text-lg text-navy">{site.founder.role}</p>
           </div>
-          <h2 className="display mt-24 max-w-4xl text-[length:var(--text-h1)]">Hablemos de tu operación.</h2>
-          <p className="mt-6 max-w-xl text-[length:var(--text-lede)] text-slate">
+          <Reveal>
+            <p className="text-[length:var(--text-lede)] leading-relaxed text-slate">{site.founder.text}</p>
+            <div className="mt-12 grid gap-8 sm:grid-cols-3">
+              {site.principles.map((p) => (
+                <div key={p.title} className="border-t-2 border-ink pt-5">
+                  <h3 className="font-semibold">{p.title}</h3>
+                  <p className="mt-2 text-[0.95rem] text-slate">{p.text}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ---------- closing ---------- */}
+      <section className="theme-dark relative isolate overflow-hidden bg-ink" aria-labelledby="cierre">
+        <ParallaxImage
+          src="/images/v4/cierre.jpg"
+          alt=""
+          reveal={false}
+          speed={20}
+          className="!absolute inset-0 -z-10 opacity-60"
+        />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/70 to-ink/30" />
+        <div className="mx-auto max-w-[1440px] px-5 py-36 md:px-10 md:py-52">
+          <p className="eyebrow">Contacto</p>
+          <SplitReveal as="h2" className="display mt-6 max-w-5xl text-[length:var(--text-h1)]">
+            <span id="cierre">Hablemos de tu operación.</span>
+          </SplitReveal>
+          <p className="prose-codex mt-8 max-w-xl text-[length:var(--text-lede)]">
             Treinta minutos, sin costo: entendemos tu reto y te decimos con honestidad si la IA es la respuesta.
           </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-primary">
-              Agendar consultoría gratuita
-            </a>
-            <a href={site.contact.whatsapp} target="_blank" rel="noopener" className="btn btn-ghost">
-              Escribir por WhatsApp
-            </a>
+          <div className="mt-12 flex flex-wrap gap-3">
+            <Magnetic>
+              <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-primary">
+                Agendar consultoría gratuita
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <a href={site.contact.whatsapp} target="_blank" rel="noopener" className="btn btn-ghost">
+                Escribir por WhatsApp
+              </a>
+            </Magnetic>
           </div>
         </div>
       </section>
@@ -220,12 +282,12 @@ async function AcademyPreview() {
     <CourseList
       courses={courses}
       empty={
-        <div className="flex flex-col justify-between gap-6 rounded-[22px] border border-line p-8 md:flex-row md:items-center">
+        <div className="flex flex-col justify-between gap-6 rounded-[28px] border border-line bg-mist-2 p-8 md:flex-row md:items-center md:p-10">
           <p className="max-w-xl text-slate">
             Los primeros cursos están en producción. Déjanos tu correo en la academia y te avisamos cuando abran las
             inscripciones.
           </p>
-          <Link href="/academia" className="btn btn-ghost shrink-0">Ir a la academia</Link>
+          <Link href="/academia" className="btn btn-dark shrink-0">Ir a la academia</Link>
         </div>
       }
     />
