@@ -14,6 +14,7 @@ export default function ContactPage() {
     <>
       <PageHero
         title="Cuéntanos qué quieres resolver."
+        image="/images/v4/cierre.jpg"
         lede="Respondemos en menos de un día hábil. Si prefieres hablar, agenda 30 minutos sin costo."
       />
       <section className="mx-auto grid max-w-[1440px] gap-16 px-5 pb-28 md:px-10 lg:grid-cols-[1.4fr_1fr]">

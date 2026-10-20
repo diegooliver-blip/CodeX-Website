@@ -15,6 +15,7 @@ export default function ServicesPage() {
     <>
       <PageHero
         title="Doce disciplinas, un solo equipo."
+        image="/images/v4/plataformas.jpg"
         lede="Del agente que responde en WhatsApp a la simulación eléctrica de una planta: lo diseñamos, lo construimos y lo dejamos operando."
       />
       <div className="mx-auto max-w-[1440px] px-5 pb-28 md:px-10">

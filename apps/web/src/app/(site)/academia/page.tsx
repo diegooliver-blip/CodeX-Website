@@ -22,6 +22,7 @@ export default function AcademyPage() {
     <>
       <PageHero
         title="Academia CODEX."
+        image="/images/v4/educacion.jpg"
         lede="Aprende lo que aplicamos en proyectos reales. Lecciones en video, material descargable y ejercicios, a tu ritmo."
       />
       <section className="mx-auto max-w-[1440px] px-5 pb-20 md:px-10">

@@ -15,6 +15,7 @@ export default function ProjectsPage() {
     <>
       <PageHero
         title="Lo que hemos construido."
+        image="/images/v4/puesta-en-marcha.jpg"
         lede={`${projects.length} sistemas entre producción, despliegue y prototipo funcional. Sin nombres ni marcas de clientes: solo el problema, la solución y los datos del sistema.`}
       />
       <section className="mx-auto max-w-[1440px] px-5 pb-28 md:px-10" aria-labelledby="portafolio">

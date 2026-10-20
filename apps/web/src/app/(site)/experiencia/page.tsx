@@ -22,6 +22,7 @@ export default function ExperiencePage() {
     <>
       <PageHero
         title="Experiencia en operación real."
+        image="/images/v4/logistica.jpg"
         lede="Antes de los agentes, la operación: plantas, sistemas de gestión, cumplimiento y dirección de proyectos. Por eso nuestra IA aterriza en procesos que funcionan."
       />
       <section className="mx-auto max-w-[1440px] px-5 pb-24 md:px-10">

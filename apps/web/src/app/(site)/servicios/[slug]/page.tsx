@@ -5,6 +5,16 @@ import { CtaBand, PageHero } from "@/components/PageHero";
 import { ProjectPlate } from "@/components/ProjectPlate";
 import { getService, projectsForService, services, site } from "@/lib/content";
 
+/** Hero photograph for each service family. */
+const groupImage: Record<string, string> = {
+  "Agentes de IA": "/images/v4/ia.jpg",
+  "Producto digital": "/images/v4/plataformas.jpg",
+  Crecimiento: "/images/v4/ecommerce.jpg",
+  Operación: "/images/v4/automatizacion.jpg",
+  Ingeniería: "/images/v4/energia.jpg",
+  Estrategia: "/images/v4/diagnostico.jpg",
+};
+
 export async function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
 }
@@ -22,14 +32,14 @@ export default async function ServicePage({ params }: PageProps<"/servicios/[slu
 
   return (
     <>
-      <PageHero trail={{ href: "/servicios", label: service.group }} title={service.title} lede={service.short}>
+      <PageHero trail={{ href: "/servicios", label: service.group }} title={service.title} lede={service.short} image={groupImage[service.group] ?? "/images/v4/plataformas.jpg"}>
         <div className="hero-line mt-10 flex flex-wrap gap-3 [animation-delay:280ms]">
           <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-primary">Agendar consultoría gratuita</a>
           <a href={site.contact.whatsapp} target="_blank" rel="noopener" className="btn btn-ghost">Preguntar por WhatsApp</a>
         </div>
       </PageHero>
 
-      <section className="mx-auto grid max-w-[1440px] gap-14 border-t border-line px-5 py-20 md:px-10 lg:grid-cols-[1fr_1.2fr]">
+      <section className="mx-auto grid max-w-[1440px] gap-14 px-5 pb-20 md:px-10 lg:grid-cols-[1fr_1.2fr]">
         <div>
           <ServiceIcon name={service.icon} className="size-10 text-navy" />
           <p className="prose-codex mt-8 text-[length:var(--text-lede)] leading-relaxed">{service.description}</p>

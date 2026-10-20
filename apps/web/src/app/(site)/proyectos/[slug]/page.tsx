@@ -22,19 +22,19 @@ export default async function ProjectPage({ params }: PageProps<"/proyectos/[slu
 
   return (
     <>
-      <PageHero trail={{ href: "/proyectos", label: project.category }} title={project.title} lede={project.summary}>
-        <dl className="hero-line mt-14 grid max-w-4xl grid-cols-2 gap-8 border-t border-line pt-8 sm:grid-cols-3 [animation-delay:280ms]">
+      <PageHero trail={{ href: "/proyectos", label: project.category }} title={project.title} lede={project.summary} image={project.cover}>
+        <dl className="hero-line mt-14 grid max-w-4xl grid-cols-2 gap-8 border-t border-paper/20 pt-8 sm:grid-cols-3 [animation-delay:280ms]">
           {project.facts.map((f) => (
             <div key={f.label}>
               <dt className="sr-only">{f.label}</dt>
-              <dd className="display text-5xl text-navy">{f.value}</dd>
-              <dd className="mt-2 text-slate">{f.label}</dd>
+              <dd className="display text-5xl text-spark">{f.value}</dd>
+              <dd className="mt-2 text-paper/75">{f.label}</dd>
             </div>
           ))}
         </dl>
       </PageHero>
 
-      <section className="mx-auto grid max-w-[1440px] gap-14 border-t border-line px-5 py-20 md:px-10 lg:grid-cols-2">
+      <section className="mx-auto grid max-w-[1440px] gap-14 px-5 pb-20 md:px-10 lg:grid-cols-2">
         <div>
           <h2 className="text-navy">El reto</h2>
           <p className="prose-codex mt-4 text-[1.15rem] leading-relaxed">{project.challenge}</p>
