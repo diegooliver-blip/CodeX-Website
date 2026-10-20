@@ -1,11 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { ServiceIcon } from "@/components/icons";
 import { gsap, useMotion } from "@/components/motion/gsap";
 
-type Item = { slug: string; title: string; short: string; icon: string; group: string };
+type Item = { slug: string; title: string; short: string; icon: string; group: string; image: string };
 
 /**
  * All twelve services on one horizontal rail. On large screens with motion allowed the section pins and
@@ -66,16 +67,25 @@ export function ServicesRail({ items }: { items: Item[] }) {
           <li key={s.slug} className="w-[82vw] shrink-0 snap-start sm:w-[22rem]">
             <Link
               href={`/servicios/${s.slug}`}
-              data-cursor="Ver"
-              className="group flex h-[26rem] flex-col justify-between rounded-[28px] border border-line bg-paper p-8 transition-[background-color,color,border-color,translate] duration-500 hover:-translate-y-2 hover:border-navy hover:bg-navy hover:text-paper"
+              className="group flex h-[30rem] flex-col overflow-hidden rounded-[28px] border border-line bg-paper transition-[background-color,color,border-color,translate] duration-500 hover:-translate-y-2 hover:border-navy hover:bg-navy hover:text-paper"
             >
-              <span className="flex items-start justify-between">
-                <span className="grid size-14 place-items-center rounded-2xl bg-mist text-navy transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
-                  <ServiceIcon name={s.icon} className="size-6" />
+              <span className="relative block min-h-44 flex-1 overflow-hidden bg-mist">
+                <Image
+                  src={s.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 640px) 22rem, 82vw"
+                  quality={70}
+                  className="object-cover transition-transform duration-[1200ms] ease-[var(--ease-codex)] group-hover:scale-110"
+                />
+                <span className="absolute left-5 top-5 grid size-12 place-items-center rounded-2xl bg-paper text-navy transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+                  <ServiceIcon name={s.icon} className="size-5" />
                 </span>
-                <span className="text-sm text-slate transition-colors duration-500 group-hover:text-paper/70">{s.group}</span>
+                <span className="absolute right-5 top-5 rounded-full bg-paper/90 px-3 py-1 text-xs font-semibold text-navy backdrop-blur">
+                  {s.group}
+                </span>
               </span>
-              <span>
+              <span className="block shrink-0 p-7">
                 <span className="display block text-[1.9rem] leading-[1.05]">{s.title}</span>
                 <span className="mt-4 block text-[0.95rem] leading-relaxed text-slate transition-colors duration-500 group-hover:text-paper/80">
                   {s.short}

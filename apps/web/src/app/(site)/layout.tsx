@@ -1,6 +1,5 @@
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Cursor } from "@/components/motion/Cursor";
 import { MotionRoot } from "@/components/motion/MotionRoot";
 import { serviceGroups, site } from "@/lib/content";
 
@@ -22,7 +21,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <main id="contenido">{children}</main>
       <SiteFooter />
       <MotionRoot />
-      <Cursor />
     </>
   );
 }

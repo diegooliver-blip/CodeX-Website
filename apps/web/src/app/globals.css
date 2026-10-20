@@ -237,16 +237,6 @@ body {
 }
 
 /* ---------- motion ---------- */
-/* The native cursor hides only once the custom one is running (fine pointer, motion allowed) */
-.has-cursor,
-.has-cursor * {
-  cursor: none !important;
-}
-.has-cursor input,
-.has-cursor textarea {
-  cursor: text !important;
-}
-
 /* Starts partly visible on purpose: a fully transparent headline can't count as the
    LCP element, which would push LCP to the end of the animation. */
 @keyframes rise {

@@ -50,7 +50,6 @@ export function ProjectIndex({ rows }: { rows: Row[] }) {
           <li key={p.slug} className="border-t border-line">
             <Link
               href={`/proyectos/${p.slug}`}
-              data-cursor="Ver"
               onPointerEnter={() => setHover(i)}
               className={`group grid items-center gap-4 py-7 transition-[opacity,padding] duration-500 md:grid-cols-[1fr_14rem_12rem] md:py-9 md:hover:pl-6 ${
                 hover !== null && hover !== i ? "md:opacity-40" : ""

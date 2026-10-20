@@ -7,7 +7,6 @@ export function ProjectPlate({ project, large = false }: { project: Project; lar
   return (
     <Link
       href={`/proyectos/${project.slug}`}
-      data-cursor="Ver"
       className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-line bg-paper transition-[border-color,translate,box-shadow] duration-500 hover:-translate-y-1.5 hover:border-navy hover:shadow-[0_30px_60px_-35px_rgba(3,20,79,0.45)]"
     >
       <div className={`relative overflow-hidden bg-mist ${large ? "aspect-[16/9]" : "aspect-[16/10]"}`}>

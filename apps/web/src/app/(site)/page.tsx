@@ -48,6 +48,22 @@ const methodImages = [
   ["/images/v4/operacion.jpg", "Dashboard de analítica en operación sobre una laptop"],
 ];
 
+/** One photograph per service card in the rail. */
+const serviceImages: Record<string, string> = {
+  "agentes-whatsapp": "/images/v4/retail.jpg",
+  "websites-ia": "/images/v4/plataformas.jpg",
+  ecommerce: "/images/v4/ecommerce.jpg",
+  "apps-moviles": "/images/v4/diseno.jpg",
+  "campanas-meta": "/images/v4/puesta-en-marcha.jpg",
+  automatizacion: "/images/v4/automatizacion.jpg",
+  "email-automation": "/images/v4/operacion.jpg",
+  dashboards: "/images/v4/ia.jpg",
+  "simulacion-energetica": "/images/v4/energia.jpg",
+  "sistemas-multiagente": "/images/v4/statement.jpg",
+  "e-learning": "/images/v4/educacion.jpg",
+  "consultoria-ia": "/images/v4/diagnostico.jpg",
+};
+
 const sectors = [...new Set([...projects.flatMap((p) => p.sector.split(", ")), ...cases.map((c) => c.sector)])];
 
 export default function HomePage() {
@@ -112,7 +128,16 @@ export default function HomePage() {
         </Reveal>
       </section>
 
-      <ServicesRail items={services.map(({ slug, title, short, icon, group }) => ({ slug, title, short, icon, group }))} />
+      <ServicesRail
+        items={services.map(({ slug, title, short, icon, group }) => ({
+          slug,
+          title,
+          short,
+          icon,
+          group,
+          image: serviceImages[slug] ?? "/images/v4/plataformas.jpg",
+        }))}
+      />
 
       <MethodSteps
         steps={site.method.map((m, i) => ({ ...m, image: methodImages[i][0], alt: methodImages[i][1] }))}
