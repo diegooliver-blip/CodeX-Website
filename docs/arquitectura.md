@@ -71,7 +71,7 @@ flowchart LR
     WEB -->|x-internal-key| API[api<br/>FastAPI]
     API --> DB[(Postgres 16<br/>+ pgvector)]
     API --> S3
-    WORKER[worker<br/>APScheduler] --> DB
+    WORKER[worker<br/>asyncio + advisory locks] --> DB
     BACKUP[backup<br/>pg_dump nocturno] --> DB
   end
   API -->|SSE| CLAUDE[Anthropic API]
@@ -98,7 +98,7 @@ sequenceDiagram
     A-->>W: 201 con la respuesta guardada
   end
   W-->>B: "Mensaje recibido."
-  loop cada 60 s (advisory lock)
+  loop cada 15 s (advisory lock)
     K->>D: select ... for update skip locked
     K->>L: lead_created
     K->>D: procesado_en = now() | intentos++ / DLQ
@@ -114,7 +114,7 @@ sequenceDiagram
 | 03 | Base de datos | Postgres 16 + pgvector en contenedor, Alembic | Supabase (reescribir auth y storage sin necesidad; D-002) | 0 | Sin PITR | Primer pago real → WAL archiving o Postgres gestionado |
 | 04 | Caché | `'use cache'` + `cacheLife` + `cacheTag` en Next; Cloudflare para estáticos | Redis (no hay un problema que lo justifique) | 0 | Contenido viejo tras publicar | Invalidación por `revalidateTag` desde el portal |
 | 05 | Tiempo real | SSE solo en el chat | WebSockets (unidireccional, no hace falta) | 0 | Buffering del proxy | Ya resuelto con `flush_interval -1` |
-| 06 | Colas y jobs | Outbox en Postgres + worker con `skip locked`, DLQ por intentos | Redis/QStash/SQS | 0 | El worker caído retrasa los emails | Backlog > 1 000 o latencia > 5 min → alerta |
+| 06 | Colas y jobs | Outbox en Postgres + worker propio (`python -m app.worker`, asyncio, `pg_try_advisory_lock` por trabajo) con `skip locked`, backoff exponencial con jitter y DLQ a los 8 intentos | Redis/QStash/SQS | 0 | El worker caído retrasa los emails | Backlog > 1 000 o latencia > 5 min → alerta |
 | 07 | Red y borde | Cloudflare free (DNS, CDN, WAF básico) → Caddy (TLS) | Load balancer gestionado | 0 | Reglas WAF limitadas | Ataque sostenido → Cloudflare Pro `[VERIFICAR]` |
 | 08 | Despliegue | Docker Compose + `git pull && compose up -d --build` | Kubernetes (1 nodo, 1 persona) | 0 | Despliegue manual | > 1 despliegue/día → GitHub Actions con SSH |
 | 09 | Estilo | Monolito modular (routers + services) + worker | Microservicios | 0 | — | ≥ 2 equipos |

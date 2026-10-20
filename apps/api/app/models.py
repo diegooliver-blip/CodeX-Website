@@ -2,8 +2,8 @@ import uuid
 from datetime import datetime
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, func
-from sqlalchemy.dialects.postgresql import TSVECTOR, UUID
+from sqlalchemy import BigInteger, Boolean, DateTime, ForeignKey, Identity, Integer, String, Text, func
+from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import Computed
 
@@ -114,3 +114,58 @@ class Chunk(Base):
         TSVECTOR, Computed("to_tsvector('spanish', content)", persisted=True)
     )
     document: Mapped[Document] = relationship(back_populates="chunks")
+
+
+# ---------- platform: idempotency, outbox, worker, audit (migration 0002) ----------
+class IdempotencyKey(Base):
+    """One row per `Idempotency-Key`: the same key with the same body replays the stored response."""
+
+    __tablename__ = "idempotency_keys"
+    clave: Mapped[str] = mapped_column(String(200), primary_key=True)
+    alcance: Mapped[str] = mapped_column(String(60), primary_key=True)  # endpoint, e.g. "leads"
+    huella: Mapped[str] = mapped_column(String(64))  # sha256 of the request body
+    status: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    respuesta: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class OutboxEvent(Base):
+    """Side effects (emails, CRM) are written here in the same transaction as the data, then delivered by the worker."""
+
+    __tablename__ = "outbox_events"
+    id: Mapped[int] = mapped_column(BigInteger, Identity(always=True), primary_key=True)
+    tipo: Mapped[str] = mapped_column(String(60))
+    entidad: Mapped[str] = mapped_column(String(60))
+    entidad_id: Mapped[str] = mapped_column(String(80))
+    datos: Mapped[dict] = mapped_column(JSONB, default=dict)
+    ocurrido_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    siguiente_intento_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    procesado_en: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    dlq_en: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    intentos: Mapped[int] = mapped_column(Integer, default=0)
+    ultimo_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class WorkerHeartbeat(Base):
+    __tablename__ = "worker_heartbeats"
+    trabajo: Mapped[str] = mapped_column(String(60), primary_key=True)
+    ultima_ejecucion: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    resultado: Mapped[str] = mapped_column(String(20))  # ok | error | omitido
+    duracion_ms: Mapped[int] = mapped_column(Integer, default=0)
+    detalle: Mapped[str] = mapped_column(Text, default="")
+
+
+class AdminAudit(Base):
+    """Append-only log of admin actions; a trigger rejects UPDATE and DELETE."""
+
+    __tablename__ = "admin_audit"
+    id: Mapped[int] = mapped_column(BigInteger, Identity(always=True), primary_key=True)
+    actor_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    actor_email: Mapped[str] = mapped_column(String(320), default="")
+    accion: Mapped[str] = mapped_column(String(60))
+    entidad: Mapped[str] = mapped_column(String(60))
+    entidad_id: Mapped[str] = mapped_column(String(80), default="")
+    antes: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    despues: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    trace_id: Mapped[str] = mapped_column(String(64), default="")
+    creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

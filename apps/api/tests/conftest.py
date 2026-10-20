@@ -57,3 +57,12 @@ async def admin_headers(client):
         await s.commit()
     res = await client.post("/auth/login", json={"email": "test@codexai.com", "password": "secreto-123"})
     return {"Authorization": f"Bearer {res.json()['access_token']}"}
+
+
+@pytest.fixture(autouse=True)
+def fresh_rate_limits():
+    """Each test starts with empty rate-limit buckets so suite order can't trip the per-minute limits."""
+    from app.limiter import limiter
+
+    limiter.reset()
+    yield

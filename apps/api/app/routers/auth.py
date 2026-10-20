@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, Request
 from sqlalchemy import select
 
+from app.errors import ApiError
 from app.limiter import limiter
 from app.models import User
 from app.schemas import LoginIn, RefreshIn, TokenPair, UserOut
@@ -14,7 +15,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 async def login(request: Request, body: LoginIn, session: DB) -> dict:
     user = await session.scalar(select(User).where(User.email == body.email.lower()))
     if user is None or not verify_password(body.password, user.password_hash):
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Correo o contraseña incorrectos")
+        raise ApiError(401, "CREDENCIALES_INVALIDAS", "Correo o contraseña incorrectos")
     return issue_tokens(user.id)
 
 
@@ -22,7 +23,7 @@ async def login(request: Request, body: LoginIn, session: DB) -> dict:
 async def refresh(body: RefreshIn, session: DB) -> dict:
     user = await session.get(User, decode(body.refresh_token, "refresh"))
     if user is None:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Usuario no encontrado")
+        raise ApiError(401, "TOKEN_INVALIDO", "Usuario no encontrado")
     return issue_tokens(user.id)
 
 

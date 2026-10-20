@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.db import get_session
+from app.errors import ApiError
 from app.models import User
 
 _bearer = HTTPBearer(auto_error=False)
@@ -43,9 +44,9 @@ def decode(token: str, kind: str) -> uuid.UUID:
     try:
         payload = jwt.decode(token, get_settings().jwt_secret, algorithms=[ALGORITHM])
     except jwt.PyJWTError as exc:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token inválido o expirado") from exc
+        raise ApiError(401, "TOKEN_INVALIDO", "Token inválido o expirado") from exc
     if payload.get("typ") != kind:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Tipo de token incorrecto")
+        raise ApiError(401, "TOKEN_INVALIDO", "Tipo de token incorrecto")
     return uuid.UUID(payload["sub"])
 
 

@@ -24,7 +24,9 @@
 - Auth JWT: access 15 min + refresh 24 h; cookies httpOnly gestionadas por el BFF de Next (`/api/auth/*`, `/api/portal/*`).
 - Almacenamiento S3 (RustFS local / S3 o R2 en producción) con URLs prefirmadas.
 - RAG: fastembed local (`paraphrase-multilingual-MiniLM-L12-v2`, 384 dims) + FTS español, fusión RRF; Claude `claude-opus-5` en streaming SSE.
-- Loops.so: eventos `lead_created` y `course_interest`.
+- Loops.so: eventos `lead_created` y `course_interest`, enviados **solo** vía outbox (`app/services/outbox.py`) por el worker (`python -m app.worker`, servicio `worker` en compose). Sin `LOOPS_API_KEY` el evento se cierra como `omitido`.
+- Contrato de errores: `{"error": {"codigo", "mensaje", "detalles", "traceId"}}` (`app/errors.py`); lanzar `ApiError(status, "CODIGO", "mensaje")` para códigos específicos. En la web, leerlo con `errorMessage()` de `src/lib/api-error.ts`.
+- POST con efecto: aceptar `Idempotency-Key` con `run_once` (`app/services/idempotency.py`). Acciones de portal/admin: `audit.record(...)` en la misma transacción (`admin_audit` es inmutable).
 - CLI: `python -m app.cli create-admin <email> <nombre>` y `python -m app.cli reindex`.
 
 ### 📚 Contenido — `content/*.json`

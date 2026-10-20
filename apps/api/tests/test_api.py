@@ -3,7 +3,10 @@ from app.services.rag import chunk_text, content_sources
 
 async def test_health(client):
     res = await client.get("/health")
-    assert res.json() == {"status": "ok"}
+    body = res.json()
+    assert res.status_code == 200 and body["db"] is True
+    assert set(body) >= {"status", "storage", "worker", "outbox", "version"}
+    assert res.headers["x-trace-id"]
 
 
 async def test_login_rejects_bad_password(client, admin_headers):
