@@ -45,8 +45,12 @@ async def process_batch(
     *,
     limit: int = 20,
     now: Callable[[], datetime] = lambda: datetime.now(UTC),
+    scrub: frozenset[str] = frozenset(),
 ) -> dict[str, int]:
-    """Deliver up to `limit` due events, one transaction per event (row locked with SKIP LOCKED)."""
+    """Deliver up to `limit` due events, one transaction per event (row locked with SKIP LOCKED).
+
+    Event types in `scrub` carry secrets (e.g. one-time links); their payload is erased once delivered.
+    """
     stats = {"ok": 0, "reintento": 0, "dlq": 0, "omitido": 0}
     for _ in range(limit):
         async with sessions() as session, session.begin():
@@ -70,9 +74,13 @@ async def process_batch(
                     raise Skip(f"sin manejador para {event.tipo}")
                 await handler(event)
                 event.procesado_en, event.ultimo_error = now(), None
+                if event.tipo in scrub:
+                    event.datos = {"borrado": True}
                 stats["ok"] += 1
             except Skip as exc:
                 event.procesado_en, event.ultimo_error = now(), f"omitido: {exc}"
+                if event.tipo in scrub:
+                    event.datos = {"borrado": True}
                 stats["omitido"] += 1
             except Exception as exc:  # any delivery failure is retried, never lost
                 event.ultimo_error = f"{type(exc).__name__}: {exc}"[:2000]

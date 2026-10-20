@@ -12,9 +12,13 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import delete, text
+import httpx
+from sqlalchemy import delete, select, text
 from sqlalchemy.dialects.postgresql import insert
 
+from app.clientes import emails as client_emails
+from app.clientes.db import ClientesSession, scope_to_sync
+from app.clientes.models import Service, UptimeCheck
 from app.db import SessionLocal, engine
 from app.models import IdempotencyKey, OutboxEvent, WorkerHeartbeat
 from app.observability import configure_logging, log
@@ -42,6 +46,48 @@ async def process_events() -> str:
     return ", ".join(f"{k}={v}" for k, v in stats.items() if v) or "sin eventos"
 
 
+async def process_client_emails() -> str:
+    stats = await outbox.process_batch(
+        ClientesSession, client_emails.HANDLERS, limit=50, scrub=client_emails.SECRET_TYPES
+    )
+    return ", ".join(f"{k}={v}" for k, v in stats.items() if v) or "sin correos"
+
+
+UPTIME_TIMEOUT = httpx.Timeout(10.0, connect=5.0)
+
+
+async def check_uptime() -> str:
+    """Ping every monitored client service; a 2xx/3xx answer within 10 s counts as up."""
+    async with ClientesSession() as db:
+        await scope_to_sync(db)
+        targets = list(
+            (await db.execute(
+                select(Service.id, Service.client_id, Service.monitor_url).where(
+                    Service.monitor_url != "", Service.eliminado_en.is_(None)
+                )
+            )).all()
+        )
+    if not targets:
+        return "sin servicios monitoreados"
+    results = []
+    async with httpx.AsyncClient(timeout=UPTIME_TIMEOUT, follow_redirects=True, headers={"User-Agent": "CODEX-Uptime/1.0"}) as client:
+        for service_id, client_id, url in targets:
+            started = time.perf_counter()
+            try:
+                res = await client.get(url)
+                ok, code = res.status_code < 400, res.status_code
+            except httpx.HTTPError:
+                ok, code = False, None
+            results.append(UptimeCheck(service_id=service_id, client_id=client_id, ok=ok, status_code=code,
+                                       latencia_ms=int((time.perf_counter() - started) * 1000)))
+    async with ClientesSession() as db, db.begin():
+        await scope_to_sync(db)
+        db.add_all(results)
+        await db.execute(delete(UptimeCheck).where(UptimeCheck.revisado_en < datetime.now(UTC) - timedelta(days=35)))
+    down = sum(1 for r in results if not r.ok)
+    return f"revisados={len(results)}, caidos={down}"
+
+
 async def cleanup() -> str:
     now = datetime.now(UTC)
     async with SessionLocal() as session, session.begin():
@@ -55,6 +101,8 @@ async def cleanup() -> str:
 JOBS = [
     Job("latido", 30, heartbeat),
     Job("procesar-eventos", 15, process_events),
+    Job("correos-clientes", 15, process_client_emails),
+    Job("uptime", 300, check_uptime),
     Job("limpieza", 24 * 3600, cleanup),
 ]
 

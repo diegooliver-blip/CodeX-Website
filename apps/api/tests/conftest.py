@@ -16,6 +16,12 @@ os.environ["DATABASE_URL"] = ADMIN_DSN.replace("postgresql://", "postgresql+asyn
 os.environ["ANTHROPIC_API_KEY"] = ""
 os.environ["LOOPS_API_KEY"] = ""
 os.environ["INTERNAL_API_KEY"] = ""
+CLIENTES_TEST_DB = "codex_clientes_test"
+_DB_HOST = ADMIN_DSN.split("@", 1)[1].rsplit("/", 1)[0]
+os.environ["CLIENTES_DATABASE_URL"] = f"postgresql+asyncpg://clientes_test:clientes-test-pass@{_DB_HOST}/{CLIENTES_TEST_DB}"
+os.environ["TURNSTILE_SECRET"] = "pruebas"  # the real verifier is replaced in tests (see fake_turnstile)
+os.environ["SYNC_SHARED_SECRET"] = "secreto-sync-pruebas"
+os.environ["PORTAL_URL"] = "https://portal.test"
 
 API_DIR = Path(__file__).resolve().parents[1]
 
@@ -31,8 +37,16 @@ async def _admin_sql(*statements: str) -> None:
 
 @pytest.fixture(scope="session", autouse=True)
 def database():
-    asyncio.run(_admin_sql(f"DROP DATABASE IF EXISTS {TEST_DB} WITH (FORCE)", f"CREATE DATABASE {TEST_DB}"))
+    asyncio.run(_admin_sql(
+        f"DROP DATABASE IF EXISTS {TEST_DB} WITH (FORCE)",
+        f"CREATE DATABASE {TEST_DB}",
+        f"DROP DATABASE IF EXISTS {CLIENTES_TEST_DB} WITH (FORCE)",
+    ))
     subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=API_DIR, check=True, env=os.environ)
+    subprocess.run([sys.executable, "-m", "app.clientes.bootstrap"], cwd=API_DIR, check=True, env=os.environ)
+    subprocess.run(
+        [sys.executable, "-m", "alembic", "-c", "alembic_clientes.ini", "upgrade", "head"], cwd=API_DIR, check=True, env=os.environ
+    )
     yield
 
 
@@ -66,3 +80,16 @@ def fresh_rate_limits():
 
     limiter.reset()
     yield
+
+
+@pytest.fixture(autouse=True)
+def fake_turnstile(monkeypatch):
+    """Captcha always passes in tests except for the token "malo" (the real verifier calls Cloudflare)."""
+    from app.clientes import routes
+    from app.errors import ApiError
+
+    async def verify(token, ip=""):
+        if token == "malo":
+            raise ApiError(400, "CAPTCHA_INVALIDO", "La verificación de seguridad expiró o no es válida.")
+
+    monkeypatch.setattr(routes, "require_human", verify)

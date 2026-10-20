@@ -66,10 +66,12 @@ def presign_put(key: str, content_type: str, expires: int = 3600) -> str:
     )
 
 
-def presign_get(key: str, expires: int = 6 * 3600) -> str:  # outlives the web cache window
-    return public().generate_presigned_url(
-        "get_object", Params={"Bucket": get_settings().s3_bucket, "Key": key}, ExpiresIn=expires
-    )
+def presign_get(key: str, expires: int = 6 * 3600, filename: str | None = None) -> str:  # outlives the web cache window
+    params = {"Bucket": get_settings().s3_bucket, "Key": key}
+    if filename:  # download with a readable name instead of the storage key
+        safe = re.sub(r'[^\w .-]+', "", filename).strip()[:120] or "archivo"
+        params["ResponseContentDisposition"] = f'attachment; filename="{safe}"'
+    return public().generate_presigned_url("get_object", Params=params, ExpiresIn=expires)
 
 
 def read(key: str) -> bytes:

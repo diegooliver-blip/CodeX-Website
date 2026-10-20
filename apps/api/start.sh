@@ -10,6 +10,9 @@ if [ "${APP_ROLE:-api}" = "worker" ]; then
 fi
 
 alembic upgrade head
+# Dedicated client-portal database: create role/database if missing, then migrate it.
+python -m app.clientes.bootstrap
+alembic -c alembic_clientes.ini upgrade head
 # Re-embed content that changed since the last deploy (unchanged documents are skipped by checksum).
 python -m app.cli reindex || echo '{"event": "reindex_fallido", "level": "warning"}'
 

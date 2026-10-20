@@ -35,6 +35,17 @@ class Settings(BaseSettings):
     embedding_dim: int = 384
 
     loops_api_key: str = ""
+    # Loops transactional template ids for the client portal (invite, reset, password changed).
+    loops_tx_invitacion: str = ""
+    loops_tx_restablecer: str = ""
+    loops_tx_contrasena_cambiada: str = ""
+
+    # ---- client portal ----
+    # Dedicated identity database and role; created on first boot by app.clientes.bootstrap.
+    clientes_database_url: str = "postgresql+asyncpg://clientes_app:clientes-dev@localhost:5432/codex_clientes"
+    portal_url: str = "http://localhost:3000"  # base for links in invitation/reset emails
+    turnstile_secret: str = ""  # Cloudflare Turnstile; empty = captcha checks fail closed
+    sync_shared_secret: str = ""  # HMAC secret shared with VS Master Control; empty = sync API disabled
 
     content_dir: Path = _default_content_dir()
 
