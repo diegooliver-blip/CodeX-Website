@@ -51,7 +51,9 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  if (pathname.startsWith("/api/")) return NextResponse.json({ detail: "No autenticado" }, { status: 401 });
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.json({ error: { codigo: "NO_AUTENTICADO", mensaje: "No autenticado", detalles: null } }, { status: 401 });
+  }
   const login = new URL("/portal/login", request.url);
   login.searchParams.set("next", pathname);
   return NextResponse.redirect(login);

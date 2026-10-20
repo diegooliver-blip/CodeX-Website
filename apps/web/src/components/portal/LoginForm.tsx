@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { errorMessage } from "@/lib/api-error";
 
 export function LoginForm() {
   const [error, setError] = useState("");
@@ -26,9 +27,7 @@ export function LoginForm() {
     setError(
       res?.status === 429
         ? "Demasiados intentos. Espera un minuto."
-        : typeof body?.detail === "string"
-          ? body.detail
-          : "Revisa tu correo y contraseña (mínimo 8 caracteres).",
+        : errorMessage(body, "Revisa tu correo y contraseña (mínimo 8 caracteres)."),
     );
     setBusy(false);
   }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
+import { errorMessage } from "@/lib/api-error";
 
 type Option = { value: string; label: string };
 
@@ -17,24 +18,30 @@ export function LeadForm({
 }) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
+  // One key per message: retries and double clicks reuse it, so the API stores the lead only once.
+  const idempotencyKey = useRef<string | null>(null);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     setState("sending");
+    idempotencyKey.current ??= crypto.randomUUID();
     const res = await fetch("/api/leads", {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", "idempotency-key": idempotencyKey.current },
       body: JSON.stringify({ ...Object.fromEntries(form), source, course_slug: courseSlug }),
     }).catch(() => null);
-    if (res?.ok) return setState("sent");
+    if (res?.ok) {
+      idempotencyKey.current = null;
+      return setState("sent");
+    }
     const body = await res?.json().catch(() => null);
     setError(
       res?.status === 429
         ? "Recibimos varios mensajes seguidos. Espera un minuto y vuelve a enviarlo."
         : res?.status === 422
           ? "Revisa tu nombre y correo: alguno no tiene el formato correcto."
-          : (body?.detail as string) ?? "No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos por WhatsApp.",
+          : errorMessage(body, "No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos por WhatsApp."),
     );
     setState("error");
   }

@@ -35,14 +35,14 @@ export function Reveal({
         );
         break;
       case "stagger":
-        gsap.from(el.children, { autoAlpha: 0, y: 48, stagger: 0.09, delay: d, scrollTrigger });
+        gsap.from(el.children, { opacity: 0, y: 48, stagger: 0.09, delay: d, scrollTrigger });
         break;
       case "fade":
-        gsap.from(el, { autoAlpha: 0, duration: 1.4, delay: d, scrollTrigger });
+        gsap.from(el, { opacity: 0, duration: 1.4, delay: d, scrollTrigger });
         break;
       default: {
         const x = variant === "left" ? -80 : variant === "right" ? 80 : 0;
-        gsap.from(el, { autoAlpha: 0, x, y: x ? 0 : 56, delay: d, scrollTrigger });
+        gsap.from(el, { opacity: 0, x, y: x ? 0 : 56, delay: d, scrollTrigger });
       }
     }
   });

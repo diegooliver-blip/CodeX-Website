@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { API_URL, apiHeaders } from "@/lib/api-base";
+import { apiError } from "@/lib/api-error";
 import { ACCESS_COOKIE } from "@/lib/session";
 
 /**
@@ -10,7 +11,7 @@ import { ACCESS_COOKIE } from "@/lib/session";
 async function forward(request: Request, ctx: { params: Promise<{ path: string[] }> }) {
   const { path } = await ctx.params;
   const token = (await cookies()).get(ACCESS_COOKIE)?.value;
-  if (!token) return Response.json({ detail: "No autenticado" }, { status: 401 });
+  if (!token) return apiError(401, "NO_AUTENTICADO", "No autenticado");
 
   const target = path[0] === "me" ? "/auth/me" : `/admin/${path.map(encodeURIComponent).join("/")}`;
   const search = new URL(request.url).search;
@@ -24,7 +25,7 @@ async function forward(request: Request, ctx: { params: Promise<{ path: string[]
     headers,
     body: hasBody ? await request.arrayBuffer() : undefined,
   }).catch(() => null);
-  if (!upstream) return Response.json({ detail: "El servidor no responde." }, { status: 502 });
+  if (!upstream) return apiError(502, "API_NO_DISPONIBLE", "El servidor no responde.");
 
   // Any course mutation refreshes the public academy immediately.
   if (hasBody && upstream.ok && path[0] === "courses") revalidateTag("courses", { expire: 0 });

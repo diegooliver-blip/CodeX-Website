@@ -16,8 +16,8 @@ export function Hero({ calendly, projectCount }: { calendly: string; projectCoun
   useMotion(root, (el) => {
     const scrollTrigger = { trigger: el, start: "top top", end: "bottom top", scrub: true };
     gsap.to(el.querySelector("[data-hero-img]"), { scale: 1.18, ease: "none", scrollTrigger });
-    gsap.to(el.querySelector("[data-hero-copy]"), { yPercent: -18, autoAlpha: 0.1, ease: "none", scrollTrigger });
-    gsap.from(el.querySelector("[data-hero-card]"), { x: 60, autoAlpha: 0, duration: 1.4, delay: 0.9 });
+    gsap.to(el.querySelector("[data-hero-copy]"), { yPercent: -18, opacity: 0.1, ease: "none", scrollTrigger });
+    gsap.from(el.querySelector("[data-hero-card]"), { x: 60, opacity: 0, duration: 1.4, delay: 0.9 });
   });
 
   return (

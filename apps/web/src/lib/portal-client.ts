@@ -1,5 +1,7 @@
 "use client";
 
+import { errorMessage } from "@/lib/api-error";
+
 /** Browser-side helper for the portal BFF (/api/portal/*). Redirects to login on 401. */
 export async function portal<T = unknown>(path: string, init?: RequestInit & { json?: unknown }): Promise<T> {
   const { json, ...rest } = init ?? {};
@@ -20,10 +22,8 @@ export async function portal<T = unknown>(path: string, init?: RequestInit & { j
   return body as T;
 }
 
-function errorText(body: { detail?: unknown }) {
-  if (typeof body.detail === "string") return body.detail;
-  if (Array.isArray(body.detail)) return "Revisa los campos: " + body.detail.map((d: { loc?: string[] }) => d.loc?.at(-1)).join(", ");
-  return "La operación no se completó. Intenta de nuevo.";
+function errorText(body: unknown) {
+  return errorMessage(body, "La operación no se completó. Intenta de nuevo.");
 }
 
 /** Upload straight to object storage with a presigned URL, reporting progress (0-100). */

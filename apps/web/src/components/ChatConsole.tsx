@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
 import { ArrowUp, LoaderCircle } from "lucide-react";
+import { errorMessage } from "@/lib/api-error";
 
 type Msg = { role: "user" | "assistant"; content: string; sources?: { title: string; url: string }[] };
 
@@ -60,7 +61,7 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        patch((m) => ({ ...m, content: err.detail ?? "El asistente no está disponible. Escríbenos por WhatsApp." }));
+        patch((m) => ({ ...m, content: errorMessage(err, "El asistente no está disponible. Escríbenos por WhatsApp.") }));
         return;
       }
       for await (const { event, data } of readEvents(res)) {
