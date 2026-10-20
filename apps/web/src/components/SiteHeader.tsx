@@ -13,6 +13,7 @@ const nav = [
   { href: "/academia", label: "Academia" },
   { href: "/experiencia", label: "Experiencia" },
   { href: "/contacto", label: "Contacto" },
+  { href: "/clientes/entrar", label: "Clientes" },
 ];
 
 /**

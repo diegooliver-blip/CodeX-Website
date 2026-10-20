@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ACCESS_COOKIE, REFRESH_COOKIE, setSession, type TokenPair } from "@/lib/session";
 import { API_URL, apiHeaders } from "@/lib/api-base";
+import { CLIENT_COOKIE } from "@/lib/client-session";
 import projects from "@content/projects.json";
 import services from "@content/services.json";
 
@@ -23,6 +24,14 @@ export async function proxy(request: NextRequest) {
   if (known[section]) {
     if (extra !== undefined || !known[section].has(slug)) return notFound(request);
     return NextResponse.next();
+  }
+
+  // Client portal: optimistic cookie check only; the API validates the session on every read.
+  if (pathname.startsWith("/clientes/panel")) {
+    if (request.cookies.get(CLIENT_COOKIE)?.value) return NextResponse.next();
+    const login = new URL("/clientes/entrar", request.url);
+    login.searchParams.set("next", pathname);
+    return NextResponse.redirect(login);
   }
 
   if (pathname === "/portal/login") return NextResponse.next();
@@ -74,5 +83,5 @@ async function notFound(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/portal/:path*", "/api/portal/:path*", "/proyectos/:path+", "/servicios/:path+"],
+  matcher: ["/portal/:path*", "/api/portal/:path*", "/proyectos/:path+", "/servicios/:path+", "/clientes/panel/:path*"],
 };
