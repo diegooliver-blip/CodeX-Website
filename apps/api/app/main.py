@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -19,10 +20,10 @@ configure_logging()
 async def lifespan(_: FastAPI):
     if get_settings().jwt_secret.startswith("dev-only"):
         log.warning("jwt_secret_por_defecto", detalle="set a long random JWT_SECRET in production")
-    try:
-        storage.ensure_bucket()
-    except Exception as exc:  # storage may come up after the API; uploads will retry on use
-        log.warning("storage_no_listo", error=str(exc))
+    try:  # storage may come up after the API; never block startup on it
+        await asyncio.wait_for(asyncio.to_thread(storage.ensure_bucket), timeout=10)
+    except Exception as exc:
+        log.warning("storage_no_listo", error=str(exc) or type(exc).__name__)
     yield
 
 

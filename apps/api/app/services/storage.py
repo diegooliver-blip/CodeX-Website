@@ -22,7 +22,14 @@ def _client(endpoint: str):
         aws_access_key_id=s.s3_access_key,
         aws_secret_access_key=s.s3_secret_key,
         region_name=s.s3_region,
-        config=Config(signature_version="s3v4", s3={"addressing_style": "path"}),
+        # Short timeouts: a storage outage must degrade uploads, never hang requests or startup.
+        config=Config(
+            signature_version="s3v4",
+            s3={"addressing_style": "path"},
+            connect_timeout=3,
+            read_timeout=15,
+            retries={"max_attempts": 2, "mode": "standard"},
+        ),
     )
 
 
