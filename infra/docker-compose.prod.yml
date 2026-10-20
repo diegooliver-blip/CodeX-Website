@@ -30,7 +30,7 @@ services:
     volumes: [objectdata:/data]
 
   api:
-    build: ../apps/api
+    build: { context: .., dockerfile: apps/api/Dockerfile }
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql+asyncpg://codex:${POSTGRES_PASSWORD}@db:5432/codex
@@ -47,7 +47,6 @@ services:
       CONTENT_DIR: /content
     volumes:
       - ../content:/content:ro
-      - fastembed:/root/.cache
     healthcheck:  # 200 whenever the database answers (worker/storage issues show as "degradado")
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
       interval: 10s
@@ -59,10 +58,10 @@ services:
       storage: { condition: service_started }
 
   worker:  # outbox delivery (Loops.so), heartbeats and daily cleanup
-    build: ../apps/api
+    build: { context: .., dockerfile: apps/api/Dockerfile }
     restart: unless-stopped
-    command: ["python", "-m", "app.worker"]
     environment:
+      APP_ROLE: worker
       DATABASE_URL: postgresql+asyncpg://codex:${POSTGRES_PASSWORD}@db:5432/codex
       LOOPS_API_KEY: ${LOOPS_API_KEY:-}
     stop_grace_period: 30s
@@ -85,6 +84,5 @@ services:
 volumes:
   pgdata:
   objectdata:
-  fastembed:
   caddydata:
   caddyconfig:

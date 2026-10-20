@@ -24,7 +24,7 @@ services:
     volumes: [objectdata:/data]
 
   api:
-    build: ./apps/api
+    build: { context: ., dockerfile: apps/api/Dockerfile }
     env_file:
       - path: .env
         required: false
@@ -36,7 +36,6 @@ services:
       CONTENT_DIR: /content
     volumes:
       - ./content:/content:ro
-      - fastembed:/root/.cache
     ports: ["8010:8000"]  # host 8000 is often reserved on Windows (Hyper-V)
     healthcheck:  # 200 whenever the database answers (worker/storage issues show as "degradado")
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
@@ -49,12 +48,12 @@ services:
       storage: { condition: service_started }
 
   worker:  # outbox delivery (Loops.so), heartbeats and daily cleanup — see apps/api/app/worker.py
-    build: ./apps/api
-    command: ["python", "-m", "app.worker"]
+    build: { context: ., dockerfile: apps/api/Dockerfile }
     env_file:
       - path: .env
         required: false
     environment:
+      APP_ROLE: worker
       DATABASE_URL: postgresql+asyncpg://codex:codex@db:5432/codex
     depends_on:
       api: { condition: service_healthy }  # the api container applies migrations first
@@ -74,4 +73,3 @@ services:
 volumes:
   pgdata:
   objectdata:
-  fastembed:
