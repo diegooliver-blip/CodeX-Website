@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import siteJson from "@content/site.json";
 import { errorMessage } from "@/lib/api-error";
 
 type Option = { value: string; label: string };
@@ -16,7 +17,8 @@ export function LeadForm({
   courseSlug?: string;
   submitLabel?: string;
 }) {
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error" | "offline">("idle");
+  const [draft, setDraft] = useState("");
   const [error, setError] = useState("");
   // One key per message: retries and double clicks reuse it, so the API stores the lead only once.
   const idempotencyKey = useRef<string | null>(null);
@@ -35,7 +37,19 @@ export function LeadForm({
       idempotencyKey.current = null;
       return setState("sent");
     }
-    const body = await res?.json().catch(() => null);
+    // The API is unreachable (not a validation problem): hand the message to WhatsApp or email instead of losing it.
+    if (!res || res.status >= 502) {
+      const f = Object.fromEntries(form) as Record<string, string>;
+      const lines = [
+        `Hola CODEX, soy ${f.name ?? ""}${f.company ? ` de ${f.company}` : ""}.`,
+        f.message,
+        f.email && `Correo: ${f.email}`,
+        f.phone && `Teléfono: ${f.phone}`,
+      ];
+      setDraft(lines.filter(Boolean).join(String.fromCharCode(10)));
+      return setState("offline");
+    }
+    const body = await res.json().catch(() => null);
     setError(
       res?.status === 429
         ? "Recibimos varios mensajes seguidos. Espera un minuto y vuelve a enviarlo."
@@ -44,6 +58,30 @@ export function LeadForm({
           : errorMessage(body, "No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos por WhatsApp."),
     );
     setState("error");
+  }
+
+  if (state === "offline") {
+    const { whatsapp, email } = siteJson.contact;
+    return (
+      <div className="rounded-2xl border border-ember/50 bg-mist-2 p-8" role="alert">
+        <p className="display text-3xl">Envíalo por otro canal.</p>
+        <p className="mt-3 text-slate">
+          Nuestro sistema de mensajes no responde en este momento. Tu mensaje ya está escrito: elige cómo mandarlo y te
+          contestamos igual de rápido.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a href={`${whatsapp}?text=${encodeURIComponent(draft)}`} target="_blank" rel="noopener" className="btn btn-primary">
+            Enviar por WhatsApp
+          </a>
+          <a
+            href={`mailto:${email}?subject=${encodeURIComponent("Contacto desde el sitio")}&body=${encodeURIComponent(draft)}`}
+            className="btn btn-ghost"
+          >
+            Enviar por correo
+          </a>
+        </div>
+      </div>
+    );
   }
 
   if (state === "sent") {
