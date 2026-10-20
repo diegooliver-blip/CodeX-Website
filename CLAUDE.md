@@ -1,18 +1,22 @@
 # CODEX AI Consulting — Directrices de Trabajo
 
-## 📋 STACK ACTUAL (Plataforma v3)
+## 📋 STACK ACTUAL (Plataforma v4)
+
+> Arquitectura completa: `docs/arquitectura.md` (basada en `docs/00-master-prompt.md`). Fases: `docs/checklist-lanzamiento.md`.
 
 ### 🎨 Frontend — `apps/web` (Next.js 16)
 - **App Router + Cache Components** (`cacheComponents`, `partialPrefetching`): leer `apps/web/AGENTS.md` y `node_modules/next/dist/docs/` antes de usar APIs de Next — la versión cambia rápido.
   - Datos de la API: funciones con `'use cache'` + `cacheLife` + `cacheTag` (`src/lib/api.ts`); `cookies()`/`params` sin `generateStaticParams` van dentro de `<Suspense>`.
   - Middleware se llama `proxy.ts` (sesión del portal + 404 reales para slugs desconocidos).
 - **CSS**: Tailwind v4 con tokens en `src/app/globals.css` (`@theme`).
-- **Paleta**:
-  - Obsidiana `#0A0A0A` (fondo), grafito `#16140F` (superficies)
-  - Oro `#C9A55A` (señal/acento), champaña `#E6D3A3` (texto dorado pequeño, AA)
-  - Marfil `#EEE9DF` (texto), ceniza `#8E887C` (secundario)
-- **Tipografía**: Bodoni Moda (titulares, clase `.display`) + Hanken Grotesk (texto/UI).
-- **Motion**: una sola secuencia orquestada (hero + constelación). Reveals discretos (`<Reveal>`), Lenis solo en puntero fino. Easing `cubic-bezier(0.34, 1.56, 0.64, 1)`; duraciones 0.6s / 0.8s / 1.2s. Siempre respetar `prefers-reduced-motion`.
+- **Paleta v4** (tomada de la plantilla de consultoría de referencia, tema claro):
+  - Papel `#FFFFFF` (fondo), tinta `#000209` (texto y secciones oscuras), niebla `#EAE9E6` (superficies)
+  - Pizarra `#3D404B` (texto secundario AA), acero `#7F8189` (solo texto grande o decorativo)
+  - Señal `#5A7EF2` (azul IA: acentos y gráficos; no para texto pequeño), marino `#03144F` (secciones profundas y enlaces)
+  - Brasa `#FF6B15` (CTA principal, siempre con texto tinta), chispa `#FFE550` (resaltados puntuales)
+- **Tipografía**: Wix Madefor Display (titulares, clase `.display`) + Wix Madefor Text (texto/UI), vía `next/font/google`.
+- **Motion**: GSAP 3 (ScrollTrigger + SplitText) a través de `useGsap` con `gsap.matchMedia()`; Lenis solo en puntero fino. Revelados con clip y slide, scrub, pins, contadores, cursor y botones magnéticos. El hero (h1 e imagen) se ve sin JS. Easing `cubic-bezier(0.22, 1, 0.36, 1)`; duraciones 0.6s / 0.8s / 1.2s. Siempre respetar `prefers-reduced-motion` (todo visible y estático).
+- **Fotos**: stock con licencia Unsplash en `public/images/v4/`, créditos en `content/credits.json`. Nunca stock para retratar a una persona real del equipo.
 - **Reglas de estilo**: sin etiquetas en MAYÚSCULAS, sin "·" como separador, sin "→" en botones, numeración solo para secuencias reales (método).
 
 ### ⚙️ Backend — `apps/api` (FastAPI)
@@ -66,11 +70,27 @@ Fuente única para páginas y RAG. **Nunca** nombres ni marcas de clientes. Proy
 ✅ Leads + Loops.so, SEO (metadata, sitemap, JSON-LD, OG)
 ✅ Pruebas: pytest (API) + Playwright e2e
 
-### Siguiente
-⏳ Pagos de cursos (Stripe / Mercado Pago) y acceso de alumnos
+### En curso (v4, rama `platform-v4`)
+⏳ F1 Fundación → F2 Rediseño claro con motion GSAP → F3 Backend de producción (errores, idempotencia, outbox + worker, auditoría) → F4 Pagos mock + alumnos + RLS → F5 Todo en VPS + backups probados
+
+### Después
+⏳ Pagos reales (Stripe / Mercado Pago) con llaves del cliente
 ⏳ Métricas reales de clientes y testimonios verificados
 ⏳ Caso de app móvil (iOS/Android) cuando exista
-⏳ Despliegue: Vercel (web) + VPS con `infra/docker-compose.prod.yml`
+
+---
+
+## 🧭 REGISTRO DE DECISIONES (ADR)
+
+| ID | Fecha | Decisión | Por qué | Alternativa descartada | Revisar cuando |
+|---|---|---|---|---|---|
+| D-001 | 2026-10-20 | Rediseño v4 claro con la paleta y la tipografía de la plantilla de consultoría de referencia | Lo pidió el owner; el negro/dorado no comunicaba "empresa de IA" | Mantener negro/dorado | Datos de conversión tras 60 días |
+| D-002 | 2026-10-20 | Mantener FastAPI + Postgres propio + JWT; RLS solo como segunda capa en tablas de dinero | El stack ya funciona y está probado; migrar no aporta valor | Migrar a Supabase (Auth, RLS, Storage) | Se suma un cliente móvil que hable directo con la BD |
+| D-003 | 2026-10-20 | GSAP 3 (licencia estándar sin costo) para el motion | Pins, scrub y SplitText con buen rendimiento; `matchMedia` para reduced motion | Motion/Framer (sin SplitText ni pins tan maduros) | Cambio de licencia de GSAP |
+| D-004 | 2026-10-20 | Todo en un VPS (web + api + worker + db + storage) con Caddy y Cloudflare free | Uso comercial (Vercel Hobby lo prohíbe) y costo mínimo | Vercel Pro + VPS | CPU p95 > 70 % o incidente > 2 h |
+| D-005 | 2026-10-20 | Outbox en Postgres + worker con `skip locked` en vez de BackgroundTasks | Una caída de Loops no debe perder eventos | Redis/QStash | Backlog > 1 000 sostenido |
+| D-006 | 2026-10-20 | Pagos detrás de `PaymentProvider` con adaptador mock; el real falla sin llaves | No hay llaves; el producto no debe acoplarse a una pasarela | Integrar Stripe directo | Llegan las llaves de prueba |
+| D-007 | 2026-10-20 | Fotos de stock con licencia Unsplash, servidas por nosotros | Calidad 4K sin costo ni hotlinking | Fotos de la plantilla (licencia Wix) | Sesión de fotos propia |
 
 ---
 
@@ -116,6 +136,6 @@ cd apps/web && npm run test:e2e
 
 ---
 
-**Última actualización**: 2026-10-16
-**Versión**: 3.0
+**Última actualización**: 2026-10-20
+**Versión**: 4.0 (en curso)
 **Owner**: Diego Oliver Martínez
