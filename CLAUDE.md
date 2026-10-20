@@ -16,7 +16,7 @@
   - Brasa `#FF6B15` (CTA principal, siempre con texto tinta), chispa `#FFE550` (resaltados puntuales)
 - **Tipografía**: Wix Madefor Display (titulares, clase `.display`) + Wix Madefor Text (texto/UI), vía `next/font/google`.
 - **Motion**: GSAP 3 (ScrollTrigger + SplitText) a través de `useGsap` con `gsap.matchMedia()`; Lenis solo en puntero fino. Revelados con clip y slide, scrub, pins, contadores, cursor y botones magnéticos. El hero (h1 e imagen) se ve sin JS. Easing `cubic-bezier(0.22, 1, 0.36, 1)`; duraciones 0.6s / 0.8s / 1.2s. Siempre respetar `prefers-reduced-motion` (todo visible y estático).
-- **Fotos**: stock con licencia Unsplash en `public/images/v4/`, créditos en `content/credits.json`. Nunca stock para retratar a una persona real del equipo.
+- **Fotos**: stock con licencia Pexels en `public/images/v4/`, créditos en `content/credits.json`. Nunca stock para retratar a una persona real del equipo.
 - **Reglas de estilo**: sin etiquetas en MAYÚSCULAS, sin "·" como separador, sin "→" en botones, numeración solo para secuencias reales (método).
 
 ### ⚙️ Backend — `apps/api` (FastAPI)
@@ -92,7 +92,7 @@ Fuente única para páginas y RAG. **Nunca** nombres ni marcas de clientes. Proy
 | D-004 | 2026-10-20 | Todo en un VPS (web + api + worker + db + storage) con Caddy y Cloudflare free | Uso comercial (Vercel Hobby lo prohíbe) y costo mínimo | Vercel Pro + VPS | CPU p95 > 70 % o incidente > 2 h |
 | D-005 | 2026-10-20 | Outbox en Postgres + worker con `skip locked` en vez de BackgroundTasks | Una caída de Loops no debe perder eventos | Redis/QStash | Backlog > 1 000 sostenido |
 | D-006 | 2026-10-20 | Pagos detrás de `PaymentProvider` con adaptador mock; el real falla sin llaves | No hay llaves; el producto no debe acoplarse a una pasarela | Integrar Stripe directo | Llegan las llaves de prueba |
-| D-007 | 2026-10-20 | Fotos de stock con licencia Unsplash, servidas por nosotros | Calidad 4K sin costo ni hotlinking | Fotos de la plantilla (licencia Wix) | Sesión de fotos propia |
+| D-007 | 2026-10-20 | Fotos de stock con licencia Pexels, servidas por nosotros (Unsplash bloqueó la búsqueda sin API key) | Calidad 4K sin costo ni hotlinking | Fotos de la plantilla (licencia Wix) | Sesión de fotos propia |
 
 ---
 
