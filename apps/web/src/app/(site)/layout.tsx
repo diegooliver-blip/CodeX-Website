@@ -1,6 +1,7 @@
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SmoothScroll } from "@/components/SmoothScroll";
+import { Cursor } from "@/components/motion/Cursor";
+import { MotionRoot } from "@/components/motion/MotionRoot";
 import { serviceGroups, site } from "@/lib/content";
 
 const groups = serviceGroups.map((g) => ({
@@ -20,7 +21,8 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <SiteHeader groups={groups} calendly={site.contact.calendly} />
       <main id="contenido">{children}</main>
       <SiteFooter />
-      <SmoothScroll />
+      <MotionRoot />
+      <Cursor />
     </>
   );
 }

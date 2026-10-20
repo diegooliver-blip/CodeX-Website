@@ -237,20 +237,14 @@ body {
 }
 
 /* ---------- motion ---------- */
-/* Pre-JS states only apply once the motion layer has booted (html.motion-ok),
-   so content is never hidden when JS fails or the user prefers reduced motion. */
-.motion-ok [data-reveal] {
-  visibility: hidden;
+/* The native cursor hides only once the custom one is running (fine pointer, motion allowed) */
+.has-cursor,
+.has-cursor * {
+  cursor: none !important;
 }
-
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.8s var(--ease-codex), transform 0.8s var(--ease-codex);
-}
-.reveal.is-in {
-  opacity: 1;
-  transform: none;
+.has-cursor input,
+.has-cursor textarea {
+  cursor: text !important;
 }
 
 /* Starts partly visible on purpose: a fully transparent headline can't count as the
@@ -325,10 +319,6 @@ span.hero-line {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
   }
   .marquee-track {
     animation: none;
