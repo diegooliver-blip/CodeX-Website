@@ -21,7 +21,10 @@ from app.config import get_settings
 
 RETENTION_DAYS = 14
 # Tables compared after a test restore (they exist in every environment and carry the business data).
-CHECK_TABLES = {"site": ["users", "courses", "lessons", "leads", "orders", "payments_ledger", "enrollments"]}
+CHECK_TABLES = {
+    "site": ["users", "courses", "lessons", "leads", "orders", "payments_ledger", "enrollments"],
+    "clientes": ["clients", "client_users", "services", "deliverables"],
+}
 
 
 def _plain(url: str) -> str:
@@ -29,8 +32,15 @@ def _plain(url: str) -> str:
 
 
 def databases() -> dict[str, str]:
+    """Both databases through the site's admin role: the portal tables FORCE row-level security, so a dump with the
+    portal's own role would fail (pg_dump refuses to dump partial tables)."""
     s = get_settings()
-    return {"site": _plain(s.database_url), "clientes": _plain(s.clientes_database_url)}
+    admin = make_url(_plain(s.database_url))
+    clientes_db = make_url(_plain(s.clientes_database_url)).database
+    return {
+        "site": admin.render_as_string(hide_password=False),
+        "clientes": admin.set(database=clientes_db).render_as_string(hide_password=False),
+    }
 
 
 @lru_cache
@@ -114,8 +124,13 @@ async def restore_test(name: str = "site") -> dict:
         with tempfile.TemporaryDirectory() as tmp:
             path = os.path.join(tmp, "restore.dump")
             await asyncio.to_thread(_s3().download_file, get_settings().backup_bucket, key, path)
+            script = os.path.join(tmp, "restore.sql")
+            await _run("pg_restore", "--no-owner", "--no-privileges", f"--file={script}", path)
+            # The image's client tools are v17; they emit `SET transaction_timeout`, which a v16 server rejects.
+            with open(script, encoding="utf-8") as src, open(script + ".16", "w", encoding="utf-8") as dst:
+                dst.writelines(line for line in src if not line.startswith("SET transaction_timeout"))
             # Extensions (pgvector, citext) come back from the dump; owners/privileges were left out on purpose.
-            await _run("pg_restore", "--no-owner", "--no-privileges", "--exit-on-error", f"--dbname={target}", path)
+            await _run("psql", "--quiet", "--set=ON_ERROR_STOP=1", f"--dbname={target}", f"--file={script}.16")
         counts = {}
         for table in CHECK_TABLES.get(name, []):
             counts[table] = [await _count(live, table), await _count(target, table)]
