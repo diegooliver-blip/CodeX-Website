@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { StudentLogout } from "@/components/academia/StudentForms";
+import { ResendVerification, StudentLogout } from "@/components/academia/StudentForms";
 import { CourseList } from "@/components/CourseList";
 import { getStudent, getStudentCourses } from "@/lib/student-api";
 
@@ -30,6 +30,11 @@ async function MyCourses() {
         </div>
         <StudentLogout />
       </div>
+      {!student.verificado && (
+        <p className="mt-8 rounded-xl bg-spark/40 px-4 py-3 text-[0.95rem]">
+          Confirma tu correo con el enlace que te enviamos a {student.email}. <ResendVerification />
+        </p>
+      )}
       <div className="mt-14">
         <CourseList
           courses={courses ?? []}

@@ -156,6 +156,19 @@ class StudentOut(BaseModel):
     id: uuid.UUID
     email: str
     nombre: str
+    verificado: bool
+
+
+class StudentEmailIn(BaseModel):
+    email: EmailStr
+
+
+class StudentTokenIn(BaseModel):
+    token: str = Field(min_length=20, max_length=200)
+
+
+class StudentResetIn(StudentTokenIn):
+    password: str = Field(min_length=10, max_length=200)
 
 
 class StudentCourse(PublicCourse):

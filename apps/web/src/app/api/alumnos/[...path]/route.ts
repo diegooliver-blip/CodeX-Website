@@ -7,11 +7,14 @@ import type { TokenPair } from "@/lib/session";
 import { clearStudentSession, setStudentSession, STUDENT_ACCESS_COOKIE } from "@/lib/student-session";
 
 /** Actions that open a session: the tokens stay server-side, the browser only gets the httpOnly cookies. */
-const OPENS_SESSION = new Set(["registro", "login"]);
+const OPENS_SESSION = new Set(["registro", "login", "restablecer"]);
+/** Public actions that don't need a session. */
+const PUBLIC = new Set([...OPENS_SESSION, "olvide", "verificar"]);
 
 /** Authenticated actions the browser may trigger, as API paths under /alumnos. */
 function authedTarget(path: string[]): string | null {
   if (path.length === 1 && path[0] === "checkout") return "/alumnos/checkout";
+  if (path.length === 1 && path[0] === "reenviar-verificacion") return "/alumnos/reenviar-verificacion";
   if (path.length === 3 && path[0] === "ordenes" && path[2] === "simular") {
     return `/alumnos/ordenes/${encodeURIComponent(path[1])}/simular`;
   }
@@ -31,7 +34,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ path: stri
 
   const headers = apiHeaders({ "content-type": "application/json", "x-client-ip": clientIp(request) });
   let target: string | null;
-  if (path.length === 1 && OPENS_SESSION.has(path[0])) {
+  if (path.length === 1 && PUBLIC.has(path[0])) {
     target = `/alumnos/${path[0]}`;
   } else {
     target = authedTarget(path);
@@ -45,6 +48,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ path: stri
 
   const upstream = await fetch(`${API_URL}${target}`, { method: "POST", headers, body: await request.text() }).catch(() => null);
   if (!upstream) return apiError(502, "API_NO_DISPONIBLE", "La academia no responde. Intenta de nuevo en un momento.");
+  if (upstream.status === 204) return new NextResponse(null, { status: 204 });
   const body = await upstream.json().catch(() => ({}));
   if (!upstream.ok || !OPENS_SESSION.has(path[0])) return NextResponse.json(body, { status: upstream.status });
 

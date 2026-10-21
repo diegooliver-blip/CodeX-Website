@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { errorCode, errorMessage } from "@/lib/api-error";
 
 async function post(path: string, body?: unknown, headers?: HeadersInit) {
@@ -85,6 +86,11 @@ export function StudentAuthForm() {
         <button type="submit" disabled={busy} className="btn btn-primary w-full disabled:opacity-60">
           {busy ? "Un momento…" : mode === "login" ? "Entrar" : "Crear mi cuenta"}
         </button>
+        {mode === "login" && (
+          <p className="text-center text-sm">
+            <Link href="/academia/recuperar" className="link-underline text-navy">¿Olvidaste tu contraseña?</Link>
+          </p>
+        )}
       </form>
     </div>
   );
@@ -159,6 +165,130 @@ export function StudentLogout() {
   return (
     <button type="button" onClick={logout} className="link-underline text-sm text-navy">
       Salir
+    </button>
+  );
+}
+
+/** Token from the emailed link (?token=), read on the client so the page itself stays static. */
+function linkToken(): string {
+  return new URLSearchParams(window.location.search).get("token") ?? "";
+}
+
+export function StudentForgotForm() {
+  const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
+  const [error, setError] = useState("");
+
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setState("sending");
+    setError("");
+    const { res, data } = await post("olvide", Object.fromEntries(new FormData(e.currentTarget)));
+    if (res?.ok) return setState("sent");
+    setError(res?.status === 429 ? "Demasiados intentos seguidos. Espera un minuto." : errorMessage(data, "No pudimos procesar la solicitud."));
+    setState("idle");
+  }
+
+  if (state === "sent") {
+    return (
+      <div role="status" className="rounded-[22px] border border-line bg-mist-2 p-8">
+        <p className="display text-2xl">Revisa tu correo.</p>
+        <p className="mt-3 text-slate">Si el correo tiene cuenta, te enviamos un enlace para elegir una contraseña nueva. Vence en 1 hora.</p>
+      </div>
+    );
+  }
+  return (
+    <form onSubmit={submit} className="space-y-6">
+      <label className="block">
+        <span className={fieldLabel}>Correo de tu cuenta</span>
+        <input name="email" type="email" required autoComplete="email" className="field" />
+      </label>
+      {error && <p className="text-danger" role="alert">{error}</p>}
+      <button type="submit" disabled={state === "sending"} className="btn btn-primary w-full disabled:opacity-60">
+        {state === "sending" ? "Enviando…" : "Enviar enlace"}
+      </button>
+    </form>
+  );
+}
+
+export function StudentResetForm() {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    if (form.get("password") !== form.get("confirmar")) return setError("Las contraseñas no coinciden.");
+    setBusy(true);
+    setError("");
+    const { res, data } = await post("restablecer", { token: linkToken(), password: form.get("password") });
+    if (res?.ok) {
+      router.push("/academia/mis-cursos");
+      return router.refresh();
+    }
+    setError(errorMessage(data, "No pudimos cambiar la contraseña."));
+    setBusy(false);
+  }
+
+  return (
+    <form onSubmit={submit} className="space-y-6">
+      <label className="block">
+        <span className={fieldLabel}>Contraseña nueva, mínimo 10 caracteres</span>
+        <input name="password" type="password" required minLength={10} autoComplete="new-password" className="field" />
+      </label>
+      <label className="block">
+        <span className={fieldLabel}>Repítela</span>
+        <input name="confirmar" type="password" required minLength={10} autoComplete="new-password" className="field" />
+      </label>
+      {error && (
+        <p className="text-danger" role="alert">
+          {error} <Link href="/academia/recuperar" className="link-underline">Pedir otro enlace</Link>
+        </p>
+      )}
+      <button type="submit" disabled={busy} className="btn btn-primary w-full disabled:opacity-60">
+        {busy ? "Guardando…" : "Guardar y entrar"}
+      </button>
+    </form>
+  );
+}
+
+export function EmailVerification() {
+  const [state, setState] = useState<"working" | "ok" | "error">("working");
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (started.current) return; // StrictMode runs effects twice; the token works once
+    started.current = true;
+    post("verificar", { token: linkToken() }).then(({ res }) => setState(res?.ok ? "ok" : "error"));
+  }, []);
+
+  if (state === "working") return <p role="status" className="text-slate">Verificando tu correo…</p>;
+  return state === "ok" ? (
+    <div role="status">
+      <p className="display text-2xl">Correo verificado.</p>
+      <Link href="/academia/mis-cursos" className="btn btn-primary mt-6 w-full">Ir a mis cursos</Link>
+    </div>
+  ) : (
+    <div role="alert">
+      <p className="display text-2xl">El enlace venció o ya se usó.</p>
+      <p className="mt-3 text-slate">Entra a tu cuenta y pide un enlace nuevo desde Mis cursos.</p>
+      <Link href="/academia/entrar" className="btn btn-ghost mt-6 w-full">Entrar</Link>
+    </div>
+  );
+}
+
+export function ResendVerification() {
+  const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
+  async function resend() {
+    setState("sending");
+    const { res } = await post("reenviar-verificacion");
+    setState(res?.ok ? "sent" : "idle");
+  }
+  return state === "sent" ? (
+    <span>Te enviamos un enlace nuevo.</span>
+  ) : (
+    <button type="button" onClick={resend} disabled={state === "sending"} className="link-underline text-navy disabled:opacity-60">
+      Reenviar enlace
     </button>
   );
 }

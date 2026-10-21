@@ -22,12 +22,14 @@ from app.clientes.models import Service, UptimeCheck
 from app.db import SessionLocal, engine
 from app.models import IdempotencyKey, OutboxEvent, WorkerHeartbeat
 from app.observability import configure_logging, log
-from app.services import loops, outbox
+from app.services import loops, outbox, student_links
 
 OUTBOX_HANDLERS: dict[str, outbox.Handler] = {
     "lead_created": loops.deliver,
     "course_interest": loops.deliver,
     "order_paid": loops.deliver,
+    student_links.EMAIL_RESTABLECER: student_links.deliver,
+    student_links.EMAIL_VERIFICAR: student_links.deliver,
 }
 
 
@@ -43,7 +45,7 @@ async def heartbeat() -> str:
 
 
 async def process_events() -> str:
-    stats = await outbox.process_batch(SessionLocal, OUTBOX_HANDLERS, limit=50)
+    stats = await outbox.process_batch(SessionLocal, OUTBOX_HANDLERS, limit=50, scrub=student_links.SECRET_TYPES)
     return ", ".join(f"{k}={v}" for k, v in stats.items() if v) or "sin eventos"
 
 

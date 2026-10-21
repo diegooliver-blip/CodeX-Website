@@ -36,7 +36,7 @@ export async function hasStudentSession(): Promise<boolean> {
   return Boolean((await cookies()).get(STUDENT_ACCESS_COOKIE)?.value);
 }
 
-export const getStudent = () => studentGet<{ id: string; email: string; nombre: string }>("/me");
+export const getStudent = () => studentGet<{ id: string; email: string; nombre: string; verificado: boolean }>("/me");
 export const getStudentCourse = (slug: string) => studentGet<StudentCourse>(`/cursos/${encodeURIComponent(slug)}`);
 export const getStudentCourses = () => studentGet<PublicCourse[]>("/cursos");
 export const getStudentOrder = (id: string) => studentGet<StudentOrder>(`/ordenes/${encodeURIComponent(id)}`);

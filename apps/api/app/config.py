@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     loops_tx_invitacion: str = ""
     loops_tx_restablecer: str = ""
     loops_tx_contrasena_cambiada: str = ""
+    # Academy (student) transactional templates: password reset link and email verification link.
+    loops_tx_alumno_restablecer: str = ""
+    loops_tx_alumno_verificar: str = ""
 
     # ---- client portal ----
     # Dedicated identity database and role; created on first boot by app.clientes.bootstrap.

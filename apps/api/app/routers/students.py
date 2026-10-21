@@ -1,6 +1,7 @@
 """Student accounts, course purchase (checkout + provider webhooks) and enrolled-course access."""
 
 import uuid
+from datetime import UTC, datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Header, Request
@@ -23,8 +24,11 @@ from app.schemas import (
     RefreshIn,
     SimulatedPaymentIn,
     StudentCourse,
+    StudentEmailIn,
     StudentOut,
+    StudentResetIn,
     StudentSignupIn,
+    StudentTokenIn,
     TokenPair,
 )
 from app.security import (
@@ -38,7 +42,7 @@ from app.security import (
     scope_to_system,
     verify_password,
 )
-from app.services import payments
+from app.services import payments, student_links
 from app.services.idempotency import run_once
 
 router = APIRouter(prefix="/alumnos", tags=["alumnos"])
@@ -49,9 +53,14 @@ webhooks = APIRouter(prefix="/pagos", tags=["pagos"])
 @router.post("/registro", response_model=TokenPair, status_code=201)
 @limiter.limit("5/minute")
 async def signup(request: Request, body: StudentSignupIn, session: DB) -> dict:
-    user = User(email=body.email.lower(), name=body.nombre.strip(), role=STUDENT, password_hash=hash_password(body.password))
+    user = User(
+        id=uuid.uuid4(), email=body.email.lower(), name=body.nombre.strip(), role=STUDENT,
+        password_hash=hash_password(body.password),
+    )
     session.add(user)
     try:
+        await session.flush()
+        await student_links.issue(session, user, student_links.VERIFICAR)
         await session.commit()
     except IntegrityError as exc:
         await session.rollback()
@@ -78,7 +87,46 @@ async def refresh(body: RefreshIn, session: DB) -> dict:
 
 @router.get("/me", response_model=StudentOut)
 async def me(user: CurrentStudent) -> dict:
-    return {"id": user.id, "email": user.email, "nombre": user.name}
+    return {"id": user.id, "email": user.email, "nombre": user.name, "verificado": user.email_verificado_en is not None}
+
+
+@router.post("/olvide", status_code=202)
+@limiter.limit("5/minute")
+async def forgot_password(request: Request, body: StudentEmailIn, session: DB) -> dict:
+    """Always the same answer, so the form can't be used to find out who has an account."""
+    user = await session.scalar(select(User).where(User.email == body.email.lower(), User.role == STUDENT))
+    if user is not None:
+        await student_links.issue(session, user, student_links.RESTABLECER)
+        await session.commit()
+    return {"ok": True, "mensaje": "Si el correo tiene cuenta, te enviamos un enlace para restablecer tu contraseña."}
+
+
+@router.post("/restablecer", response_model=TokenPair)
+@limiter.limit("10/minute")
+async def reset_password(request: Request, body: StudentResetIn, session: DB) -> dict:
+    user = await student_links.consume(session, body.token, student_links.RESTABLECER)
+    user.password_hash = hash_password(body.password)
+    # Opening the emailed link proves the address too.
+    user.email_verificado_en = user.email_verificado_en or datetime.now(UTC)
+    await session.commit()
+    return issue_tokens(user.id)
+
+
+@router.post("/verificar", status_code=204)
+@limiter.limit("10/minute")
+async def verify_email(request: Request, body: StudentTokenIn, session: DB) -> None:
+    user = await student_links.consume(session, body.token, student_links.VERIFICAR)
+    user.email_verificado_en = user.email_verificado_en or datetime.now(UTC)
+    await session.commit()
+
+
+@router.post("/reenviar-verificacion", status_code=202)
+@limiter.limit("3/minute")
+async def resend_verification(request: Request, user: CurrentStudent, session: DB) -> dict:
+    if user.email_verificado_en is None:
+        await student_links.issue(session, user, student_links.VERIFICAR)
+        await session.commit()
+    return {"ok": True}
 
 
 # ---------- enrolled courses (read under row-level security) ----------
