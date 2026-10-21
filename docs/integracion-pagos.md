@@ -23,7 +23,10 @@ class PaymentProvider(Protocol):
 4. Las correcciones (reembolsos) son movimientos inversos en el ledger, nunca un UPDATE.
 
 ## Montos
-Siempre en centavos (`bigint`), moneda `MXN`. Los precios actuales de `courses.price_mxn` se migran a centavos en la 0002.
+Siempre en centavos (`bigint`), moneda `MXN`. `courses.price_mxn` sigue en pesos enteros (lo edita el admin); la orden guarda `price_mxn * 100` al crearse, así que un cambio de precio no altera órdenes existentes.
+
+## Configuración
+`PAYMENT_PROVIDER`: vacío = ventas cerradas (`PAGOS_NO_DISPONIBLES`), `mock` solo en local (docker-compose lo activa), `stripe` o `mercadopago` cuando lleguen las llaves. Los webhooks entran por `POST /pagos/webhook/{proveedor}` (exento de la llave interna; se autentican con la firma del proveedor). Un curso con compras no se puede borrar (`CURSO_CON_VENTAS`): se despublica.
 
 ## Qué se necesita del cliente
 - Elegir la pasarela: Stripe, Mercado Pago o ambas.
