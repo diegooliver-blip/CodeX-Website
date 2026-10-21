@@ -55,6 +55,7 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str = ""
     mercadopago_access_token: str = ""
     mercadopago_webhook_secret: str = ""
+    api_public_url: str = ""  # public base URL of this API, for gateway webhooks (e.g. https://api.example.com)
 
     content_dir: Path = _default_content_dir()
 

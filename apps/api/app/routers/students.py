@@ -148,6 +148,7 @@ async def checkout(
             id=uuid.uuid4(), user_id=user.id, course_id=course.id,
             monto_centavos=course.price_mxn * 100, moneda="MXN", proveedor=provider.id,
         )
+        order.titulo = course.title  # transient: shown on the gateway's checkout page
         session.add(order)
         await session.flush()
         sesion = await provider.crear_checkout(order, f"{get_settings().portal_url}/academia/pago")
@@ -193,7 +194,10 @@ async def simulate_payment(order_id: uuid.UUID, body: SimulatedPaymentIn, user: 
 @webhooks.post("/webhook/{proveedor}")
 async def webhook(proveedor: str, request: Request, session: DB) -> dict:
     provider = payments.provider_by_id(proveedor)
-    evento = await provider.verificar_webhook(await request.body(), request.headers)
+    try:
+        evento = await provider.verificar_webhook(await request.body(), request.headers)
+    except payments.EventoIgnorado as exc:
+        return {"ok": True, "ignorado": str(exc)}
     await scope_to_system(session)
     order = await payments.apply_event(session, provider.id, evento)
     await session.commit()

@@ -173,6 +173,7 @@ async def test_real_providers_refuse_without_keys(client, course, monkeypatch, p
     student = await _student(client, f"sin-llaves-{provider}@example.com")
     res = await client.post("/alumnos/checkout", json={"curso": course}, headers=student)
     assert res.status_code == 503 and res.json()["error"]["codigo"] == "PROVEEDOR_NO_CONFIGURADO"
+    assert (await client.get(f"/courses/{course}")).json()["venta_activa"] is False
     hook = await client.post(f"/pagos/webhook/{provider}", content=b"{}")
     assert hook.json()["error"]["codigo"] == "PROVEEDOR_NO_CONFIGURADO"
     async with SessionLocal() as s:  # the failed checkout left no order behind
@@ -207,3 +208,85 @@ async def test_rls_student_a_cannot_see_student_b_orders(client, course):
         with pytest.raises(DBAPIError):  # the student role can read, never write
             await s.execute(text("INSERT INTO enrollments (id, user_id, course_id) SELECT gen_random_uuid(), user_id, course_id FROM orders LIMIT 1"))
         await s.rollback()
+
+
+# ---------- Mercado Pago (Checkout Pro), with the REST API faked ----------
+@pytest.fixture
+def fake_mp(monkeypatch):
+    from app.services import payments
+
+    s = get_settings()
+    monkeypatch.setattr(s, "payment_provider", "mercadopago")
+    monkeypatch.setattr(s, "mercadopago_access_token", "TEST-token")
+    monkeypatch.setattr(s, "api_public_url", "https://api.test")
+    state = {"calls": [], "payments": {}}
+
+    async def request(method, path, *, json_body=None, headers=None):
+        state["calls"].append((method, path, json_body, headers))
+        if path == "/checkout/preferences":
+            n = len(state["calls"])
+            return {"id": f"pref-{uuid.uuid4().hex[:8]}", "init_point": f"https://mercadopago.test/checkout?pref={n}"}
+        return state["payments"][path.rsplit("/", 1)[-1]]
+
+    monkeypatch.setattr(payments, "_mp_request", request)
+    return state
+
+
+async def test_mercadopago_checkout_and_webhook(client, course, fake_mp):
+    import json as _json
+
+    student = await _student(client, "mp@example.com")
+    res = await client.post("/alumnos/checkout", json={"curso": course}, headers=student)
+    assert res.status_code == 201 and res.json()["url"].startswith("https://mercadopago.test/")
+    order_id = res.json()["orden_id"]
+    _, _, pref, headers = fake_mp["calls"][0]
+    assert pref["external_reference"] == order_id and pref["items"][0]["unit_price"] == 1200
+    assert pref["items"][0]["title"] == "Agentes en producción"
+    assert pref["notification_url"] == "https://api.test/pagos/webhook/mercadopago"
+    assert headers["X-Idempotency-Key"] == order_id
+
+    notice = _json.dumps({"type": "payment", "data": {"id": "777"}}).encode()
+    fake_mp["payments"]["777"] = {"status": "in_process", "external_reference": order_id, "transaction_amount": 1200, "currency_id": "MXN"}
+    waiting = await client.post("/pagos/webhook/mercadopago", content=notice)
+    assert waiting.status_code == 200 and waiting.json()["ignorado"] == "pago in_process"
+
+    fake_mp["payments"]["777"]["status"] = "approved"
+    paid = await client.post("/pagos/webhook/mercadopago", content=notice)
+    assert paid.json() == {"ok": True, "estado": "pagada"}
+    enrolled, _ = await _lessons(client, student, course)
+    assert enrolled
+    async with SessionLocal() as s:
+        ref = await s.scalar(select(PaymentLedgerEntry.referencia_externa).where(PaymentLedgerEntry.orden_id == uuid.UUID(order_id)))
+        assert ref == "mp_pay_777"
+
+    other = await client.post("/pagos/webhook/mercadopago", content=b'{"type": "merchant_order", "data": {"id": "1"}}')
+    assert other.json()["ok"] is True and "ignorado" in other.json()
+
+
+async def test_mercadopago_signature_when_secret_set(client, course, fake_mp, monkeypatch):
+    import hashlib
+    import hmac
+    import json as _json
+
+    monkeypatch.setattr(get_settings(), "mercadopago_webhook_secret", "secreto-mp")
+    student = await _student(client, "mp-firma@example.com")
+    order_id = (await client.post("/alumnos/checkout", json={"curso": course}, headers=student)).json()["orden_id"]
+    fake_mp["payments"]["888"] = {"status": "approved", "external_reference": order_id, "transaction_amount": 1200, "currency_id": "MXN"}
+    notice = _json.dumps({"type": "payment", "data": {"id": "888"}}).encode()
+
+    bad = await client.post("/pagos/webhook/mercadopago", content=notice, headers={"x-signature": "ts=1,v1=abc", "x-request-id": "r1"})
+    assert bad.status_code == 400 and bad.json()["error"]["detalles"] == {"motivo": "firma"}
+
+    v1 = hmac.new(b"secreto-mp", b"id:888;request-id:r1;ts:1700;", hashlib.sha256).hexdigest()
+    good = await client.post("/pagos/webhook/mercadopago", content=notice, headers={"x-signature": f"ts=1700,v1={v1}", "x-request-id": "r1"})
+    assert good.json()["estado"] == "pagada"
+
+
+async def test_mercadopago_amount_mismatch_is_rejected(client, course, fake_mp):
+    import json as _json
+
+    student = await _student(client, "mp-monto@example.com")
+    order_id = (await client.post("/alumnos/checkout", json={"curso": course}, headers=student)).json()["orden_id"]
+    fake_mp["payments"]["999"] = {"status": "approved", "external_reference": order_id, "transaction_amount": 1, "currency_id": "MXN"}
+    res = await client.post("/pagos/webhook/mercadopago", content=_json.dumps({"type": "payment", "data": {"id": "999"}}).encode())
+    assert res.status_code == 400 and res.json()["error"]["detalles"] == {"motivo": "monto"}

@@ -1,18 +1,21 @@
 """Payment providers behind one contract (see docs/integracion-pagos.md).
 
 `MockProvider` never moves money: its checkout sends the student to a simulated payment page, and its webhooks
-are HMAC-signed by the API itself. The Stripe and Mercado Pago adapters fail with PROVEEDOR_NO_CONFIGURADO until
-their keys exist; they never simulate a charge.
+are HMAC-signed by the API itself. `MercadoPagoProvider` uses Checkout Pro; its webhook is only a hint: the payment
+is always re-read from the Mercado Pago API with our token, so a forged notification can't mark anything paid.
+Stripe fails with PROVEEDOR_NO_CONFIGURADO until its adapter and keys exist; nothing ever simulates a charge.
 """
 
 import hashlib
 import hmac
 import json
+import logging
 import uuid
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from typing import Literal, Protocol
 
+import httpx
 from pydantic import BaseModel, Field, ValidationError
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
@@ -48,9 +51,14 @@ class Salud(BaseModel):
 class PaymentProvider(Protocol):
     id: str
 
+    def listo(self) -> bool: ...  # keys present: the storefront may offer the purchase
     async def crear_checkout(self, orden: Order, retorno_url: str) -> CheckoutSesion: ...
     async def verificar_webhook(self, cuerpo: bytes, cabeceras: Mapping[str, str]) -> EventoPago: ...
     async def salud(self) -> Salud: ...
+
+
+class EventoIgnorado(Exception):
+    """A notice that needs no action (another topic, a payment still in process). Answered 200 so it isn't retried."""
 
 
 def _invalid(detalle: str) -> ApiError:
@@ -93,6 +101,9 @@ class MockProvider:
         }).encode()
         return cuerpo, {self.SIGNATURE_HEADER: self.firmar(cuerpo)}
 
+    def listo(self) -> bool:
+        return True
+
     async def salud(self) -> Salud:
         return Salud(proveedor=self.id, configurado=True, detalle="simulado: no mueve dinero")
 
@@ -121,6 +132,9 @@ class _KeyedProvider:
         self._require()
         raise AssertionError("unreachable")
 
+    def listo(self) -> bool:
+        return not self._missing()
+
     async def salud(self) -> Salud:
         missing = self._missing()
         return Salud(proveedor=self.id, configurado=not missing, detalle=f"faltan: {', '.join(missing)}" if missing else "")
@@ -131,9 +145,114 @@ class StripeProvider(_KeyedProvider):
     keys = ("stripe_secret_key", "stripe_webhook_secret")
 
 
-class MercadoPagoProvider(_KeyedProvider):
+MP_API = "https://api.mercadopago.com"
+MP_TIMEOUT = httpx.Timeout(15.0, connect=5.0)
+log = logging.getLogger(__name__)
+
+# Mercado Pago payment status -> our event. Anything else (pending, in_process, authorized) waits for the next notice.
+_MP_STATUS = {
+    "approved": "pagado",
+    "rejected": "fallido",
+    "cancelled": "fallido",
+    "refunded": "reembolsado",
+    "charged_back": "reembolsado",
+}
+
+
+async def _mp_request(method: str, path: str, *, json_body: dict | None = None, headers: dict | None = None) -> dict:
+    """One call to the Mercado Pago REST API. Errors raise, so the webhook answers 5xx and Mercado Pago retries."""
+    token = get_settings().mercadopago_access_token
+    async with httpx.AsyncClient(base_url=MP_API, timeout=MP_TIMEOUT) as client:
+        res = await client.request(
+            method, path, json=json_body, headers={"Authorization": f"Bearer {token}"} | (headers or {})
+        )
+    if res.status_code >= 400:
+        raise RuntimeError(f"Mercado Pago {method} {path} -> {res.status_code}: {res.text[:300]}")
+    return res.json()
+
+
+class MercadoPagoProvider:
     id = "mercadopago"
-    keys = ("mercadopago_access_token", "mercadopago_webhook_secret")
+
+    def listo(self) -> bool:
+        return bool(get_settings().mercadopago_access_token)
+
+    def _require(self) -> None:
+        if not self.listo():
+            raise ApiError(503, "PROVEEDOR_NO_CONFIGURADO", "Los pagos con este proveedor aún no están disponibles.")
+
+    async def crear_checkout(self, orden: Order, retorno_url: str) -> CheckoutSesion:
+        self._require()
+        s = get_settings()
+        back = f"{retorno_url}?orden={orden.id}"
+        body = {
+            "items": [{
+                "id": str(orden.course_id), "title": getattr(orden, "titulo", None) or "Curso CODEX", "quantity": 1,
+                "unit_price": orden.monto_centavos / 100, "currency_id": orden.moneda,
+            }],
+            # The order's uuid is how the webhook finds the order to mark paid.
+            "external_reference": str(orden.id),
+            "back_urls": {"success": back, "failure": back, "pending": back},
+            "auto_return": "approved",
+            "statement_descriptor": "CODEX ACADEMIA",
+        }
+        if s.api_public_url:
+            body["notification_url"] = f"{s.api_public_url.rstrip('/')}/pagos/webhook/mercadopago"
+        try:
+            pref = await _mp_request(
+                "POST", "/checkout/preferences", json_body=body, headers={"X-Idempotency-Key": str(orden.id)}
+            )
+        except (httpx.HTTPError, RuntimeError) as exc:
+            log.error("mercadopago_preferencia_fallida: %s", exc)
+            raise ApiError(502, "PROVEEDOR_NO_DISPONIBLE", "Mercado Pago no respondió. Intenta de nuevo en un momento.") from exc
+        return CheckoutSesion(url=pref["init_point"], referencia_externa=f"mp_pref_{pref['id']}")
+
+    def _firma_valida(self, data_id: str, cabeceras: Mapping[str, str]) -> bool:
+        """`x-signature: ts=..,v1=..` over `id:{data.id};request-id:{x-request-id};ts:{ts};`, when a secret is set."""
+        secret = get_settings().mercadopago_webhook_secret
+        if not secret:
+            return True  # the payment is re-read from the API below, which is the real check
+        firma = cabeceras.get("x-signature", "").replace(" ", "")
+        partes = dict(p.split("=", 1) for p in firma.split(",") if "=" in p)
+        ts, recibido = partes.get("ts"), partes.get("v1")
+        if not ts or not recibido:
+            return False
+        manifiesto = f"id:{data_id.lower()};request-id:{cabeceras.get('x-request-id', '')};ts:{ts};"
+        esperado = hmac.new(secret.encode(), manifiesto.encode(), hashlib.sha256).hexdigest()
+        return hmac.compare_digest(esperado, recibido)
+
+    async def verificar_webhook(self, cuerpo: bytes, cabeceras: Mapping[str, str]) -> EventoPago:
+        self._require()
+        try:
+            aviso = json.loads(cuerpo or b"{}")
+        except ValueError as exc:
+            raise _invalid("cuerpo") from exc
+        tipo = aviso.get("type") or aviso.get("topic")
+        if tipo != "payment":
+            raise EventoIgnorado(f"tipo {tipo}")
+        data_id = str((aviso.get("data") or {}).get("id") or aviso.get("resource") or "").rsplit("/", 1)[-1]
+        if not data_id.isdigit():
+            raise EventoIgnorado("sin data.id")
+        if not self._firma_valida(data_id, cabeceras):
+            raise _invalid("firma")
+
+        pago = await _mp_request("GET", f"/v1/payments/{data_id}")
+        estado = _MP_STATUS.get(pago.get("status", ""))
+        if estado is None:
+            raise EventoIgnorado(f"pago {pago.get('status')}")
+        try:
+            orden_id = uuid.UUID(str(pago.get("external_reference")))
+        except ValueError as exc:
+            raise EventoIgnorado("pago sin orden de la academia") from exc
+        return EventoPago(
+            referencia_externa=f"mp_pay_{data_id}", orden_id=orden_id, estado=estado,
+            monto_centavos=round(float(pago.get("transaction_amount") or 0) * 100),
+            moneda=pago.get("currency_id") or "",
+        )
+
+    async def salud(self) -> Salud:
+        ok = self.listo()
+        return Salud(proveedor=self.id, configurado=ok, detalle="" if ok else "faltan: mercadopago_access_token")
 
 
 PROVIDERS: dict[str, type] = {"mock": MockProvider, "stripe": StripeProvider, "mercadopago": MercadoPagoProvider}
@@ -144,6 +263,12 @@ def provider_by_id(provider_id: str) -> PaymentProvider:
     if cls is None:
         raise ApiError(404, "NO_ENCONTRADO", "Proveedor de pago desconocido.")
     return cls()
+
+
+def sales_open() -> bool:
+    """Show the buy button only when checkout can actually work."""
+    provider = active_provider()
+    return provider is not None and provider.listo()
 
 
 def active_provider() -> PaymentProvider | None:
@@ -157,14 +282,12 @@ async def apply_event(session: AsyncSession, proveedor: str, evento: EventoPago)
     orden = await session.scalar(select(Order).where(Order.id == evento.orden_id).with_for_update())
     if orden is None or orden.proveedor != proveedor:
         raise _invalid("orden")
-    if orden.referencia_externa and orden.referencia_externa != evento.referencia_externa:
-        raise _invalid("referencia")
     if evento.monto_centavos != orden.monto_centavos or evento.moneda != orden.moneda:
         raise _invalid("monto")
 
     if evento.estado == "pagado" and orden.estado in ("pendiente", "fallida"):
         orden.estado = "pagada"
-        await _ledger(session, orden, "cargo", orden.monto_centavos)
+        await _ledger(session, orden, "cargo", orden.monto_centavos, evento.referencia_externa)
         await session.execute(
             insert(Enrollment)
             .values(id=uuid.uuid4(), user_id=orden.user_id, course_id=orden.course_id, orden_id=orden.id)
@@ -183,7 +306,7 @@ async def apply_event(session: AsyncSession, proveedor: str, evento: EventoPago)
         orden.estado = "fallida"
     elif evento.estado == "reembolsado" and orden.estado == "pagada":
         orden.estado = "reembolsada"
-        await _ledger(session, orden, "reembolso", -orden.monto_centavos)
+        await _ledger(session, orden, "reembolso", -orden.monto_centavos, evento.referencia_externa)
         await session.execute(
             Enrollment.__table__.delete().where(
                 Enrollment.user_id == orden.user_id, Enrollment.course_id == orden.course_id
@@ -193,14 +316,14 @@ async def apply_event(session: AsyncSession, proveedor: str, evento: EventoPago)
     return orden
 
 
-async def _ledger(session: AsyncSession, orden: Order, tipo: str, monto: int) -> None:
+async def _ledger(session: AsyncSession, orden: Order, tipo: str, monto: int, referencia: str) -> None:
     prefijo = "pago" if tipo == "cargo" else "reembolso"
     await session.execute(
         insert(PaymentLedgerEntry)
         .values(
             clave=f"{prefijo}:{orden.id}", orden_id=orden.id, user_id=orden.user_id, tipo=tipo,
             monto_centavos=monto, moneda=orden.moneda, proveedor=orden.proveedor,
-            referencia_externa=orden.referencia_externa or "",
+            referencia_externa=referencia,
         )
         .on_conflict_do_nothing(index_elements=["clave"])
     )

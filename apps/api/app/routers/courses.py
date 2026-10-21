@@ -35,7 +35,7 @@ def _card(c: Course) -> dict:
         "slug": c.slug, "title": c.title, "subtitle": c.subtitle, "category": c.category, "level": c.level,
         "cover_url": storage.presign_get(c.cover_key, 86400) if c.cover_key else None,
         "price_mxn": c.price_mxn, "lessons": len(lessons), "minutes": sum(x.duration_min for x in lessons),
-        "venta_activa": bool(c.price_mxn) and payments.active_provider() is not None,
+        "venta_activa": bool(c.price_mxn) and payments.sales_open(),
     }
 
 

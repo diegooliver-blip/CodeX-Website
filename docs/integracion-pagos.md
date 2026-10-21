@@ -1,6 +1,8 @@
 # Integración de pagos de cursos
 
 ## Estado
+Mercado Pago (Checkout Pro) es la pasarela elegida (2026-10-21) y su adaptador es real: crea la preferencia con `external_reference` = id de la orden y, al llegar el webhook, vuelve a leer el pago en `GET /v1/payments/{id}` con nuestro token (un aviso falsificado no puede marcar nada pagado). Si `MERCADOPAGO_WEBHOOK_SECRET` existe, además valida `x-signature`. El botón de compra solo aparece cuando el proveedor tiene su token. Lo de abajo describe el contrato original.
+
 Contrato y adaptador mock (F4). Los adaptadores reales de Stripe y Mercado Pago están declarados y **fallan con `PROVEEDOR_NO_CONFIGURADO`** mientras no haya llaves. Nunca simulan un cobro.
 
 ## Contrato
