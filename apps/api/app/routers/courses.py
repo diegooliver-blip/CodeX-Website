@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import selectinload
 
 from app.errors import ApiError
-from app.models import Course, Lesson, Module
+from app.models import Course, Lesson, Module, Order
 from app.schemas import (
     CourseIn,
     CourseOut,
@@ -126,6 +126,9 @@ async def admin_update(course_id: uuid.UUID, body: CoursePatch, session: DB, use
 @admin.delete("/{course_id}", status_code=204)
 async def admin_delete(course_id: uuid.UUID, session: DB, user: CurrentUser) -> None:
     c = await _course(session, course_id)
+    if await session.scalar(select(Order.id).where(Order.course_id == c.id).limit(1)):
+        # Orders and the ledger are permanent records; a sold course is unpublished, never deleted.
+        raise ApiError(409, "CURSO_CON_VENTAS", "Este curso ya tiene compras: despublícalo en lugar de eliminarlo.")
     audit.record(session, user, "eliminar", "curso", c.id, antes=audit.snapshot(c))
     await session.delete(c)
     await session.commit()

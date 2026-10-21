@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getCourse, getCourses } from "@/lib/api";
+import { getStudentCourse, hasStudentSession } from "@/lib/student-api";
 
 export async function generateStaticParams() {
   const courses = await getCourses();
@@ -34,9 +35,13 @@ export default function LessonPage({ params }: PageProps<"/academia/[slug]/[lecc
 async function Lesson({ params }: { params: PageProps<"/academia/[slug]/[leccion]">["params"] }) {
   const { slug, leccion } = await params;
   const course = await getCourse(slug);
-  const lessons = course?.modules.flatMap((m) => m.lessons) ?? [];
-  const lesson = lessons.find((l) => l.slug === leccion);
+  let lesson = course?.modules.flatMap((m) => m.lessons).find((l) => l.slug === leccion);
   if (!course || !lesson) notFound();
+  // The public (cached) course hides paid lessons; an enrolled student gets them from their own read.
+  if (lesson.locked && (await hasStudentSession())) {
+    const mine = await getStudentCourse(slug);
+    lesson = mine?.modules.flatMap((m) => m.lessons).find((l) => l.slug === leccion) ?? lesson;
+  }
 
   return (
     <article className="mx-auto max-w-5xl px-5 pb-28 pt-32 md:pt-40">
@@ -46,7 +51,11 @@ async function Lesson({ params }: { params: PageProps<"/academia/[slug]/[leccion
       {lesson.locked ? (
         <div className="mt-12 rounded-[22px] border border-line p-10">
           <p className="display text-3xl">Esta lección es parte del curso completo.</p>
-          <p className="mt-3 text-slate">Regístrate en la página del curso para recibir acceso cuando abran las inscripciones.</p>
+          <p className="mt-3 text-slate">
+            {course.venta_activa
+              ? "Compra el curso para abrir todas sus lecciones."
+              : "Regístrate en la página del curso para recibir acceso cuando abran las inscripciones."}
+          </p>
           <Link href={`/academia/${course.slug}`} className="btn btn-primary mt-6">Ir al curso</Link>
         </div>
       ) : (

@@ -3,9 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Lock, PlayCircle } from "lucide-react";
+import { BuyButton } from "@/components/academia/StudentForms";
 import { formatPrice } from "@/components/CourseList";
 import { LeadForm } from "@/components/LeadForm";
-import { getCourse, getCourses } from "@/lib/api";
+import { getCourse, getCourses, type PublicCourse } from "@/lib/api";
+import { getStudentCourse, hasStudentSession } from "@/lib/student-api";
 import { siteUrl } from "@/lib/content";
 
 // Courses live in the API; unknown slugs render on demand. A placeholder keeps
@@ -58,13 +60,9 @@ async function Course({ params }: { params: PageProps<"/academia/[slug]">["param
             <div><dt className="text-slate">Lecciones</dt><dd className="mt-1">{course.lessons}</dd></div>
             <div><dt className="text-slate">Duración</dt><dd className="mt-1">{Math.round(course.minutes / 6) / 10} h</dd></div>
           </dl>
-          {free && (
-            <Link href={`/academia/${course.slug}/${free.slug}`} className="btn btn-ghost mt-6 w-full">Ver lección gratuita</Link>
-          )}
-          <p className="mt-8 text-[0.95rem] text-slate">Las inscripciones abren pronto. Déjanos tu correo y te avisamos primero.</p>
-          <div className="mt-5">
-            <LeadForm source="academia" courseSlug={course.slug} submitLabel="Quiero inscribirme" />
-          </div>
+          <Suspense fallback={<div className="mt-6 h-14 animate-pulse rounded-full bg-mist" />}>
+            <Enroll course={course} freeSlug={free?.slug} />
+          </Suspense>
         </aside>
       </section>
 
@@ -96,6 +94,47 @@ async function Course({ params }: { params: PageProps<"/academia/[slug]">["param
         </ol>
       </section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    </>
+  );
+}
+
+/** Per-visitor part of the course page: enrolled student, buyer, or (sales closed) interest form. */
+async function Enroll({ course, freeSlug }: { course: PublicCourse; freeSlug?: string }) {
+  const mine = (await hasStudentSession()) ? await getStudentCourse(course.slug) : null;
+  if (mine?.inscrito) {
+    const first = mine.modules.flatMap((m) => m.lessons)[0];
+    return (
+      <div className="mt-6">
+        <p className="rounded-xl bg-spark/40 px-4 py-3 text-[0.95rem]">Ya tienes este curso. Todas las lecciones están abiertas.</p>
+        {first && <Link href={`/academia/${course.slug}/${first.slug}`} className="btn btn-primary mt-5 w-full">Empezar el curso</Link>}
+        <Link href="/academia/mis-cursos" className="link-underline mt-5 inline-block text-sm text-navy">Mis cursos</Link>
+      </div>
+    );
+  }
+  const freeLink = freeSlug && (
+    <Link href={`/academia/${course.slug}/${freeSlug}`} className="btn btn-ghost mt-3 w-full">Ver lección gratuita</Link>
+  );
+  if (course.venta_activa) {
+    return (
+      <div className="mt-6">
+        <BuyButton slug={course.slug} />
+        {freeLink}
+        {!mine && (
+          <p className="mt-5 text-sm text-slate">
+            ¿Ya compraste?{" "}
+            <Link href={`/academia/entrar?siguiente=${encodeURIComponent(`/academia/${course.slug}`)}`} className="link-underline text-navy">Entra a tu cuenta</Link>
+          </p>
+        )}
+      </div>
+    );
+  }
+  return (
+    <>
+      {freeLink && <div className="mt-6">{freeLink}</div>}
+      <p className="mt-8 text-[0.95rem] text-slate">Las inscripciones abren pronto. Déjanos tu correo y te avisamos primero.</p>
+      <div className="mt-5">
+        <LeadForm source="academia" courseSlug={course.slug} submitLabel="Quiero inscribirme" />
+      </div>
     </>
   );
 }

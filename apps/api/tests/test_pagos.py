@@ -151,6 +151,13 @@ async def test_other_students_order_is_invisible(client, course):
     assert (await client.post(f"/alumnos/ordenes/{order_id}/simular", json={}, headers=other)).status_code == 404
 
 
+async def test_sold_course_cannot_be_deleted(client, admin_headers, course):
+    courses = (await client.get("/admin/courses", headers=admin_headers)).json()
+    course_id = next(c["id"] for c in courses if c["slug"] == course)
+    res = await client.delete(f"/admin/courses/{course_id}", headers=admin_headers)
+    assert res.status_code == 409 and res.json()["error"]["codigo"] == "CURSO_CON_VENTAS"
+
+
 # ---------- providers ----------
 async def test_sales_off_without_provider(client, course, monkeypatch):
     monkeypatch.setattr(get_settings(), "payment_provider", "")

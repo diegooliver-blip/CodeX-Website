@@ -15,6 +15,7 @@ export type CourseCard = {
   price_mxn: number | null;
   lessons: number;
   minutes: number;
+  venta_activa: boolean; // has a price and online payments are on
 };
 
 export type PublicLesson = {

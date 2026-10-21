@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { ACCESS_COOKIE, REFRESH_COOKIE, setSession, type TokenPair } from "@/lib/session";
 import { API_URL, apiHeaders } from "@/lib/api-base";
 import { CLIENT_COOKIE } from "@/lib/client-session";
+import { setStudentSession, STUDENT_ACCESS_COOKIE, STUDENT_REFRESH_COOKIE } from "@/lib/student-session";
 import projects from "@content/projects.json";
 import services from "@content/services.json";
 
@@ -32,6 +33,11 @@ export async function proxy(request: NextRequest) {
     const login = new URL("/clientes/entrar", request.url);
     login.searchParams.set("next", pathname);
     return NextResponse.redirect(login);
+  }
+
+  // Academy: anyone may browse; a signed-in student whose access token expired is refreshed silently.
+  if (pathname.startsWith("/academia") || pathname.startsWith("/api/alumnos")) {
+    return refreshStudent(request);
   }
 
   if (pathname === "/portal/login") return NextResponse.next();
@@ -68,6 +74,28 @@ export async function proxy(request: NextRequest) {
   return NextResponse.redirect(login);
 }
 
+async function refreshStudent(request: NextRequest) {
+  const refresh = request.cookies.get(STUDENT_REFRESH_COOKIE)?.value;
+  if (request.cookies.get(STUDENT_ACCESS_COOKIE)?.value || !refresh) return NextResponse.next();
+  try {
+    const res = await fetch(`${API_URL}/alumnos/refresh`, {
+      method: "POST",
+      headers: apiHeaders({ "content-type": "application/json" }),
+      body: JSON.stringify({ refresh_token: refresh }),
+    });
+    if (res.ok) {
+      const tokens = (await res.json()) as TokenPair;
+      request.cookies.set(STUDENT_ACCESS_COOKIE, tokens.access_token);
+      const next = NextResponse.next({ request });
+      setStudentSession(next, tokens);
+      return next;
+    }
+  } catch {
+    // API unreachable: browse as a visitor
+  }
+  return NextResponse.next();
+}
+
 // A rewrite to a prerendered page keeps the cached 200 status in production, so the
 // 404 page's HTML is fetched once and served with the right status code.
 let notFoundHtml: string | null = null;
@@ -83,5 +111,5 @@ async function notFound(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/portal/:path*", "/api/portal/:path*", "/proyectos/:path+", "/servicios/:path+", "/clientes/panel/:path*"],
+  matcher: ["/portal/:path*", "/api/portal/:path*", "/proyectos/:path+", "/servicios/:path+", "/clientes/panel/:path*", "/academia/:path*", "/api/alumnos/:path*"],
 };
