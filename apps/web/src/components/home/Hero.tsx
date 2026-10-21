@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
-import { gsap, useMotion } from "@/components/motion/gsap";
+import { gsap, MOTION_OK, useMotion } from "@/components/motion/gsap";
 import { Magnetic } from "@/components/motion/primitives";
 
 /**
@@ -18,7 +18,7 @@ export function Hero({ calendly, projectCount }: { calendly: string; projectCoun
     gsap.to(el.querySelector("[data-hero-img]"), { scale: 1.18, ease: "none", scrollTrigger });
     gsap.to(el.querySelector("[data-hero-copy]"), { yPercent: -18, opacity: 0.1, ease: "none", scrollTrigger });
     gsap.from(el.querySelector("[data-hero-card]"), { x: 60, opacity: 0, duration: 1.4, delay: 0.9 });
-  });
+  }, [], MOTION_OK, "now");
 
   return (
     <section ref={root} className="theme-dark relative isolate flex min-h-[100svh] items-end overflow-hidden bg-ink">
