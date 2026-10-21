@@ -49,7 +49,7 @@ export function SecurityAdmin() {
 
   const codeField = (
     <label className="block">
-      <span className="text-sm text-slate">Código de 6 dígitos de tu app</span>
+      <span className="block text-sm text-slate">Código de 6 dígitos de tu app</span>
       <input name="codigo" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9 ]{6,7}" required className="field max-w-xs" />
     </label>
   );
