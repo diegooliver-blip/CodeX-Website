@@ -73,7 +73,7 @@ Fuente única para páginas y RAG. **Nunca** nombres ni marcas de clientes. Proy
 ✅ Pruebas: pytest (API) + Playwright e2e
 
 ### En curso (v4, rama `platform-v4`)
-⏳ F1 Fundación → F2 Rediseño claro con motion GSAP → F3 Backend de producción (errores, idempotencia, outbox + worker, auditoría) → F4 Pagos mock + alumnos + RLS → F5 Todo en VPS + backups probados
+✅ F1 Fundación → ✅ F2 Rediseño claro con motion GSAP → ✅ F3 Backend de producción → ✅ F4 Pagos (mock + Mercado Pago real) + alumnos + RLS → ⏳ F5 Vercel + Railway (D-008) con backups probados
 
 ### Después
 ⏳ Pagos reales (Stripe / Mercado Pago) con llaves del cliente
@@ -89,9 +89,11 @@ Fuente única para páginas y RAG. **Nunca** nombres ni marcas de clientes. Proy
 | D-001 | 2026-10-20 | Rediseño v4 claro con la paleta y la tipografía de la plantilla de consultoría de referencia | Lo pidió el owner; el negro/dorado no comunicaba "empresa de IA" | Mantener negro/dorado | Datos de conversión tras 60 días |
 | D-002 | 2026-10-20 | Mantener FastAPI + Postgres propio + JWT; RLS solo como segunda capa en tablas de dinero | El stack ya funciona y está probado; migrar no aporta valor | Migrar a Supabase (Auth, RLS, Storage) | Se suma un cliente móvil que hable directo con la BD |
 | D-003 | 2026-10-20 | GSAP 3 (licencia estándar sin costo) para el motion | Pins, scrub y SplitText con buen rendimiento; `matchMedia` para reduced motion | Motion/Framer (sin SplitText ni pins tan maduros) | Cambio de licencia de GSAP |
-| D-004 | 2026-10-20 | Todo en un VPS (web + api + worker + db + storage) con Caddy y Cloudflare free | Uso comercial (Vercel Hobby lo prohíbe) y costo mínimo | Vercel Pro + VPS | CPU p95 > 70 % o incidente > 2 h |
+| D-004 | 2026-10-20 | ~~Todo en un VPS (web + api + worker + db + storage) con Caddy y Cloudflare free~~ Reemplazada por D-008 | Uso comercial (Vercel Hobby lo prohíbe) y costo mínimo | Vercel Pro + VPS | CPU p95 > 70 % o incidente > 2 h |
 | D-005 | 2026-10-20 | Outbox en Postgres + worker con `skip locked` en vez de BackgroundTasks | Una caída de Loops no debe perder eventos | Redis/QStash | Backlog > 1 000 sostenido |
 | D-006 | 2026-10-20 | Pagos detrás de `PaymentProvider` con adaptador mock; el real falla sin llaves | No hay llaves; el producto no debe acoplarse a una pasarela | Integrar Stripe directo | Llegan las llaves de prueba |
+| D-008 | 2026-10-21 | Web en Vercel (proyecto `code-x-website`, despliega `main`; plan **Pro** por uso comercial) y backend en Railway (`codex-platform`: api+worker con `APP_ROLE=all`, Postgres pgvector, RustFS) | Ya está en producción y probado; mover a VPS ahora retrasa el lanzamiento y suma operación (parches, backups, TLS) sin un equipo que la atienda | VPS único con Caddy (D-004) | Otra caída de Railway > 2 h (hubo una de builds el 2026-10-21), costo mensual > VPS + 50 %, o se necesita control de red |
+| D-009 | 2026-10-21 | Mercado Pago (Checkout Pro) como pasarela de cursos; el webhook relee el pago en la API de MP | Lo pidió el owner; mismo proveedor que Linker | Stripe | Ventas fuera de México |
 | D-007 | 2026-10-20 | Fotos de stock con licencia Pexels, servidas por nosotros (Unsplash bloqueó la búsqueda sin API key) | Calidad 4K sin costo ni hotlinking | Fotos de la plantilla (licencia Wix) | Sesión de fotos propia |
 
 ---
