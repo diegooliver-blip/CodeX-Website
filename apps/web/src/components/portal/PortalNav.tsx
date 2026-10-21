@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, Database, Gauge, LogOut, Users } from "lucide-react";
+import { BookOpen, Database, Gauge, LogOut, ShieldCheck, Users } from "lucide-react";
 
 const items = [
   { href: "/portal", label: "Resumen", icon: Gauge },
   { href: "/portal/cursos", label: "Cursos", icon: BookOpen },
   { href: "/portal/leads", label: "Leads", icon: Users },
   { href: "/portal/conocimiento", label: "Conocimiento", icon: Database },
+  { href: "/portal/seguridad", label: "Seguridad", icon: ShieldCheck },
 ];
 
 export function PortalNav() {

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { errorMessage } from "@/lib/api-error";
+import { errorCode, errorMessage } from "@/lib/api-error";
 
 export function LoginForm() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [needsCode, setNeedsCode] = useState(false);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -24,6 +25,11 @@ export function LoginForm() {
       return;
     }
     const body = await res?.json().catch(() => null);
+    if (errorCode(body) === "MFA_REQUERIDO") {
+      setNeedsCode(true);
+      setBusy(false);
+      return;
+    }
     setError(
       res?.status === 429
         ? "Demasiados intentos. Espera un minuto."
@@ -42,6 +48,12 @@ export function LoginForm() {
         <span className="text-sm text-slate">Contraseña</span>
         <input name="password" type="password" required minLength={8} autoComplete="current-password" className="field" />
       </label>
+      {needsCode && (
+        <label className="block">
+          <span className="text-sm text-slate">Código de tu app de autenticación</span>
+          <input name="codigo" inputMode="numeric" autoComplete="one-time-code" required autoFocus className="field" />
+        </label>
+      )}
       {error && <p className="text-danger" role="alert">{error}</p>}
       <button type="submit" disabled={busy} className="btn btn-primary w-full disabled:opacity-60">
         {busy ? "Ingresando…" : "Ingresar"}

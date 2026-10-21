@@ -13,6 +13,16 @@ class ORM(BaseModel):
 class LoginIn(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=200)
+    codigo: str | None = Field(default=None, max_length=12)  # staff TOTP code, when MFA is on
+
+
+class MfaCodeIn(BaseModel):
+    codigo: str = Field(min_length=6, max_length=12)
+
+
+class MfaSetupOut(BaseModel):
+    secreto: str
+    uri: str
 
 
 class TokenPair(BaseModel):
@@ -30,6 +40,7 @@ class UserOut(ORM):
     email: str
     name: str
     role: str
+    mfa: bool = False
 
 
 # --- courses ---

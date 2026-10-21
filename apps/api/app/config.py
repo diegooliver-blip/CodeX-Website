@@ -60,6 +60,13 @@ class Settings(BaseSettings):
     mercadopago_webhook_secret: str = ""
     api_public_url: str = ""  # public base URL of this API, for gateway webhooks (e.g. https://api.example.com)
 
+    # ---- nightly database backups (app/services/backups.py) ----
+    backup_bucket: str = "codex-backups"
+    # Empty = reuse the media storage endpoint and keys. Point these at another provider (e.g. R2) for off-site copies.
+    backup_s3_endpoint: str = ""
+    backup_s3_access_key: str = ""
+    backup_s3_secret_key: str = ""
+
     content_dir: Path = _default_content_dir()
 
 

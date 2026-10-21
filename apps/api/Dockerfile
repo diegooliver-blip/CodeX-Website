@@ -6,6 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 \
     CONTENT_DIR=/content FASTEMBED_CACHE_PATH=/opt/fastembed
 WORKDIR /app
 
+# pg_dump / pg_restore for the nightly backups (client >= server major version 16).
+RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client && rm -rf /var/lib/apt/lists/*
+
 COPY apps/api/requirements.txt .
 RUN pip install -r requirements.txt
 

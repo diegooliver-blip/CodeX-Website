@@ -13,7 +13,8 @@ async function forward(request: Request, ctx: { params: Promise<{ path: string[]
   const token = (await cookies()).get(ACCESS_COOKIE)?.value;
   if (!token) return apiError(401, "NO_AUTENTICADO", "No autenticado");
 
-  const target = path[0] === "me" ? "/auth/me" : `/admin/${path.map(encodeURIComponent).join("/")}`;
+  const rest = path.map(encodeURIComponent).join("/");
+  const target = path[0] === "me" ? "/auth/me" : path[0] === "mfa" ? `/auth/${rest}` : `/admin/${rest}`;
   const search = new URL(request.url).search;
   const headers = apiHeaders({ authorization: `Bearer ${token}` });
   const type = request.headers.get("content-type");

@@ -22,7 +22,7 @@ from app.clientes.models import Service, UptimeCheck
 from app.db import SessionLocal, engine
 from app.models import IdempotencyKey, OutboxEvent, WorkerHeartbeat
 from app.observability import configure_logging, log
-from app.services import loops, outbox, student_links
+from app.services import backups, loops, outbox, student_links
 
 OUTBOX_HANDLERS: dict[str, outbox.Handler] = {
     "lead_created": loops.deliver,
@@ -107,6 +107,7 @@ JOBS = [
     Job("correos-clientes", 15, process_client_emails),
     Job("uptime", 300, check_uptime),
     Job("limpieza", 24 * 3600, cleanup),
+    Job("respaldo", 24 * 3600, backups.backup_all),
 ]
 
 

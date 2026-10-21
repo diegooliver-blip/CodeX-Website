@@ -10,7 +10,7 @@ from app.models import AdminAudit, User
 from app.observability import trace_id_var
 
 # Never copied into the audit trail.
-_SECRET_COLUMNS = {"password_hash", "embedding", "tsv"}
+_SECRET_COLUMNS = {"password_hash", "embedding", "tsv", "totp_secret"}
 
 
 def snapshot(obj) -> dict:
