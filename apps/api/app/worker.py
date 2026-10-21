@@ -27,6 +27,7 @@ from app.services import loops, outbox
 OUTBOX_HANDLERS: dict[str, outbox.Handler] = {
     "lead_created": loops.deliver,
     "course_interest": loops.deliver,
+    "order_paid": loops.deliver,
 }
 
 

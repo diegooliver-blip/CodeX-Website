@@ -21,7 +21,7 @@ from app.schemas import (
     PublicModule,
 )
 from app.security import DB, CurrentUser
-from app.services import audit, storage
+from app.services import audit, payments, storage
 
 public = APIRouter(prefix="/courses", tags=["courses"])
 admin = APIRouter(prefix="/admin/courses", tags=["admin"])
@@ -35,11 +35,13 @@ def _card(c: Course) -> dict:
         "slug": c.slug, "title": c.title, "subtitle": c.subtitle, "category": c.category, "level": c.level,
         "cover_url": storage.presign_get(c.cover_key, 86400) if c.cover_key else None,
         "price_mxn": c.price_mxn, "lessons": len(lessons), "minutes": sum(x.duration_min for x in lessons),
+        "venta_activa": bool(c.price_mxn) and payments.active_provider() is not None,
     }
 
 
-def _public_lesson(lesson: Lesson) -> PublicLesson:
-    open_ = lesson.is_free
+def _public_lesson(lesson: Lesson, unlocked: bool = False) -> PublicLesson:
+    """Free lessons are open to everyone; the rest only for an enrolled student (`unlocked`)."""
+    open_ = lesson.is_free or unlocked
     return PublicLesson(
         title=lesson.title, slug=lesson.slug, kind=lesson.kind, duration_min=lesson.duration_min,
         is_free=lesson.is_free, locked=not open_,

@@ -47,6 +47,15 @@ class Settings(BaseSettings):
     turnstile_secret: str = ""  # Cloudflare Turnstile; empty = captcha checks fail closed
     sync_shared_secret: str = ""  # HMAC secret shared with VS Master Control; empty = sync API disabled
 
+    # ---- course payments (docs/integracion-pagos.md) ----
+    # "" = sales off (checkout answers PAGOS_NO_DISPONIBLES) | mock | stripe | mercadopago.
+    # Never set "mock" in production: it grants access without charging.
+    payment_provider: str = ""
+    stripe_secret_key: str = ""
+    stripe_webhook_secret: str = ""
+    mercadopago_access_token: str = ""
+    mercadopago_webhook_secret: str = ""
+
     content_dir: Path = _default_content_dir()
 
 

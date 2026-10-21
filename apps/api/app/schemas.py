@@ -137,11 +137,52 @@ class PublicCourseCard(BaseModel):
     price_mxn: int | None
     lessons: int
     minutes: int
+    venta_activa: bool = False  # has a price and a payment provider is configured
 
 
 class PublicCourse(PublicCourseCard):
     description: str
     modules: list[PublicModule]
+
+
+# --- students and payments ---
+class StudentSignupIn(BaseModel):
+    email: EmailStr
+    nombre: str = Field(min_length=2, max_length=200)
+    password: str = Field(min_length=10, max_length=200)
+
+
+class StudentOut(BaseModel):
+    id: uuid.UUID
+    email: str
+    nombre: str
+
+
+class StudentCourse(PublicCourse):
+    inscrito: bool
+
+
+class CheckoutIn(BaseModel):
+    curso: str = Field(min_length=1, max_length=160)
+
+
+class CheckoutOut(BaseModel):
+    orden_id: uuid.UUID
+    url: str
+
+
+class OrderOut(BaseModel):
+    id: uuid.UUID
+    estado: str
+    monto_centavos: int
+    moneda: str
+    proveedor: str
+    curso: str  # course slug
+    creado_en: datetime
+
+
+class SimulatedPaymentIn(BaseModel):
+    estado: Literal["pagado", "fallido"] = "pagado"
 
 
 # --- uploads ---

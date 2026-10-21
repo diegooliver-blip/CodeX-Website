@@ -6,6 +6,7 @@ import bcrypt
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -50,16 +51,48 @@ def decode(token: str, kind: str) -> uuid.UUID:
     return uuid.UUID(payload["sub"])
 
 
-async def current_user(
-    creds: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)],
-    session: Annotated[AsyncSession, Depends(get_session)],
-) -> User:
+STUDENT = "student"
+
+
+async def _bearer_user(creds: HTTPAuthorizationCredentials | None, session: AsyncSession) -> User:
     if creds is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "No autenticado")
     user = await session.get(User, decode(creds.credentials, "access"))
     if user is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Usuario no encontrado")
     return user
+
+
+async def current_user(
+    creds: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)],
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> User:
+    """Staff (admin or editor). A student's token never reaches the admin endpoints."""
+    user = await _bearer_user(creds, session)
+    if user.role == STUDENT:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "Acceso solo para el equipo")
+    return user
+
+
+async def current_student(
+    creds: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)],
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> User:
+    user = await _bearer_user(creds, session)
+    if user.role != STUDENT:
+        raise ApiError(403, "SOLO_ALUMNOS", "Esta sección es para alumnos.")
+    return user
+
+
+async def scope_to_student(session: AsyncSession, user_id: uuid.UUID) -> None:
+    """Row-level security for the rest of this transaction: run as the student role, seeing only their rows."""
+    await session.execute(text("SET LOCAL ROLE codex_alumno"))
+    await session.execute(text("SELECT set_config('app.user_id', :u, true)"), {"u": str(user_id)})
+
+
+async def scope_to_system(session: AsyncSession) -> None:
+    """Server-side payment processing (checkout, webhooks) works across students."""
+    await session.execute(text("SELECT set_config('app.role', 'sistema', true)"))
 
 
 async def require_admin(user: Annotated[User, Depends(current_user)]) -> User:
@@ -69,5 +102,6 @@ async def require_admin(user: Annotated[User, Depends(current_user)]) -> User:
 
 
 CurrentUser = Annotated[User, Depends(current_user)]
+CurrentStudent = Annotated[User, Depends(current_student)]
 AdminUser = Annotated[User, Depends(require_admin)]
 DB = Annotated[AsyncSession, Depends(get_session)]

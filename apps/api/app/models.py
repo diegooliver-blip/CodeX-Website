@@ -25,7 +25,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
     name: Mapped[str] = mapped_column(String(200), default="")
     password_hash: Mapped[str] = mapped_column(String(200))
-    role: Mapped[str] = mapped_column(String(20), default="editor")  # admin | editor
+    role: Mapped[str] = mapped_column(String(20), default="editor")  # admin | editor | student
     created_at: Mapped[datetime] = _created()
 
 
@@ -169,3 +169,47 @@ class AdminAudit(Base):
     despues: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     trace_id: Mapped[str] = mapped_column(String(64), default="")
     creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+# ---------- payments and students (migration 0003) ----------
+class Order(Base):
+    """A student's purchase of one course. Amounts are integer cents; RLS limits students to their own rows."""
+
+    __tablename__ = "orders"
+    id: Mapped[uuid.UUID] = _id()
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="RESTRICT"), index=True)
+    course_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("courses.id", ondelete="RESTRICT"))
+    monto_centavos: Mapped[int] = mapped_column(BigInteger)
+    moneda: Mapped[str] = mapped_column(String(3), default="MXN")
+    estado: Mapped[str] = mapped_column(String(20), default="pendiente")  # pendiente | pagada | fallida | reembolsada
+    proveedor: Mapped[str] = mapped_column(String(20))
+    referencia_externa: Mapped[str | None] = mapped_column(String(200), unique=True, nullable=True)
+    creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    actualizado_en: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class PaymentLedgerEntry(Base):
+    """Append-only money movements; corrections are reverse entries, never an UPDATE (a trigger enforces it)."""
+
+    __tablename__ = "payments_ledger"
+    id: Mapped[int] = mapped_column(BigInteger, Identity(always=True), primary_key=True)
+    clave: Mapped[str] = mapped_column(String(120), unique=True)  # pago:<orden_id> | reembolso:<orden_id>
+    orden_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("orders.id", ondelete="RESTRICT"), index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    tipo: Mapped[str] = mapped_column(String(20))  # cargo | reembolso
+    monto_centavos: Mapped[int] = mapped_column(BigInteger)
+    moneda: Mapped[str] = mapped_column(String(3))
+    proveedor: Mapped[str] = mapped_column(String(20))
+    referencia_externa: Mapped[str] = mapped_column(String(200))
+    creado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class Enrollment(Base):
+    __tablename__ = "enrollments"
+    id: Mapped[uuid.UUID] = _id()
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    course_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("courses.id", ondelete="CASCADE"))
+    orden_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("orders.id", ondelete="SET NULL"), nullable=True)
+    otorgado_en: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
