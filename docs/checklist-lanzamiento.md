@@ -38,12 +38,19 @@ Cada fase cierra con evidencia (salida de las pruebas, capturas) y la aprobació
 - [ ] En producción `PAYMENT_PROVIDER` se queda vacío (ventas cerradas, se muestra el formulario de interés) hasta tener llaves reales. Nunca `mock`.
 - Pendiente para fases futuras: verificación de correo del alumno y recuperación de contraseña de alumnos.
 
-## F5 Infra y salida
-- [ ] `infra/docker-compose.prod.yml` con web, api, worker, db, storage, backup y caddy.
-- [ ] Caddy con cabeceras; Cloudflare en modo Full (strict).
-- [ ] Backup nocturno a R2 y `restore-test.sh` ejecutado (fecha: ______).
-- [ ] Monitores de UptimeRobot y alertas de facturación.
-- [ ] Documentación final: qué se construyó, qué quedó en mock, costos reales y pendientes.
+## F5 Infra y salida (D-008: Vercel + Railway)
+- [x] Web en Vercel desde `main` (despliegue automático por Git); backend en Railway (`codex-platform`).
+- [x] CI completo en verde en GitHub (API, web y e2e) desde 2026-10-21.
+- [x] Respaldo nocturno de ambas bases (`pg_dump -Fc`) al bucket privado `codex-backups`, 14 días de retención, y `python -m app.cli restore-test` para probar la restauración.
+- [ ] Copia fuera de Railway: definir `BACKUP_S3_ENDPOINT` y sus llaves (Cloudflare R2) para que los respaldos no vivan con el mismo proveedor.
+- [ ] Vercel en plan Pro (uso comercial) y alertas de facturación.
+- [ ] Monitores de UptimeRobot (`/health` de la API y la home).
+- [ ] Mercado Pago: `MERCADOPAGO_ACCESS_TOKEN` en Railway (y opcional `MERCADOPAGO_WEBHOOK_SECRET`); webhook en `https://api.codexaiconsulting.com/pagos/webhook/mercadopago`.
+- [ ] Loops: plantillas transaccionales `LOOPS_TX_ALUMNO_RESTABLECER` y `LOOPS_TX_ALUMNO_VERIFICAR` (variables `nombre`, `enlace`), además de las del portal de clientes.
 
-## Fases futuras
-Pagos reales con llaves de producción, WAL archiving (RPO de 1 h), MFA para admin, app móvil y testimonios verificados.
+## Fases futuras (aprobadas por el owner el 2026-10-21)
+- [x] Pagos reales: Mercado Pago (Checkout Pro), falta solo el token en Railway.
+- [x] MFA (TOTP) para el staff: Portal, Seguridad. Recuperación: `python -m app.cli reset-mfa <correo>`.
+- [x] Alumnos: verificación de correo y recuperación de contraseña.
+- [ ] WAL archiving (RPO de 1 h): requiere Postgres propio o el plan de Railway con backups gestionados; hoy el RPO es de 24 h (respaldo nocturno).
+- [ ] App móvil y testimonios verificados: dependen de contenido real del cliente.
