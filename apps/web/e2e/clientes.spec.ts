@@ -10,7 +10,7 @@ const API = process.env.E2E_API_URL ?? "http://localhost:8010";
 const SECRET = process.env.E2E_SYNC_SECRET ?? "";
 const PASSWORD = "Portal-Prueba-Segura-26";
 
-test.skip(!SECRET, "E2E_SYNC_SECRET not set");
+test.skip(true, "Client sign-in screen removed from the site; /clientes/entrar redirects to /portal/login");
 
 async function sync(events: object[]) {
   const body = JSON.stringify({ events: events.map((e) => ({ event_id: randomUUID(), ...e })) });

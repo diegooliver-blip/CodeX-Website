@@ -16,7 +16,7 @@ const nav = [
   { href: "/contacto", label: "Contacto" },
 ];
 
-const PORTAL = "/clientes/entrar";
+const PORTAL = "/portal/login";
 
 /**
  * Every public page opens on a dark photographic hero, so the header starts transparent with light text

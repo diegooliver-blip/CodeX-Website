@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  // The client sign-in screen is gone from the site: every way into it lands on the portal login instead.
+  async redirects() {
+    return [{ source: "/clientes/entrar", destination: "/portal/login", permanent: false }];
+  },
   async headers() {
     return [
       {
