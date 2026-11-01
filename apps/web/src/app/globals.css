@@ -186,6 +186,11 @@ body {
   color: var(--color-ink);
   border-color: var(--color-paper);
 }
+.btn-sm {
+  min-height: 2.4rem;
+  padding: 0 1rem;
+  font-size: 0.82rem;
+}
 /* White pill; the hairline keeps it visible once the header turns white. */
 .btn-light {
   background: var(--color-paper);

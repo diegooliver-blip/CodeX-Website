@@ -150,7 +150,7 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link href={PORTAL} onClick={close} className="btn btn-light hidden min-h-9 px-4 text-[0.82rem] sm:inline-flex">
+          <Link href={PORTAL} onClick={close} className="btn btn-light btn-sm hidden sm:inline-flex">
             Ingresa al portal
           </Link>
           <span className="hidden sm:block">
