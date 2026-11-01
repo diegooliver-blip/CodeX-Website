@@ -6,13 +6,12 @@ import { BookingCalendar } from "@/components/BookingCalendar";
 import { CourseList } from "@/components/CourseList";
 import { Hero } from "@/components/home/Hero";
 import { MethodSteps } from "@/components/home/MethodSteps";
-import { ProjectIndex } from "@/components/home/ProjectIndex";
 import { ServicesRail } from "@/components/home/ServicesRail";
 import { Counter, Magnetic, Marquee, ParallaxImage, ScrubText, SplitReveal } from "@/components/motion/primitives";
 import { WarmSpotlight } from "@/components/motion/WarmSpotlight";
 import { Reveal } from "@/components/Reveal";
 import { getCourses } from "@/lib/api";
-import { cases, featuredProjects, projects, serviceGroups, services, site } from "@/lib/content";
+import { cases, projects, serviceGroups, services, site } from "@/lib/content";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
@@ -164,30 +163,6 @@ export default function HomePage() {
               </div>
             ))}
           </dl>
-        </div>
-      </section>
-
-      {/* ---------- projects ---------- */}
-      <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-40" aria-labelledby="proyectos">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="eyebrow">Proyectos</p>
-            <SplitReveal className="display mt-4 max-w-3xl text-[length:var(--text-h2)]">
-              <span id="proyectos">Sistemas en producción, contados sin nombres.</span>
-            </SplitReveal>
-          </div>
-          <Link href="/proyectos" className="link-underline w-fit shrink-0 font-semibold text-navy">
-            Ver los {projects.length} proyectos
-          </Link>
-        </div>
-        <p className="mt-6 max-w-2xl text-slate">
-          Protegemos a cada cliente: no verás marcas ni nombres, pero sí lo que construimos, con qué tecnología y los
-          datos reales del sistema.
-        </p>
-        <div className="mt-14">
-          <ProjectIndex
-            rows={featuredProjects.map(({ slug, title, category, sector, cover }) => ({ slug, title, category, sector, cover }))}
-          />
         </div>
       </section>
 

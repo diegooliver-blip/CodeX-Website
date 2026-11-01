@@ -186,6 +186,19 @@ body {
   color: var(--color-ink);
   border-color: var(--color-paper);
 }
+/* White pill; the hairline keeps it visible once the header turns white. */
+.btn-light {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+.btn-light::before {
+  background: var(--color-ink);
+}
+.btn-light:hover {
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
 .btn-dark {
   background: var(--color-ink);
   color: var(--color-paper);

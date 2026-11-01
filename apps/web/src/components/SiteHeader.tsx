@@ -14,8 +14,9 @@ const nav = [
   { href: "/academia", label: "Academia" },
   { href: "/experiencia", label: "Experiencia" },
   { href: "/contacto", label: "Contacto" },
-  { href: "/clientes/entrar", label: "Clientes" },
 ];
+
+const PORTAL = "/clientes/entrar";
 
 /**
  * Every public page opens on a dark photographic hero, so the header starts transparent with light text
@@ -149,6 +150,9 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
         </nav>
 
         <div className="flex items-center gap-3">
+          <Link href={PORTAL} onClick={close} className="btn btn-light hidden min-h-9 px-4 text-[0.82rem] sm:inline-flex">
+            Ingresa al portal
+          </Link>
           <span className="hidden sm:block">
             <Magnetic>
               <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary min-h-11 px-5 text-[0.9rem]">
@@ -191,6 +195,9 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
         <a href={calendly} target="_blank" rel="noopener" className="btn btn-primary mt-8 w-full">
           Agendar llamada gratuita
         </a>
+        <Link href={PORTAL} onClick={close} className="btn btn-light mt-3 w-full">
+          Ingresa al portal
+        </Link>
       </div>
       {/* Fixed full-screen panel needs the header shell itself to paint black while open */}
       {mobile && <div aria-hidden className="absolute inset-0 -z-10 bg-ink" />}
