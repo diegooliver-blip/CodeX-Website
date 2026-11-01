@@ -27,6 +27,7 @@ export function PageHero({
         <Image src={image} alt={alt} fill priority sizes="100vw" quality={70} className="-z-10 object-cover" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/95 via-navy/80 to-navy/35" />
         <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-ink/60 to-transparent" />
+        <div aria-hidden className="warm-glow -bottom-[16rem] -left-[10rem] size-[44rem]" />
         <div className="mx-auto flex min-h-[78svh] max-w-[1440px] flex-col justify-end px-5 pb-16 pt-36 md:px-10 md:pb-24 md:pt-48">
           {trail && (
             <Link href={trail.href} className="hero-line link-underline w-fit text-[0.92rem] text-spark">

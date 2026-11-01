@@ -10,7 +10,8 @@
     "phoneHref": "tel:+528331375723",
     "email": "codexai.consulting@gmail.com",
     "whatsapp": "https://wa.me/528331375723",
-    "calendly": "https://calendly.com/codexai-consulting/30min"
+    "calendly": "https://calendly.com/codexai-consulting/30min",
+    "calcom": ""
   },
   "proof": [
     { "value": "17+", "label": "Plataformas construidas en producción y prototipo" },

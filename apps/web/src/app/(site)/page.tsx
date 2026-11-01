@@ -2,21 +2,19 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { ChatConsole } from "@/components/ChatConsole";
-import { Constellation } from "@/components/Constellation";
+import { BookingCalendar } from "@/components/BookingCalendar";
 import { CourseList } from "@/components/CourseList";
 import { Hero } from "@/components/home/Hero";
 import { MethodSteps } from "@/components/home/MethodSteps";
 import { ProjectIndex } from "@/components/home/ProjectIndex";
 import { ServicesRail } from "@/components/home/ServicesRail";
 import { Counter, Magnetic, Marquee, ParallaxImage, ScrubText, SplitReveal } from "@/components/motion/primitives";
+import { WarmSpotlight } from "@/components/motion/WarmSpotlight";
 import { Reveal } from "@/components/Reveal";
 import { getCourses } from "@/lib/api";
-import { capabilityGraph, cases, featuredProjects, projects, serviceGroups, services, site } from "@/lib/content";
+import { cases, featuredProjects, projects, serviceGroups, services, site } from "@/lib/content";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
-
-const graph = capabilityGraph();
 
 /** Three pillars that group the six service families, each with its own photograph. */
 const pillars = [
@@ -146,6 +144,7 @@ export default function HomePage() {
       {/* ---------- proof ---------- */}
       <section className="theme-dark relative isolate overflow-hidden bg-navy" aria-labelledby="cifras">
         <div aria-hidden className="absolute -right-40 -top-40 -z-10 size-[36rem] rounded-full bg-signal/30 blur-3xl" />
+        <WarmSpotlight />
         <div className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-36">
           <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
             <SplitReveal className="display text-[length:var(--text-h2)]">
@@ -195,32 +194,6 @@ export default function HomePage() {
       {/* ---------- sectors ---------- */}
       <section aria-label="Sectores en los que hemos trabajado" className="border-y border-line bg-mist-2 py-10">
         <Marquee items={sectors} className="display text-[clamp(1.6rem,3vw,2.6rem)] text-ink/85" />
-      </section>
-
-      {/* ---------- assistant ---------- */}
-      <section className="theme-dark relative isolate overflow-hidden bg-navy" aria-labelledby="asistente">
-        <div aria-hidden className="absolute inset-0 -z-10 opacity-70">
-          <Constellation nodes={graph.nodes} edges={graph.edges} />
-        </div>
-        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-navy via-navy/85 to-navy/40" />
-        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-28 md:px-10 md:py-40 lg:grid-cols-[1fr_1.15fr] lg:items-center">
-          <div>
-            <p className="eyebrow">Asistente</p>
-            <SplitReveal className="display mt-4 text-[length:var(--text-h2)]">
-              <span id="asistente">Pregúntale a CODEX.</span>
-            </SplitReveal>
-            <p className="prose-codex mt-6 max-w-lg text-[length:var(--text-lede)]">
-              Nuestro asistente responde con lo que de verdad hemos construido: lee nuestros servicios, proyectos y
-              cursos antes de contestar, y te dice de dónde sacó cada respuesta.
-            </p>
-            <p className="prose-codex mt-6 max-w-lg">
-              Es el mismo tipo de agente que instalamos en empresas: con fuentes, con límites y sin inventar.
-            </p>
-          </div>
-          <Reveal variant="right" className="h-[560px] text-ink">
-            <ChatConsole />
-          </Reveal>
-        </div>
       </section>
 
       {/* ---------- academy ---------- */}
@@ -275,26 +248,40 @@ export default function HomePage() {
           className="!absolute inset-0 -z-10 opacity-60"
         />
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/70 to-ink/30" />
+        <div aria-hidden className="warm-glow warm-glow-drift left-[-10%] top-[10%] size-[46rem]" />
         <div className="mx-auto max-w-[1440px] px-5 py-36 md:px-10 md:py-52">
-          <p className="eyebrow">Contacto</p>
-          <SplitReveal as="h2" className="display mt-6 max-w-5xl text-[length:var(--text-h1)]">
-            <span id="cierre">Hablemos de tu operación.</span>
-          </SplitReveal>
-          <p className="prose-codex mt-8 max-w-xl text-[length:var(--text-lede)]">
-            Treinta minutos, sin costo: entendemos tu reto y te decimos con honestidad si la IA es la respuesta.
-          </p>
-          <div className="mt-12 flex flex-wrap gap-3">
-            <Magnetic>
-              <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-primary">
-                Agendar consultoría gratuita
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a href={site.contact.whatsapp} target="_blank" rel="noopener" className="btn btn-ghost">
-                Escribir por WhatsApp
-              </a>
-            </Magnetic>
+          <div>
+            <p className="eyebrow">Contacto</p>
+            <SplitReveal as="h2" className="display mt-6 max-w-5xl text-[length:var(--text-h1)]">
+              <span id="cierre">Hablemos de tu operación.</span>
+            </SplitReveal>
+            <p className="prose-codex mt-8 max-w-xl text-[length:var(--text-lede)]">
+              Treinta minutos, sin costo: entendemos tu reto y te decimos con honestidad si la IA es la respuesta.
+            </p>
+            <div className="mt-12 flex flex-wrap gap-3">
+              <Magnetic>
+                {site.contact.calcom ? (
+                  <a href="#agendar" className="btn btn-primary">Agendar consultoría gratuita</a>
+                ) : (
+                  <a href={site.contact.calendly} target="_blank" rel="noopener" className="btn btn-primary">
+                    Agendar consultoría gratuita
+                  </a>
+                )}
+              </Magnetic>
+              <Magnetic>
+                <a href={site.contact.whatsapp} target="_blank" rel="noopener" className="btn btn-ghost">
+                  Escribir por WhatsApp
+                </a>
+              </Magnetic>
+            </div>
           </div>
+          {site.contact.calcom ? (
+            <div id="agendar" className="mt-16 scroll-mt-24 md:mt-20">
+              <Reveal variant="right">
+                <BookingCalendar calLink={site.contact.calcom} fallbackHref={`https://cal.com/${site.contact.calcom}`} />
+              </Reveal>
+            </div>
+          ) : null}
         </div>
       </section>
     </>

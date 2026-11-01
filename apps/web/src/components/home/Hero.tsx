@@ -35,6 +35,8 @@ export function Hero({ calendly, projectCount }: { calendly: string; projectCoun
       </div>
       <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/95 via-navy/70 to-navy/10" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-ink/80 to-transparent" />
+      <div aria-hidden className="warm-glow warm-glow-drift -bottom-[18rem] -left-[12rem] size-[52rem]" />
+      <div aria-hidden className="warm-glow right-[8%] top-[12%] size-[28rem] opacity-60" />
 
       <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-5 pb-14 pt-36 md:px-10 md:pb-20 lg:grid-cols-[1fr_auto] lg:items-end">
         <div data-hero-copy>

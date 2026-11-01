@@ -50,12 +50,6 @@ test("project filter narrows the portfolio", async ({ page }) => {
   await expect(page.getByText(/^2 proyectos$/)).toBeVisible();
 });
 
-test("assistant answers with sources", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: "¿Qué incluye una tienda en línea con ustedes?" }).click();
-  await expect(page.getByRole("link", { name: /Tiendas en línea inteligentes/ }).last()).toBeVisible({ timeout: 30_000 });
-});
-
 test("contact form stores a lead", async ({ page }) => {
   const email = `e2e+${Date.now()}@example.com`;
   await page.goto("/contacto");

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { ServiceIcon } from "@/components/icons";
+import { Logo } from "@/components/Logo";
 import { Magnetic } from "@/components/motion/primitives";
 
 type Group = { group: string; items: { slug: string; title: string; short: string; icon: string }[] };
@@ -79,14 +80,14 @@ export function SiteHeader({ groups, calendly }: { groups: Group[]; calendly: st
       } ${solid && !mobile ? "bg-paper/90 text-ink shadow-[0_1px_0_var(--color-line)] backdrop-blur-xl" : "text-paper"}`}
     >
       <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 md:px-10">
-        <Link href="/" onClick={close} className="group flex items-center gap-3" aria-label="CODEX, inicio">
-          <span aria-hidden className="grid size-9 place-items-center rounded-[10px] bg-ember text-ink transition-transform duration-500 group-hover:rotate-90">
-            <svg viewBox="0 0 20 20" className="size-4" fill="currentColor">
-              <path d="M10 0 12.2 7.8 20 10l-7.8 2.2L10 20l-2.2-7.8L0 10l7.8-2.2z" />
-            </svg>
-          </span>
-          <span className="display text-[1.45rem] leading-none tracking-[0.02em]">CODEX</span>
-          <span className={`hidden text-[0.8rem] sm:inline ${light ? "text-paper/70" : "text-slate"}`}>AI Consulting</span>
+        <Link href="/" onClick={close} className="relative block" aria-label="CODEX AI Consulting, inicio">
+          {/* Both variants stay mounted and cross-fade, so the swap over the hero never flashes. */}
+          <Logo variant="light" priority className={`h-9 w-auto transition-opacity duration-500 md:h-10 ${light ? "opacity-100" : "opacity-0"}`} />
+          <Logo
+            variant="color"
+            priority
+            className={`absolute inset-0 h-9 w-auto transition-opacity duration-500 md:h-10 ${light ? "opacity-0" : "opacity-100"}`}
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">

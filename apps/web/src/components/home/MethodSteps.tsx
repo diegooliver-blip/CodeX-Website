@@ -32,7 +32,8 @@ export function MethodSteps({ steps }: { steps: Step[] }) {
   });
 
   return (
-    <section ref={root} className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-40" aria-labelledby="metodo">
+    <section ref={root} className="relative isolate overflow-x-clip mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-40" aria-labelledby="metodo">
+      <div aria-hidden className="warm-glow warm-glow-soft -left-[14rem] top-0 size-[40rem]" />
       <p className="eyebrow">Método</p>
       <h2 id="metodo" className="display mt-4 max-w-3xl text-[length:var(--text-h2)]">
         Cinco etapas, cero cajas negras.

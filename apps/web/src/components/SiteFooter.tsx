@@ -1,13 +1,16 @@
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import { serviceGroups, site } from "@/lib/content";
 
 export function SiteFooter() {
   return (
-    <footer className="theme-dark relative overflow-hidden bg-ink">
+    <footer className="theme-dark relative isolate overflow-hidden bg-ink">
+      <div aria-hidden className="warm-glow -left-[14rem] -top-[14rem] size-[42rem]" />
       <div className="mx-auto max-w-[1440px] px-5 pt-24 md:px-10">
         <div className="grid gap-14 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <p className="eyebrow">Hablemos</p>
+            <Logo variant="light" className="h-12 w-auto md:h-14" />
+            <p className="eyebrow mt-12">Hablemos</p>
             <p className="display mt-5 max-w-md text-4xl md:text-5xl">{site.tagline}</p>
             <div className="mt-10 space-y-2 text-[0.98rem]">
               <a className="link-underline block w-fit" href={`mailto:${site.contact.email}`}>{site.contact.email}</a>

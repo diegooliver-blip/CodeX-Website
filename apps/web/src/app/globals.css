@@ -278,6 +278,65 @@ span.hero-line {
   }
 }
 
+/* ---------- warm light ---------- */
+/* Soft ember/spark light pools. Paint only: no layout, no blur filter (the gradient is already soft). */
+.warm-glow {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at center,
+    rgb(255 107 21 / 0.34) 0%,
+    rgb(255 150 60 / 0.16) 32%,
+    rgb(255 229 80 / 0.06) 52%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+}
+/* On light surfaces the same pool would vanish under `screen`; keep it faint and normal-blended. */
+.warm-glow-soft {
+  mix-blend-mode: normal;
+  opacity: 0.45;
+}
+@keyframes warm-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(6%, -4%, 0) scale(1.12);
+    opacity: 1;
+  }
+}
+.warm-glow-drift {
+  animation: warm-drift 14s var(--ease-codex) infinite;
+  will-change: transform, opacity;
+}
+/* Pointer-following light (set by <WarmSpotlight>); sits still in the centre without a fine pointer. */
+.warm-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    38rem circle at var(--spot-x, 70%) var(--spot-y, 40%),
+    rgb(255 107 21 / 0.22),
+    rgb(255 229 80 / 0.05) 45%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  transition: opacity 0.8s var(--ease-codex);
+}
+/* Warm rim for floating cards on dark sections (booking calendar). */
+.glow-card {
+  box-shadow:
+    0 0 0 1px rgb(255 107 21 / 0.12),
+    0 30px 90px -30px rgb(255 107 21 / 0.35),
+    0 40px 80px -40px rgb(0 2 9 / 0.8);
+}
+
 /* View transitions between routes */
 @view-transition {
   navigation: auto;
@@ -310,7 +369,8 @@ span.hero-line {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .marquee-track {
+  .marquee-track,
+  .warm-glow-drift {
     animation: none;
   }
 }
