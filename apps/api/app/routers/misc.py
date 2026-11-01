@@ -15,7 +15,7 @@ from app.limiter import limiter
 from app.models import Document, Lead, WorkerHeartbeat
 from app.schemas import ChatIn, DocumentOut, LeadIn, LeadOut, PresignIn, PresignOut
 from app.security import DB, AdminUser, CurrentUser
-from app.services import assistant, audit, outbox, rag, storage
+from app.services import assistant, audit, lead_mail, outbox, rag, storage
 from app.services.idempotency import run_once
 
 router = APIRouter()
@@ -101,6 +101,14 @@ async def create_lead(
                 "source": f"web:{body.source}",
                 "properties": {"service": body.service, "courseSlug": body.course_slug, "company": body.company},
             },
+        )
+        outbox.enqueue(
+            session,
+            lead_mail.EVENT,
+            "lead",
+            str(lead.id),
+            body.model_dump(include={"name", "phone", "company", "service", "message", "source", "course_slug"})
+            | {"email": lead.email},
         )
         return 201, {"ok": True, "id": str(lead.id)}
 

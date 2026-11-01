@@ -43,6 +43,13 @@ class Settings(BaseSettings):
     loops_tx_alumno_restablecer: str = ""
     loops_tx_alumno_verificar: str = ""
 
+    # Gmail SMTP for owner notifications of new web leads (app password, needs 2-step verification).
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 465
+    smtp_user: str = "codexai.consulting@gmail.com"
+    smtp_password: str = ""  # empty = notifications skipped
+    lead_notify_to: str = "codexai.consulting@gmail.com"
+
     # ---- client portal ----
     # Dedicated identity database and role; created on first boot by app.clientes.bootstrap.
     clientes_database_url: str = "postgresql+asyncpg://clientes_app:clientes-dev@localhost:5432/codex_clientes"

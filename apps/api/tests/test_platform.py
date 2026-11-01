@@ -51,7 +51,7 @@ async def _count_events(lead_id: str) -> int:
         return await s.scalar(select(func.count()).select_from(OutboxEvent).where(OutboxEvent.entidad_id == lead_id))
 
 
-async def test_double_submit_creates_one_lead_and_one_event(client):
+async def test_double_submit_creates_one_lead_and_one_set_of_events(client):
     key = str(uuid.uuid4())
     body = {"name": "Doble Clic", "email": "doble@example.com", "message": "hola"}
     first = await client.post("/leads", json=body, headers={"Idempotency-Key": key})
@@ -59,7 +59,7 @@ async def test_double_submit_creates_one_lead_and_one_event(client):
     assert first.status_code == second.status_code == 201
     assert first.json() == second.json()
     assert await _count_leads("doble@example.com") == 1
-    assert await _count_events(first.json()["id"]) == 1
+    assert await _count_events(first.json()["id"]) == 2  # Loops event + owner email
 
 
 async def test_reused_key_with_other_body_is_rejected(client):

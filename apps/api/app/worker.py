@@ -22,11 +22,12 @@ from app.clientes.models import Service, UptimeCheck
 from app.db import SessionLocal, engine
 from app.models import IdempotencyKey, OutboxEvent, WorkerHeartbeat
 from app.observability import configure_logging, log
-from app.services import backups, loops, outbox, student_links
+from app.services import backups, lead_mail, loops, outbox, student_links
 
 OUTBOX_HANDLERS: dict[str, outbox.Handler] = {
     "lead_created": loops.deliver,
     "course_interest": loops.deliver,
+    lead_mail.EVENT: lead_mail.deliver,
     "order_paid": loops.deliver,
     student_links.EMAIL_RESTABLECER: student_links.deliver,
     student_links.EMAIL_VERIFICAR: student_links.deliver,
