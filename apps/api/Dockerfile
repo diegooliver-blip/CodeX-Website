@@ -1,6 +1,6 @@
 # Build from the repo root so the site content (RAG source) ships inside the image:
 #   docker build -f apps/api/Dockerfile .
-FROM python:3.12-slim
+FROM python:3.15-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 \
     CONTENT_DIR=/content FASTEMBED_CACHE_PATH=/opt/fastembed
