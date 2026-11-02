@@ -177,3 +177,12 @@ async def test_monthly_report_is_a_pdf(client, mock_gateway):
     assert res.content.startswith(b"%PDF") and len(res.content) > 2000
     assert (await client.get("/v1/clientes/reportes/2099-01.pdf", headers=p["h"])).status_code == 404
     assert (await client.get(f"/v1/clientes/reportes/{mes}.pdf")).status_code == 401
+
+
+async def test_client_payment_webhook_bypasses_internal_key(client, monkeypatch):
+    """Mercado Pago calls the API directly: the BFF's internal key must not block its notices."""
+    monkeypatch.setattr(get_settings(), "internal_api_key", "llave-interna")
+    blocked = await client.get("/v1/clientes/resumen")
+    assert blocked.status_code == 403
+    res = await client.post("/v1/clientes/pagos/webhook/mercadopago", json={"type": "payment", "data": {"id": "1"}})
+    assert res.status_code != 403  # 404 here: Mercado Pago isn't the configured gateway in tests

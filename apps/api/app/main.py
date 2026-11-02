@@ -46,10 +46,10 @@ app.add_middleware(
 async def internal_key(request: Request, call_next):
     """When INTERNAL_API_KEY is set, only the Next.js BFF (which sends it) may call the API."""
     key = get_settings().internal_api_key
-    # /v1/sync (Master Control) and /pagos/webhook (payment gateways) are called directly and authenticate
-    # every request with a signature.
+    # /v1/sync (Master Control) and the payment webhooks (gateways) are called directly and authenticate
+    # every request with a signature or by re-reading the payment from the gateway.
     path = request.url.path
-    exempt = path == "/health" or path.startswith(("/v1/sync/", "/pagos/webhook/"))
+    exempt = path == "/health" or path.startswith(("/v1/sync/", "/pagos/webhook/", "/v1/clientes/pagos/webhook/"))
     if key and not exempt and request.headers.get("x-internal-key") != key:
         return JSONResponse(error_body("PROHIBIDO", "Acceso no autorizado."), status_code=403)
     return await call_next(request)
