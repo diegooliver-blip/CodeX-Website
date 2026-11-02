@@ -51,6 +51,7 @@ export function Turnstile({ onToken }: { onToken: (token: string) => void }) {
           sitekey: siteKey,
           language: "es",
           theme: "light",
+          appearance: "interaction-only",
           callback: (token: string) => onToken(token),
           "expired-callback": () => onToken(""),
           "error-callback": () => onToken(""),
@@ -67,5 +68,5 @@ export function Turnstile({ onToken }: { onToken: (token: string) => void }) {
   if (!siteKey) {
     return <p className="text-sm text-danger">La verificación de seguridad no está configurada en este entorno.</p>;
   }
-  return <div ref={box} className="min-h-[65px]" />;
+  return <div ref={box} />;
 }

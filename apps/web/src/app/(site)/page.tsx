@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
 import { BookingCalendar } from "@/components/BookingCalendar";
-import { CourseList } from "@/components/CourseList";
 import { Hero } from "@/components/home/Hero";
 import { MethodSteps } from "@/components/home/MethodSteps";
 import { ServicesRail } from "@/components/home/ServicesRail";
-import { Counter, Magnetic, Marquee, ParallaxImage, ScrubText, SplitReveal } from "@/components/motion/primitives";
-import { WarmSpotlight } from "@/components/motion/WarmSpotlight";
+import { Magnetic, Marquee, ParallaxImage, SplitReveal } from "@/components/motion/primitives";
 import { Reveal } from "@/components/Reveal";
-import { getCourses } from "@/lib/api";
 import { cases, projects, serviceGroups, services, site } from "@/lib/content";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -38,7 +34,7 @@ const pillars = [
 ].map((p) => ({ ...p, items: serviceGroups.filter((g) => p.groups.includes(g.group)).flatMap((g) => g.items) }));
 
 const methodImages = [
-  ["/images/v4/diagnostico.jpg", "Facilitadora explicando un diagnóstico en un pizarrón"],
+  ["/images/v4/plataformas.jpg", "Consultor frente a un pizarrón con diagramas de procesos"],
   ["/images/v4/diseno.jpg", "Bocetos de interfaz dibujados a mano en una libreta"],
   ["/images/v4/construccion.jpg", "Código en pantalla durante el desarrollo"],
   ["/images/v4/puesta-en-marcha.jpg", "Equipo revisando dashboards en una presentación"],
@@ -67,20 +63,6 @@ export default function HomePage() {
   return (
     <>
       <Hero calendly={site.contact.calendly} projectCount={projects.length} />
-
-      {/* ---------- statement ---------- */}
-      <section className="mx-auto grid max-w-[1440px] gap-14 px-5 py-28 md:px-10 md:py-40 lg:grid-cols-[1fr_22rem] lg:items-end">
-        <div>
-          <p className="eyebrow">Quiénes somos</p>
-          <ScrubText text={site.statement} className="display mt-8 text-[clamp(1.9rem,4.2vw,3.6rem)] leading-[1.12] tracking-[-0.025em]" />
-        </div>
-        <ParallaxImage
-          src="/images/v4/statement.jpg"
-          alt="Fibras ópticas iluminadas en azul"
-          sizes="(min-width: 1024px) 22rem, 100vw"
-          className="aspect-[4/5] rounded-[28px]"
-        />
-      </section>
 
       {/* ---------- pillars ---------- */}
       <section className="mx-auto max-w-[1440px] px-5 pb-28 md:px-10 md:pb-40" aria-labelledby="pilares">
@@ -140,55 +122,9 @@ export default function HomePage() {
         steps={site.method.map((m, i) => ({ ...m, image: methodImages[i][0], alt: methodImages[i][1] }))}
       />
 
-      {/* ---------- proof ---------- */}
-      <section className="theme-dark relative isolate overflow-hidden bg-navy" aria-labelledby="cifras">
-        <div aria-hidden className="absolute -right-40 -top-40 -z-10 size-[36rem] rounded-full bg-signal/30 blur-3xl" />
-        <WarmSpotlight />
-        <div className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-36">
-          <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
-            <SplitReveal className="display text-[length:var(--text-h2)]">
-              <span id="cifras">Cifras de sistemas reales.</span>
-            </SplitReveal>
-            <p className="prose-codex text-[length:var(--text-lede)]">
-              Sin clientes inventados ni porcentajes de catálogo: estos números salen de lo que construimos y operamos.
-            </p>
-          </div>
-          <dl className="mt-20 grid gap-px overflow-hidden rounded-[28px] bg-paper/15 sm:grid-cols-2 lg:grid-cols-4">
-            {site.proof.map((p) => (
-              <div key={p.label} className="flex flex-col-reverse justify-end bg-navy p-8 md:p-10">
-                <dt className="mt-4 max-w-[16rem] text-[0.95rem] text-paper/75">{p.label}</dt>
-                <dd className="display text-[clamp(3.5rem,6vw,5.5rem)] leading-none text-spark">
-                  <Counter value={p.value} />
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
       {/* ---------- sectors ---------- */}
       <section aria-label="Sectores en los que hemos trabajado" className="border-y border-line bg-mist-2 py-10">
         <Marquee items={sectors} className="display text-[clamp(1.6rem,3vw,2.6rem)] text-ink/85" />
-      </section>
-
-      {/* ---------- academy ---------- */}
-      <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-40" aria-labelledby="academia">
-        <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
-          <div>
-            <p className="eyebrow">Academia</p>
-            <SplitReveal className="display mt-4 text-[length:var(--text-h2)]">
-              <span id="academia">Academia CODEX.</span>
-            </SplitReveal>
-          </div>
-          <p className="max-w-xl text-[length:var(--text-lede)] text-slate">
-            Lo que aplicamos en proyectos reales, convertido en cursos: agentes, automatización y producto digital con IA.
-          </p>
-        </div>
-        <div className="mt-14">
-          <Suspense fallback={<div className="h-40 animate-pulse rounded-[22px] bg-mist" />}>
-            <AcademyPreview />
-          </Suspense>
-        </div>
       </section>
 
       {/* ---------- founder ---------- */}
@@ -260,23 +196,5 @@ export default function HomePage() {
         </div>
       </section>
     </>
-  );
-}
-
-async function AcademyPreview() {
-  const courses = (await getCourses()).slice(0, 4);
-  return (
-    <CourseList
-      courses={courses}
-      empty={
-        <div className="flex flex-col justify-between gap-6 rounded-[28px] border border-line bg-mist-2 p-8 md:flex-row md:items-center md:p-10">
-          <p className="max-w-xl text-slate">
-            Los primeros cursos están en producción. Déjanos tu correo en la academia y te avisamos cuando abran las
-            inscripciones.
-          </p>
-          <Link href="/academia" className="btn btn-dark shrink-0">Ir a la academia</Link>
-        </div>
-      }
-    />
   );
 }
