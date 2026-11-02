@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { DownloadButton } from "@/components/clientes/AuthForms";
+import { Bars } from "@/components/clientes/Charts";
+import { SettingsForm } from "@/components/clientes/PortalActions";
 import { PanelShell } from "@/components/clientes/PortalShell";
 import { fmtDate, Progress, StageTimeline, StatusPill, stageLabel } from "@/components/clientes/ServiceViews";
-import { getService } from "@/lib/clientes-api";
+import { getMetrics, getService, getServiceSettings, type MetricSeries } from "@/lib/clientes-api";
+import { fmtCompact, fmtDay } from "@/lib/clientes-format";
 
 export const metadata: Metadata = { title: "Detalle del servicio" };
 
@@ -20,12 +23,12 @@ export default function ServicePage({ params }: { params: Promise<{ id: string }
 
 async function Detail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const res = await getService(id);
+  const [res, metrics, settings] = await Promise.all([getService(id), getMetrics(id), getServiceSettings(id)]);
   if (!res.ok && res.status === 401) redirect(`/clientes/entrar?next=/clientes/panel/servicios/${id}`);
   if (!res.ok && (res.status === 404 || res.status === 422)) notFound();
   if (!res.ok) {
     return (
-      <PanelShell eyebrow="Servicio" title="El portal no responde." back={{ href: "/clientes/panel", label: "Mis servicios" }}>
+      <PanelShell eyebrow="Servicio" title="El portal no responde." back={{ href: "/clientes/panel", label: "Mi panel" }}>
         <p className="text-slate">Intenta de nuevo en unos minutos.</p>
       </PanelShell>
     );
@@ -38,7 +41,7 @@ async function Detail({ params }: { params: Promise<{ id: string }> }) {
       eyebrow={stageLabel(s.etapa)}
       title={s.nombre}
       lede={s.descripcion || undefined}
-      back={{ href: "/clientes/panel", label: "Mis servicios" }}
+      back={{ href: "/clientes/panel", label: "Mi panel" }}
       actions={<StatusPill estado={u} />}
     >
       <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
@@ -51,6 +54,8 @@ async function Detail({ params }: { params: Promise<{ id: string }> }) {
               {s.fecha_estimada && <p className="text-sm text-slate">Entrega estimada: {fmtDate(s.fecha_estimada)}</p>}
             </div>
           </section>
+
+          {metrics.ok && metrics.data.length > 0 && <Metrics series={metrics.data} />}
 
           <section aria-labelledby="bitacora">
             <h2 id="bitacora" className="display text-2xl">Bitácora de avances</h2>
@@ -95,6 +100,15 @@ async function Detail({ params }: { params: Promise<{ id: string }> }) {
             )}
           </section>
 
+          {settings.ok && (
+            <section className="rounded-[28px] border border-line p-7 md:p-8" aria-labelledby="ajustes">
+              <h2 id="ajustes" className="display text-2xl">Ajustes</h2>
+              <div className="mt-4">
+                <SettingsForm serviceId={s.id} initial={settings.data} />
+              </div>
+            </section>
+          )}
+
           <section aria-labelledby="entregables">
             <h2 id="entregables" className="display text-2xl">Entregables</h2>
             {s.entregables.length === 0 ? (
@@ -116,5 +130,38 @@ async function Detail({ params }: { params: Promise<{ id: string }> }) {
         </div>
       </div>
     </PanelShell>
+  );
+}
+
+/** Last 30 days per metric: the first one charted, every one as a total. */
+function Metrics({ series }: { series: MetricSeries[] }) {
+  const [main] = series;
+  return (
+    <section className="rounded-[28px] border border-line p-7 md:p-8" aria-labelledby="desempeno">
+      <h2 id="desempeno" className="display text-2xl">Desempeño, 30 días</h2>
+      <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
+        {series.map((m) => (
+          <div key={m.clave}>
+            <dt className="text-sm text-slate">{m.etiqueta}</dt>
+            <dd className="display text-4xl">{fmtCompact(m.total)}</dd>
+          </div>
+        ))}
+      </dl>
+      <div className="mt-8">
+        <Bars
+          title={`${main.etiqueta} por día`}
+          height={140}
+          tickEvery={5}
+          data={main.puntos.map(([day, v], i) => ({
+            key: day,
+            label: fmtDay(day),
+            tick: String(Number(day.slice(8, 10))),
+            value: v,
+            display: fmtCompact(v),
+            highlight: i === main.puntos.length - 1,
+          }))}
+        />
+      </div>
+    </section>
   );
 }

@@ -403,3 +403,28 @@ html.lenis body {
 .lenis.lenis-stopped {
   overflow: hidden;
 }
+
+/* Client panel charts: bars grow from the baseline, rings draw in. Static under reduced motion. */
+@keyframes bar-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes ring-draw {
+  from {
+    stroke-dasharray: 0 999;
+  }
+}
+.bar-grow {
+  transform-origin: bottom;
+  animation: bar-grow 0.8s var(--ease-codex) both;
+}
+.ring-draw {
+  animation: ring-draw 1.2s var(--ease-codex) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow,
+  .ring-draw {
+    animation: none;
+  }
+}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PanelNav } from "./PanelNav";
 
 /** Auth screens (enter, activate, recover): photograph under a navy wash with the form on a floating card. */
 export function AuthScreen({
@@ -38,6 +39,7 @@ export function PanelShell({
   lede,
   actions,
   back,
+  nav = true,
   children,
 }: {
   eyebrow: string;
@@ -45,6 +47,7 @@ export function PanelShell({
   lede?: string;
   actions?: React.ReactNode;
   back?: { href: string; label: string };
+  nav?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -64,6 +67,11 @@ export function PanelShell({
           </div>
           {actions && <div className="flex flex-wrap gap-3">{actions}</div>}
         </div>
+        {nav && (
+          <div className="mx-auto max-w-[1440px] px-5 pb-6 md:px-10">
+            <PanelNav />
+          </div>
+        )}
       </section>
       <div className="mx-auto min-h-[50svh] max-w-[1440px] px-5 py-14 md:px-10 md:py-20">{children}</div>
     </>

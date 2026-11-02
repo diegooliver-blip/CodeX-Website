@@ -95,6 +95,7 @@ async def test_voided_and_externally_paid_charges(client):
     pagos = (await client.get("/v1/clientes/pagos", headers=p["h"])).json()
     assert [c["estado"] for c in pagos["cargos"]] == ["pagado"]
     assert pagos["pendiente_centavos"] == 0
+    assert pagos["historial"][-1]["pagado_centavos"] == 1_250_000  # paid by transfer still counts as received
 
 
 async def test_charge_for_unknown_client_is_rejected(client):

@@ -64,3 +64,63 @@ async function read<T>(path: string): Promise<Result<T>> {
 export const getMe = () => read<ClientMe>("me");
 export const getServices = () => read<ServiceCard[]>("servicios");
 export const getService = (id: string) => read<ServiceDetail>(`servicios/${encodeURIComponent(id)}`);
+
+// ---------- portal v5 ----------
+export type Membership = {
+  estado: "ninguna" | "pendiente" | "activa" | "pausada" | "cancelada";
+  monto_centavos: number;
+  moneda: string;
+  activa_desde: string | null;
+  proximo_cobro: string | null;
+  pago_en_linea: boolean;
+  pasarela: "mock" | "mercadopago" | null;
+};
+
+export type Overview = {
+  servicios: ServiceCard[];
+  pendiente_centavos: number;
+  vencido_centavos: number;
+  proximo_vencimiento: string | null;
+  disponibilidad_30d: number | null;
+  membresia: Membership;
+  contratados: string[];
+  reportes: string[];
+};
+
+export type Charge = {
+  id: string;
+  concepto: string;
+  monto_centavos: number;
+  moneda: string;
+  emitido_en: string;
+  vence_en: string | null;
+  estado: "pendiente" | "pagado" | "anulado";
+  vencido: boolean;
+  pagado_en: string | null;
+  servicio: string | null;
+  tiene_factura: boolean;
+};
+
+export type Payments = {
+  pago_en_linea: boolean;
+  pasarela: "mock" | "mercadopago" | null;
+  pendiente_centavos: number;
+  vencido_centavos: number;
+  cargos: Charge[];
+  historial: { mes: string; pagado_centavos: number }[];
+};
+
+export type MetricSeries = { clave: string; etiqueta: string; total: number; puntos: [string, number][] };
+
+export type ServiceSettings = {
+  avisos_avance: boolean;
+  avisos_caida: boolean;
+  contacto_tecnico: string;
+  ventana_mantenimiento: "domingo_noche" | "sabado_noche" | "entre_semana_noche" | "coordinar";
+};
+
+export const getOverview = () => read<Overview>("resumen");
+export const getPayments = () => read<Payments>("pagos");
+export const getMembership = () => read<Membership>("membresia");
+export const getMetrics = (id: string, dias = 30) => read<MetricSeries[]>(`servicios/${encodeURIComponent(id)}/metricas?dias=${dias}`);
+export const getServiceSettings = (id: string) => read<ServiceSettings>(`servicios/${encodeURIComponent(id)}/ajustes`);

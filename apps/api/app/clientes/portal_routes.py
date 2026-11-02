@@ -12,7 +12,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Request, Response
 from pydantic import BaseModel, Field
-from sqlalchemy import func, select
+from sqlalchemy import func, literal, select
 
 from app.clientes import billing, report
 from app.clientes import service as identity
@@ -62,6 +62,7 @@ class MonthTotal(BaseModel):
 
 class PaymentsOut(BaseModel):
     pago_en_linea: bool
+    pasarela: str | None  # mock | mercadopago | None (the panel shows the test checkout only for mock)
     pendiente_centavos: int
     vencido_centavos: int
     cargos: list[ChargeOut]
@@ -75,6 +76,7 @@ class MembershipOut(BaseModel):
     activa_desde: datetime | None
     proximo_cobro: date | None
     pago_en_linea: bool
+    pasarela: str | None = None
 
 
 class Overview(BaseModel):
@@ -130,9 +132,11 @@ async def _membership(db, client_id: uuid.UUID) -> MembershipOut:
     online = billing.provider_id() is not None
     if m is None:
         return MembershipOut(estado="ninguna", monto_centavos=billing.membership_price_cents(), moneda="MXN",
-                             activa_desde=None, proximo_cobro=None, pago_en_linea=online)
+                             activa_desde=None, proximo_cobro=None, pago_en_linea=online,
+                             pasarela=billing.provider_id())
     return MembershipOut(estado=m.estado, monto_centavos=m.monto_centavos, moneda=m.moneda,
-                         activa_desde=m.activa_desde, proximo_cobro=m.proximo_cobro, pago_en_linea=online)
+                         activa_desde=m.activa_desde, proximo_cobro=m.proximo_cobro, pago_en_linea=online,
+                         pasarela=billing.provider_id())
 
 
 async def _service_or_404(db, service_id: uuid.UUID) -> Service:
@@ -148,6 +152,21 @@ def _month_bounds(ym: str) -> tuple[date, date]:
     except ValueError as exc:
         raise ApiError(404, "NO_ENCONTRADO", "Reporte no encontrado.") from exc
     return start, billing.add_month(start)
+
+
+async def _paid_rows(db, start: datetime, end: datetime | None) -> list[tuple[datetime, int, str, str]]:
+    """Money received: paid charges (online or marked paid by Master Control) and CODEX+ periods."""
+    q1 = select(Charge.pagado_en, Charge.monto_centavos, Charge.concepto, Charge.moneda).where(
+        Charge.estado == "pagado", Charge.pagado_en >= start
+    )
+    q2 = select(ClientPayment.actualizado_en, ClientPayment.monto_centavos, literal("CODEX+"), ClientPayment.moneda).where(
+        ClientPayment.estado == "pagado", ClientPayment.membership_id.is_not(None), ClientPayment.actualizado_en >= start
+    )
+    if end is not None:
+        q1 = q1.where(Charge.pagado_en < end)
+        q2 = q2.where(ClientPayment.actualizado_en < end)
+    rows = [tuple(r) for r in (await db.execute(q1)).all()] + [tuple(r) for r in (await db.execute(q2)).all()]
+    return sorted(rows, key=lambda r: r[0])
 
 
 def _retorno(path: str) -> str:
@@ -195,13 +214,9 @@ async def payments(db: ClientesDB, auth: Current) -> dict:
     ))
     first = billing.hoy().replace(day=1)
     since = first.replace(year=first.year - 1)  # 12 months including this one: start one year back, step 12
-    mes = func.to_char(func.timezone(billing.TZ.key, ClientPayment.actualizado_en), "YYYY-MM")
-    paid = await db.execute(
-        select(mes, func.sum(ClientPayment.monto_centavos))
-        .where(ClientPayment.estado == "pagado", ClientPayment.actualizado_en >= since)
-        .group_by(mes)
-    )
-    by_month = dict(paid.all())
+    by_month: dict[str, int] = defaultdict(int)
+    for when, cents, *_ in await _paid_rows(db, datetime.combine(since, datetime.min.time(), billing.TZ), None):
+        by_month[when.astimezone(billing.TZ).strftime("%Y-%m")] += cents
     months, cur = [], since
     for _ in range(12):
         cur = billing.add_month(cur)
@@ -210,6 +225,7 @@ async def payments(db: ClientesDB, auth: Current) -> dict:
     pending = [c for c in charges if c.estado == "pendiente"]
     out = {
         "pago_en_linea": billing.provider_id() is not None,
+        "pasarela": billing.provider_id(),
         "pendiente_centavos": sum(c.monto_centavos for c in pending),
         "vencido_centavos": sum(c.monto_centavos for c in pending if billing.overdue(c)),
         "cargos": [_charge_out(c, services) for c in charges],
@@ -441,12 +457,8 @@ async def monthly_report(mes: str, db: ClientesDB, auth: Current) -> Response:
         .where(ServiceUpdate.publicado_en >= start, ServiceUpdate.publicado_en < end)
         .order_by(ServiceUpdate.publicado_en)
     )
-    paid = await db.execute(
-        select(ClientPayment.actualizado_en, Charge.concepto, ClientPayment.monto_centavos, ClientPayment.moneda, ClientPayment.membership_id)
-        .outerjoin(Charge, Charge.id == ClientPayment.charge_id)
-        .where(ClientPayment.estado == "pagado", ClientPayment.actualizado_en >= start, ClientPayment.actualizado_en < end)
-        .order_by(ClientPayment.actualizado_en)
-    )
+    tz_start = datetime.combine(start, datetime.min.time(), billing.TZ)
+    paid = await _paid_rows(db, tz_start, datetime.combine(end, datetime.min.time(), billing.TZ))
     pending = await db.scalar(select(func.coalesce(func.sum(Charge.monto_centavos), 0)).where(Charge.estado == "pendiente"))
     m = await db.scalar(select(Membership.estado).where(Membership.client_id == auth.user.client_id))
 
@@ -455,7 +467,7 @@ async def monthly_report(mes: str, db: ClientesDB, auth: Current) -> Response:
         mes=start,
         servicios=rows,
         avances=[(f.date(), names.get(sid, ""), t) for f, sid, t in updates],
-        pagos=[(f.date(), concepto or ("CODEX+" if mid else "Pago"), monto, moneda) for f, concepto, monto, moneda, mid in paid],
+        pagos=[(f.astimezone(billing.TZ).date(), concepto, monto, moneda) for f, monto, concepto, moneda in paid],
         pendiente_centavos=int(pending or 0),
         membresia_activa=m == "activa",
     )
