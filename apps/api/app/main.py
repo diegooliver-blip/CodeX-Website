@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app import VERSION
+from app.clientes import portal_routes as clientes_portal
 from app.clientes import routes as clientes
 from app.config import get_settings
 from app.errors import error_body, install_error_handlers
@@ -65,4 +66,5 @@ app.include_router(misc.router)
 app.include_router(students.router)
 app.include_router(students.webhooks)
 app.include_router(clientes.router)
+app.include_router(clientes_portal.router)
 app.include_router(sync.router)

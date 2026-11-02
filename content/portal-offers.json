@@ -1,0 +1,42 @@
+{
+  "membership": {
+    "slug": "codex-plus",
+    "name": "CODEX+",
+    "priceMxn": 499,
+    "period": "mes",
+    "pitch": "Tu equipo de IA de guardia.",
+    "perks": [
+      { "icon": "video", "title": "Asesoría semanal en línea", "text": "30 minutos cada semana con un consultor." },
+      { "icon": "compass", "title": "Orientación tecnológica", "text": "Qué herramienta usar antes de pagarla." },
+      { "icon": "quote", "title": "Cotizaciones sin costo", "text": "Respuesta en 48 horas hábiles." },
+      { "icon": "chat", "title": "Consultas por chat", "text": "Dudas técnicas resueltas por el equipo." }
+    ]
+  },
+  "combos": [
+    {
+      "slug": "presencia-que-vende",
+      "name": "Presencia que vende",
+      "services": ["websites-ia", "campanas-meta", "agentes-whatsapp"],
+      "pitch": "Atrae, atiende y cierra sin que nadie conteste a mano.",
+      "badge": "Más pedido"
+    },
+    {
+      "slug": "operacion-en-piloto",
+      "name": "Operación en piloto automático",
+      "services": ["automatizacion", "email-automation", "dashboards"],
+      "pitch": "Procesos que corren solos y un tablero que te dice cómo van."
+    },
+    {
+      "slug": "tienda-completa",
+      "name": "Tienda completa",
+      "services": ["ecommerce", "agentes-whatsapp", "campanas-meta"],
+      "pitch": "Tienda, vendedor por WhatsApp y campañas en un solo equipo."
+    }
+  ],
+  "skills": [
+    { "slug": "prompts-para-equipos", "name": "Prompts para tu equipo", "minutes": 90, "gain": "Redacta y resume 3 veces más rápido.", "icon": "spark" },
+    { "slug": "automatiza-tu-correo", "name": "Automatiza tu correo", "minutes": 60, "gain": "Respuestas y seguimientos sin teclear.", "icon": "mail" },
+    { "slug": "reportes-con-ia", "name": "Reportes con IA", "minutes": 90, "gain": "Del Excel al informe en minutos.", "icon": "chart" },
+    { "slug": "agentes-sin-codigo", "name": "Agentes sin código", "minutes": 120, "gain": "Tu primer asistente interno en una tarde.", "icon": "bot" }
+  ]
+}

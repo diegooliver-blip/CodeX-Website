@@ -15,7 +15,7 @@ from app.services.outbox import Skip
 
 EVENT = "lead_notificar"
 
-SOURCES = {"contacto": "Formulario de contacto", "academia": "Academia", "chat": "Asistente"}
+SOURCES = {"contacto": "Formulario de contacto", "academia": "Academia", "chat": "Asistente", "portal": "Portal de clientes"}
 FIELDS = [
     ("name", "Nombre"),
     ("email", "Correo"),
@@ -35,7 +35,7 @@ def build_message(d: dict, *, sender: str, to: str, event_id: int) -> EmailMessa
     msg["To"] = to
     msg["Reply-To"] = d["email"]  # answering the notification writes straight to the lead
     # Stable id per outbox event: if a retry delivers twice, Gmail threads it as the same message.
-    msg["Message-ID"] = make_msgid(idstring=f"lead-{event_id}", domain="codexaiconsulting.com")
+    msg["Message-ID"] = make_msgid(idstring=f"lead-{d.get('source', 'web')}-{event_id}", domain="codexaiconsulting.com")
     lines = [f"{label}: {d[key]}" for key, label in FIELDS if d.get(key)]
     msg.set_content(f"Llegó un formulario desde {origin}.\n\n" + "\n".join(lines) + "\n\nResponde este correo para escribirle.")
     return msg

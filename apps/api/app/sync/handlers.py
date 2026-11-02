@@ -5,10 +5,11 @@ from typing import Literal
 
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.clientes import service as identity
-from app.clientes.models import STAGES, Client, ClientUser, Deliverable, Service, ServiceUpdate
+from app.clientes.models import STAGES, Charge, Client, ClientUser, Deliverable, Service, ServiceMetric, ServiceUpdate
 from app.errors import ApiError
 
 DELIVERABLE_PREFIX = "entregables/"
@@ -72,6 +73,35 @@ class DeliverableIn(BaseModel):
 
 class DeliverableRef(BaseModel):
     mc_deliverable_id: str
+
+
+class ChargeIn(BaseModel):
+    mc_charge_id: str = Field(min_length=1, max_length=80)
+    mc_client_id: str
+    mc_service_id: str | None = None
+    concepto: str = Field(min_length=1, max_length=200)
+    monto_centavos: int = Field(gt=0, le=10_000_000_000)
+    moneda: Literal["MXN", "USD"] = "MXN"
+    emitido_en: date
+    vence_en: date | None = None
+    pagado: bool = False  # paid outside the portal (transfer): MC marks it so the client sees it settled
+    factura_key: str = Field(default="", max_length=500)
+
+
+class ChargeRef(BaseModel):
+    mc_charge_id: str
+
+
+class MetricPoint(BaseModel):
+    dia: date
+    valor: float
+
+
+class MetricIn(BaseModel):
+    mc_service_id: str
+    clave: str = Field(min_length=1, max_length=40, pattern=r"^[a-z0-9_]+$")
+    etiqueta: str = Field(default="", max_length=80)
+    puntos: list[MetricPoint] = Field(min_length=1, max_length=400)
 
 
 # ---------- helpers ----------
@@ -211,6 +241,56 @@ async def deliverable_deleted(db, datos: dict, version: int) -> dict:
     return {"resultado": "aplicado" if row else "sin_cambios"}
 
 
+async def charge_published(db, datos: dict, version: int) -> dict:
+    p = ChargeIn.model_validate(datos)
+    client = await _client(db, p.mc_client_id)
+    svc = await _service(db, p.mc_service_id) if p.mc_service_id else None
+    if p.factura_key and not p.factura_key.startswith(f"{DELIVERABLE_PREFIX}{client.mc_client_id}/"):
+        raise ApiError(422, "LLAVE_INVALIDA", "La factura no pertenece a la carpeta de este cliente.")
+    row = await db.scalar(select(Charge).where(Charge.mc_charge_id == p.mc_charge_id).with_for_update())
+    if _is_stale(row, version):
+        return {"resultado": "version_antigua"}
+    if row is None:
+        row = Charge(mc_charge_id=p.mc_charge_id, client_id=client.id)
+        db.add(row)
+    elif row.client_id != client.id:
+        raise ApiError(409, "CARGO_DE_OTRO_CLIENTE", "Ese cargo ya pertenece a otro cliente.")
+    if row.estado == "pagado" and p.monto_centavos != row.monto_centavos:
+        raise ApiError(409, "CARGO_PAGADO", "El cargo ya se pagó; publica uno nuevo en vez de cambiar el monto.")
+    for field in ("concepto", "monto_centavos", "moneda", "emitido_en", "vence_en", "factura_key"):
+        setattr(row, field, getattr(p, field))
+    row.service_id = svc.id if svc else None
+    if p.pagado and row.estado != "pagado":
+        row.estado, row.pagado_en = "pagado", datetime.now(UTC)
+    elif row.estado == "anulado":
+        row.estado = "pendiente"
+    row.version = version
+    return {"resultado": "aplicado"}
+
+
+async def charge_voided(db, datos: dict, version: int) -> dict:
+    p = ChargeRef.model_validate(datos)
+    row = await db.scalar(select(Charge).where(Charge.mc_charge_id == p.mc_charge_id).with_for_update())
+    if row is None or _is_stale(row, version):
+        return {"resultado": "sin_cambios"}
+    if row.estado == "pagado":
+        raise ApiError(409, "CARGO_PAGADO", "Un cargo pagado no se anula; registra un reembolso.")
+    row.estado, row.version = "anulado", version
+    return {"resultado": "aplicado"}
+
+
+async def metric_recorded(db, datos: dict, version: int) -> dict:
+    p = MetricIn.model_validate(datos)
+    svc = await _service(db, p.mc_service_id)
+    for punto in p.puntos:
+        await db.execute(
+            insert(ServiceMetric)
+            .values(client_id=svc.client_id, service_id=svc.id, clave=p.clave, etiqueta=p.etiqueta, dia=punto.dia, valor=punto.valor)
+            .on_conflict_do_update(constraint="uq_service_metrics_dia", set_={"valor": punto.valor, "etiqueta": p.etiqueta})
+        )
+    return {"resultado": "aplicado", "puntos": len(p.puntos)}
+
+
 HANDLERS = {
     "client.upserted": client_upserted,
     "client_user.invited": user_invited,
@@ -221,4 +301,7 @@ HANDLERS = {
     "update.deleted": update_deleted,
     "deliverable.published": deliverable_published,
     "deliverable.deleted": deliverable_deleted,
+    "charge.published": charge_published,
+    "charge.voided": charge_voided,
+    "metric.recorded": metric_recorded,
 }

@@ -8,7 +8,7 @@ and are protected by row-level security.
 import uuid
 from datetime import date, datetime
 
-from sqlalchemy import BigInteger, Boolean, Date, DateTime, ForeignKey, Identity, Integer, String, Text, func
+from sqlalchemy import BigInteger, Boolean, Date, DateTime, Float, ForeignKey, Identity, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import CITEXT, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -152,3 +152,98 @@ class SyncInbox(ClientesBase):
     tipo: Mapped[str] = mapped_column(String(60))
     resultado: Mapped[str] = mapped_column(String(40))
     recibido_en: Mapped[datetime] = _now()
+
+
+# ---------- billing, membership, metrics and preferences (migration c0002, RLS by client_id) ----------
+CHARGE_STATES = ("pendiente", "pagado", "anulado")
+MEMBERSHIP_STATES = ("pendiente", "activa", "pausada", "cancelada")
+
+
+class Charge(ClientesBase):
+    """A charge Master Control published. The portal only collects what is here; amounts never come from the browser."""
+
+    __tablename__ = "charges"
+    id: Mapped[uuid.UUID] = _id()
+    client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), index=True)
+    service_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("services.id", ondelete="SET NULL"), nullable=True)
+    mc_charge_id: Mapped[str] = mapped_column(String(80), unique=True)
+    concepto: Mapped[str] = mapped_column(String(200))
+    monto_centavos: Mapped[int] = mapped_column(BigInteger)
+    moneda: Mapped[str] = mapped_column(String(3), default="MXN")
+    emitido_en: Mapped[date] = mapped_column(Date)
+    vence_en: Mapped[date | None] = mapped_column(Date, nullable=True)
+    estado: Mapped[str] = mapped_column(String(20), default="pendiente")
+    pagado_en: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    factura_key: Mapped[str] = mapped_column(String(500), default="")  # CFDI PDF in storage, when MC attaches it
+    version: Mapped[int] = mapped_column(BigInteger, default=0)
+
+
+class ClientPayment(ClientesBase):
+    """One checkout attempt (a charge or a CODEX+ period). `referencia` is unique, so a replayed webhook changes nothing."""
+
+    __tablename__ = "client_payments"
+    id: Mapped[uuid.UUID] = _id()
+    client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), index=True)
+    charge_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("charges.id", ondelete="SET NULL"), nullable=True, index=True)
+    membership_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("memberships.id", ondelete="SET NULL"), nullable=True)
+    proveedor: Mapped[str] = mapped_column(String(20))
+    referencia: Mapped[str | None] = mapped_column(String(120), unique=True, nullable=True)
+    monto_centavos: Mapped[int] = mapped_column(BigInteger)
+    moneda: Mapped[str] = mapped_column(String(3), default="MXN")
+    estado: Mapped[str] = mapped_column(String(20), default="pendiente")  # pendiente | pagado | fallido | reembolsado
+    creado_en: Mapped[datetime] = _now()
+    actualizado_en: Mapped[datetime] = _now()
+
+
+class Membership(ClientesBase):
+    __tablename__ = "memberships"
+    id: Mapped[uuid.UUID] = _id()
+    client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), unique=True)
+    plan: Mapped[str] = mapped_column(String(40), default="codex_plus")
+    monto_centavos: Mapped[int] = mapped_column(BigInteger)
+    moneda: Mapped[str] = mapped_column(String(3), default="MXN")
+    estado: Mapped[str] = mapped_column(String(20), default="pendiente")
+    proveedor: Mapped[str] = mapped_column(String(20), default="")
+    proveedor_ref: Mapped[str] = mapped_column(String(120), default="")
+    activa_desde: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    proximo_cobro: Mapped[date | None] = mapped_column(Date, nullable=True)
+    creado_en: Mapped[datetime] = _now()
+    actualizado_en: Mapped[datetime] = _now()
+
+
+class ServiceMetric(ClientesBase):
+    """Daily value per service and key (visits, requests, conversations, leads...), published by Master Control."""
+
+    __tablename__ = "service_metrics"
+    id: Mapped[int] = mapped_column(BigInteger, Identity(always=True), primary_key=True)
+    client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"))
+    service_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("services.id", ondelete="CASCADE"))
+    clave: Mapped[str] = mapped_column(String(40))
+    etiqueta: Mapped[str] = mapped_column(String(80), default="")
+    dia: Mapped[date] = mapped_column(Date)
+    valor: Mapped[float] = mapped_column(Float)
+
+
+class ServiceSettings(ClientesBase):
+    """What the client may tune on each service. One row per service, created on first save."""
+
+    __tablename__ = "service_settings"
+    service_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("services.id", ondelete="CASCADE"), primary_key=True)
+    client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), index=True)
+    avisos_avance: Mapped[bool] = mapped_column(Boolean, default=True)
+    avisos_caida: Mapped[bool] = mapped_column(Boolean, default=True)
+    contacto_tecnico: Mapped[str] = mapped_column(String(200), default="")
+    ventana_mantenimiento: Mapped[str] = mapped_column(String(20), default="domingo_noche")
+    actualizado_en: Mapped[datetime] = _now()
+
+
+class InterestRequest(ClientesBase):
+    """'Me interesa' on a catalog item; the team follows up (handed over through the outbox)."""
+
+    __tablename__ = "interest_requests"
+    id: Mapped[uuid.UUID] = _id()
+    client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), index=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("client_users.id", ondelete="CASCADE"))
+    tipo: Mapped[str] = mapped_column(String(20))  # servicio | combo | skill
+    slug: Mapped[str] = mapped_column(String(80))
+    creado_en: Mapped[datetime] = _now()

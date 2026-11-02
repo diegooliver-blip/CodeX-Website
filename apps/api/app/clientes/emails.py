@@ -6,6 +6,7 @@ Payloads carry one-time links, so these event types are scrubbed after delivery 
 import httpx
 
 from app.config import get_settings
+from app.services import lead_mail
 from app.services.outbox import Skip
 
 TRANSACTIONAL_URL = "https://app.loops.so/api/v1/transactional"
@@ -41,4 +42,7 @@ async def deliver(event) -> None:
         raise RuntimeError(f"Loops transaccional -> {res.status_code} {res.text[:200]}")
 
 
-HANDLERS = {INVITACION: deliver, RESTABLECER: deliver, CONTRASENA_CAMBIADA: deliver}
+# 'Me interesa' from the portal catalog reaches the owner's inbox the same way web leads do.
+INTERES = "cliente_interes"
+
+HANDLERS = {INVITACION: deliver, RESTABLECER: deliver, CONTRASENA_CAMBIADA: deliver, INTERES: lead_mail.deliver}
