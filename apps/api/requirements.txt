@@ -16,6 +16,6 @@ pypdf>=5.1
 slowapi>=0.1.9
 structlog==26.1.0
 argon2-cffi==25.1.0
-python-multipart>=0.0.18
+python-multipart>=0.0.32
 reportlab>=4.2
 tzdata>=2025.2
